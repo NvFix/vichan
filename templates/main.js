@@ -236,6 +236,9 @@ var resourceVersion = document.currentScript.getAttribute('data-resource-version
 {% else %}
 	{% verbatim %}
 	if (localStorage.stylesheet) {
+		if (!styles[localStorage.stylesheet]) {
+			localStorage.stylesheet = '{% endverbatim %}{{ config.default_stylesheet.0|addslashes }}{% verbatim %}';
+		}
 		document.documentElement.setAttribute('data-theme', localStorage.stylesheet);
 		if (document.body) {
 			document.body.setAttribute('data-theme', localStorage.stylesheet);

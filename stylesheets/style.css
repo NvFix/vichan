@@ -38,11 +38,11 @@ a.post_no {
 }
 
 .intro a.email span.name {
-  color: #34345C;
+  color: #6841a8;
 }
 
 .intro a.email:hover span.name {
-  color: #ff0000;
+  color: #8f61c0;
 }
 
 .intro label {
@@ -55,7 +55,7 @@ a.post_no {
 }
 
 h2 {
-  color: #AF0A0F;
+  color: #7c66bb;
   font-size: 11pt;
   margin: 0;
   padding: 0;
@@ -66,19 +66,24 @@ header {
 }
 
 h1 {
-  font-family: tahoma;
-  letter-spacing: -2px;
-  font-size: 20pt;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: -0.5px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #7c66bb;
+  text-align: center;
   margin: 0;
 }
 
 header div.subtitle,h1 {
-  color: #AF0A0F;
+  color: #7c66bb;
   text-align: center;
 }
 
 header div.subtitle {
-  font-size: 8pt;
+  color: #6a5385;
+  font-size: 13px;
+  margin-top: 4px;
 }
 
 form {
@@ -239,7 +244,7 @@ div.post.op {
 }
 
 div.post.op hr {
-  border-color: #D9BFB7;
+  border-color: #d2c0e8;
 }
 
 .intro {
@@ -254,7 +259,7 @@ input.delete {
 }
 
 .intro span.subject {
-  color: #0F0C5D;
+  color: #54338c;
   font-weight: bold;
 }
 
@@ -264,7 +269,7 @@ input.delete {
 }
 
 .intro span.capcode,p.intro a.capcode,p.intro a.nametag {
-  color: #F00000;
+  color: #7c66bb;
   margin-left: 0;
 }
 
@@ -389,7 +394,7 @@ div.ban p.reason {
 }
 
 span.heading {
-  color: #AF0A0F;
+  color: #7c66bb;
   font-size: 11pt;
   font-weight: bold;
 }
@@ -497,7 +502,7 @@ div.pages form input {
 
 hr {
   border: none;
-  border-top: 1px solid #B7C5D9;
+  border-top: 1px solid #d2c0e8;
   height: 0;
   clear: left;
 }
@@ -951,7 +956,7 @@ pre {
   user-select: none;
 }
 .poster_id:hover {
-  color: #800000!important;
+  color: #8f61c0!important;
 }
 .poster_id::before {
   content: " ID: ";

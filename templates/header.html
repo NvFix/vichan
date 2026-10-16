@@ -7,17 +7,24 @@
 {% if config.meta_keywords %}<meta name="keywords" content="{{ config.meta_keywords }}">{% endif %}
 <style id="theme-inline-bg">
 	html[data-theme="Schizou"], html[data-theme="Schizou"] body { background-color: #f6f2fc; color: #281b38; }
+	html[data-theme="Schizou"] h1, html[data-theme="Schizou"] h2 { color: #7c66bb; }
 	html[data-theme="Yotsuba"], html[data-theme="Yotsuba"] body { background: #ffe url('/stylesheets/img/fade-yotsuba.png') repeat-x 50% 0%; color: #800000; }
 	html[data-theme="Yotsuba"] div.post.reply { background: #f0e0d6 !important; border-color: #d9bfb7 !important; }
-	html[data-theme="Yotsuba"] form table tr th { background: #ea8 !important; color: #800000 !important; border-color: #800000 !important; }
+	html[data-theme="Yotsuba"] form table tr th { background: #ea8 !important; color: #800000 !important; border-color: #800000 !important; font-size: 10pt !important; padding: 0 5px !important; }
 	html[data-theme="Yotsuba"] div.pages { background: #f0e0d6 !important; border-color: #d9bfb7 !important; color: #800000 !important; }
 	html[data-theme="Yotsuba"] div.boardlist a { color: #800000 !important; }
+	html[data-theme="Yotsuba"] h1, html[data-theme="Yotsuba"] header div.subtitle, html[data-theme="Yotsuba"] h2 { color: #800000 !important; }
 </style>
 <script type="text/javascript">
 	var configRoot="{{ config.root }}";
 	var inMod = {% if mod %} true {% else %} false {% endif %};
 	var modRoot = "{{ config.root }}" + (inMod ? "mod.php?/" : "");
 	(function() {
+		var styles = {
+		{% for name, file in config.stylesheets %}
+			'{{ name|addslashes }}': '{{ config.uri_stylesheets }}{{ file|addslashes }}',
+		{% endfor %}
+		};
 		var defaultTheme = '{{ config.default_stylesheet.0|addslashes }}';
 		var theme = null;
 		try {
@@ -27,16 +34,13 @@
 			var m = document.cookie.match('(^|;) ?stylesheet=([^;]*)(;|$)');
 			if (m) theme = decodeURIComponent(m[2]);
 		}
-		if (!theme) theme = defaultTheme;
+		if (!theme || !styles[theme]) {
+			theme = defaultTheme;
+			try { localStorage.setItem('stylesheet', defaultTheme); } catch (e) {}
+		}
 		document.documentElement.setAttribute('data-theme', theme);
 
 		{% if not no_board_style %}
-		var styles = {
-		{% for name, file in config.stylesheets %}
-			'{{ name|addslashes }}': '{{ config.uri_stylesheets }}{{ file|addslashes }}',
-		{% endfor %}
-		};
-
 		var href = styles[theme] || styles[defaultTheme] || '{{ config.uri_stylesheets }}{{ config.default_stylesheet.1|addslashes }}';
 		if (href) {
 			href += (href.indexOf('?') === -1 ? '?v=' : '&v=') + '{{ config.resource_version }}';
