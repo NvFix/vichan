@@ -453,7 +453,7 @@ function openBoard($uri) {
 		$build_pages = array();
 
 	// And what if we don't really need to change a board we have opened?
-	if (isset ($board) && isset ($board['uri']) && $board['uri'] == $uri) {
+	if (isset ($board) && isset ($board['uri']) && isset ($board['dir']) && $board['uri'] == $uri) {
 		return true;
 	}
 
@@ -2890,4 +2890,8 @@ function get_urls($body) {
 	$result = preg_match_all("#$regex#i", $body, $match);
 
 	return $match[0];
+}
+
+function rebuildThemes(string $action, $boardname = false): void {
+	\Vichan\Functions\Theme\rebuild_themes($action, $boardname);
 }

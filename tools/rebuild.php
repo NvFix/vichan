@@ -46,7 +46,7 @@ $twig->getCache()->clear();
 
 if(!$options['quiet'])
 	echo "Regenerating theme files...\n";
-rebuildThemes('all');
+\Vichan\Functions\Theme\rebuild_themes('all');
 
 if(!$options['quiet'])
 	echo "Generating Javascript file...\n";
@@ -56,15 +56,15 @@ $main_js = $config['file_script'];
 
 $boards = listBoards();
 
-foreach($boards as &$board) {
-	if($options['board'] && $board['uri'] != $options['board'])
+foreach($boards as &$b_item) {
+	if($options['board'] && $b_item['uri'] != $options['board'])
 		continue;
 	
 	if(!$options['quiet'])
-		echo "Opening board /{$board['uri']}/...\n";
+		echo "Opening board /{$b_item['uri']}/...\n";
 	// Reset locale to global locale
 	$config['locale'] = $global_locale;
-	openBoard($board['uri']);
+	openBoard($b_item['uri']);
 	$config['try_smarter'] = false;
 	
 	if($config['file_script'] != $main_js) {
@@ -83,7 +83,7 @@ foreach($boards as &$board) {
 		continue; // do no more
 	
 	if($options['full']) {
-		$query = query(sprintf("SELECT `id` FROM ``posts_%s``", $board['uri'])) or error(db_error());
+		$query = query(sprintf("SELECT `id` FROM ``posts_%s``", $b_item['uri'])) or error(db_error());
 		while($post = $query->fetch()) {
 			if(!$options['quiet'])
 				echo "Rebuilding #{$post['id']}...\n";
@@ -91,7 +91,7 @@ foreach($boards as &$board) {
 		}
 	}
 	
-	$query = query(sprintf("SELECT `id` FROM ``posts_%s`` WHERE `thread` IS NULL", $board['uri'])) or error(db_error());
+	$query = query(sprintf("SELECT `id` FROM ``posts_%s`` WHERE `thread` IS NULL", $b_item['uri'])) or error(db_error());
 	while($post = $query->fetch()) {
 		if(!$options['quiet'])
 			echo "Rebuilding #{$post['id']}...\n";
@@ -102,6 +102,6 @@ foreach($boards as &$board) {
 if(!$options['quiet'])
 	printf("Complete! Took %g seconds\n", microtime(true) - $start);
 
-unset($board);
+unset($b_item);
 modLog('Rebuilt everything using tools/rebuild.php');
 

@@ -49,7 +49,7 @@ if ($options['cache']) {
 
 if($options['themes']) {
 	echo "Regenerating theme files...\n";
-	rebuildThemes('all');
+	\Vichan\Functions\Theme\rebuild_themes('all');
 }
 
 if($options['js']) {
