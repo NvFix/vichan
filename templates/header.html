@@ -10,6 +10,10 @@
 	var configRoot="{{ config.root }}";
 	var inMod = {% if mod %} true {% else %} false {% endif %};
 	var modRoot = "{{ config.root }}" + (inMod ? "mod.php?/" : "");
+	(function() {
+		var theme = localStorage.getItem('stylesheet') || '{{ config.default_stylesheet.0|addslashes }}';
+		document.documentElement.setAttribute('data-theme', theme);
+	})();
 </script>
 {% if not nojavascript %}
 	<script type="text/javascript" src="{{ config.url_javascript }}?v={{ config.resource_version }} data-resource-version="{{ config.resource_version }}"></script>

@@ -2947,6 +2947,21 @@ function mod_theme_uninstall(Context $ctx, $theme_name) {
 	$cache->delete("themes");
 	$cache->delete("theme_settings_$theme_name");
 
+	Vichan\Functions\Theme\rebuild_themes('all');
+
+	if ($theme_name === 'global_header') {
+		$boards = listBoards();
+		foreach ($boards as $b) {
+			openBoard($b['uri']);
+			$config['try_smarter'] = false;
+			buildIndex();
+			$q = query(sprintf("SELECT `id` FROM ``posts_%s`` WHERE `thread` IS NULL", $b['uri']));
+			while ($post = $q->fetch(PDO::FETCH_ASSOC)) {
+				buildThread($post['id']);
+			}
+		}
+	}
+
 	header('Location: ?/themes', true, $config['redirect_http']);
 }
 

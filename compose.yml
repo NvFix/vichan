@@ -30,7 +30,8 @@ services:
     restart: unless-stopped
     volumes:
       - ./local-instances/${INSTANCE:-0}/www:/var/www
-      - ./templates/themes:/code/templates/themes
+      - ./templates:/code/templates
+      - ./inc:/code/inc
       - ./stylesheets:/code/stylesheets
       - ./docker/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
       - ./docker/php/jit.ini:/usr/local/etc/php/conf.d/jit.ini

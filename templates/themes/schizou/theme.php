@@ -254,6 +254,7 @@
 			return Element('themes/schizou/schizou.html', [
 				'settings' => $settings,
 				'config' => $config,
+				'boardlist' => createBoardlist(),
 				'boards' => $active_boards,
 				'logo_url' => $logo_url,
 				'logo_mtime' => $logo_mtime,

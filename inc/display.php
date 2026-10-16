@@ -44,8 +44,83 @@ function doBoardListPart($list, $root, &$boards) {
 	return $body;
 }
 
+function render_global_header($mod = false) {
+	global $config;
+
+	$settings = \Vichan\Functions\Theme\theme_settings('global_header');
+
+	$all_boards = listBoards();
+	$exclude = !empty($settings['exclude_boards']) ? explode(' ', $settings['exclude_boards']) : [];
+	$boards = [];
+	foreach ($all_boards as $b) {
+		if (!in_array($b['uri'], $exclude)) {
+			$boards[] = $b;
+		}
+	}
+
+	$home_url = !empty($settings['home_url']) ? $settings['home_url'] : ($mod ? '?/' : $config['root']);
+	$home_label = !empty($settings['home_label']) ? $settings['home_label'] : 'home';
+	$header_height = !empty($settings['header_height']) ? (int)$settings['header_height'] : 36;
+	if ($header_height <= 0) $header_height = 36;
+	$custom_css = !empty($settings['custom_css']) ? $settings['custom_css'] : '';
+	$board_url_prefix = $mod ? '?/' : $config['root'];
+
+	$show_home = !isset($settings['show_home']) || !empty($settings['show_home']);
+	$show_boards = !isset($settings['show_boards']) || !empty($settings['show_boards']);
+	$show_theme_changer = !isset($settings['show_theme_changer']) || !empty($settings['show_theme_changer']);
+	$fixed_top = !isset($settings['fixed_top']) || !empty($settings['fixed_top']);
+
+	$stylesheets = isset($config['stylesheets']) ? $config['stylesheets'] : [];
+
+	try {
+		$header_html = Element('themes/global_header/global_header.html', [
+			'config' => $config,
+			'settings' => $settings,
+			'show_home' => $show_home,
+			'show_boards' => $show_boards,
+			'show_theme_changer' => $show_theme_changer,
+			'fixed_top' => $fixed_top,
+			'boards' => $boards,
+			'stylesheets' => $stylesheets,
+			'home_url' => $home_url,
+			'home_label' => $home_label,
+			'header_height' => $header_height,
+			'custom_css' => $custom_css,
+			'board_url_prefix' => $board_url_prefix,
+			'mod' => $mod,
+		]);
+	} catch (\Throwable $e) {
+		$boards_links = [];
+		foreach ($boards as $b) {
+			$boards_links[] = '<a href="' . $board_url_prefix . $b['uri'] . '/">' . $b['uri'] . '</a>';
+		}
+		$theme_links = [];
+		foreach ($stylesheets as $name => $f) {
+			$theme_links[] = '<a href="javascript:void(0)" class="gh-theme-link" data-theme="' . htmlspecialchars($name) . '" onclick="changeStyle(\'' . addslashes($name) . '\', this)">' . htmlspecialchars($name) . '</a>';
+		}
+		$pos_style = $fixed_top ? 'position:fixed;top:0;left:0;right:0;' : 'position:relative;';
+		$header_html = '<header id="global-header" class="global-header" style="' . $pos_style . 'width:100%;height:' . $header_height . 'px;z-index:99999;background:#e8ddfa;border-bottom:1px solid #7c66bb;display:flex;justify-content:space-between;align-items:center;padding:0 16px;box-sizing:border-box;font-size:14.5px;color:#4a3875;"><div class="global-header-left">' . ($show_home ? '<span class="gh-home">[ <a href="' . $home_url . '">' . htmlspecialchars($home_label) . '</a> ]</span> ' : '') . ($show_boards ? '<span class="gh-boards">[ ' . implode(' / ', $boards_links) . ' ]</span>' : '') . '</div><div class="global-header-right">' . ($show_theme_changer ? '<span class="gh-theme-changer">[ ' . implode(' / ', $theme_links) . ' ]</span>' : '') . '</div></header><style>body, body.theme-schizou{margin-top:0 !important;padding-top:' . ($fixed_top ? $header_height : 0) . 'px !important;}</style>';
+
+	}
+
+	$bottom_boards = [];
+	foreach ($boards as $b) {
+		$bottom_boards[] = '<a href="' . $board_url_prefix . $b['uri'] . '/">' . $b['uri'] . '</a>';
+	}
+	$bottom_body = '[ ' . implode(' / ', $bottom_boards) . ' ]';
+
+	return [
+		'top' => $header_html,
+		'bottom' => '<div class="boardlist bottom">' . $bottom_body . '</div>'
+	];
+}
+
 function createBoardlist($mod=false) {
 	global $config;
+
+	if (\Vichan\Functions\Theme\is_theme_installed('global_header')) {
+		return render_global_header($mod);
+	}
 
 	if (!isset($config['boards'])) return array('top'=>'','bottom'=>'');
 

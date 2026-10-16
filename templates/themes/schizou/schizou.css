@@ -6,9 +6,8 @@ html, body {
 body.theme-schizou {
     margin: 0 !important;
     padding: 0 !important;
-    padding-top: 36px !important;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: 15px;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 10pt;
     background-color: #f6f2fc;
     background-image: linear-gradient(180deg, #ede2fc 0%, #f6f2fc 160px, #f6f2fc 100%);
     background-repeat: no-repeat;
@@ -29,41 +28,6 @@ body.theme-schizou {
     box-sizing: border-box;
 }
 
-header.top-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    margin: 0 !important;
-    padding: 6px 20px;
-    background-color: #e8ddfa;
-    border-bottom: 1px solid #7c66bb;
-    font-size: 14.5px;
-    line-height: 22px;
-    display: flex;
-    align-items: center;
-    box-sizing: border-box;
-    z-index: 9999;
-}
-
-.top-nav .board-nav {
-    color: #54338c;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-}
-
-.top-nav .board-nav a {
-    color: #54338c;
-    text-decoration: none;
-    padding: 0 4px;
-    transition: color 0.15s ease;
-}
-
-.top-nav .board-nav a:hover {
-    text-decoration: underline;
-    color: #8f61c0;
-}
 
 .logo-wrap {
     text-align: center;
@@ -391,3 +355,127 @@ header.top-nav {
 .site-footer a:hover {
     color: #8f61c0;
 }
+
+html[data-theme="Yotsuba"] body.theme-schizou,
+body.theme-schizou[data-theme="Yotsuba"] {
+    background-color: #ffffee;
+    background-image: url('/stylesheets/img/fade-yotsuba.png');
+    background-repeat: repeat-x;
+    background-position: 50% 0%;
+    background-attachment: scroll;
+    color: #800000;
+}
+
+html[data-theme="Yotsuba"] body.theme-schizou a,
+html[data-theme="Yotsuba"] body.theme-schizou a:visited,
+body.theme-schizou[data-theme="Yotsuba"] a,
+body.theme-schizou[data-theme="Yotsuba"] a:visited {
+    color: #0000ff;
+}
+
+html[data-theme="Yotsuba"] body.theme-schizou a:hover,
+body.theme-schizou[data-theme="Yotsuba"] a:hover {
+    color: #d00000;
+}
+
+html[data-theme="Yotsuba"] .box,
+body.theme-schizou[data-theme="Yotsuba"] .box {
+    border: 1px solid #800000;
+    background-color: #f0e0d6;
+    box-shadow: none;
+}
+
+html[data-theme="Yotsuba"] .box-header,
+body.theme-schizou[data-theme="Yotsuba"] .box-header {
+    background: #ea8;
+    color: #800000;
+    border-bottom: 1px solid #800000;
+    text-shadow: none;
+}
+
+html[data-theme="Yotsuba"] .box-content,
+body.theme-schizou[data-theme="Yotsuba"] .box-content {
+    background-color: #f0e0d6;
+    color: #800000;
+}
+
+html[data-theme="Yotsuba"] .detail-content,
+body.theme-schizou[data-theme="Yotsuba"] .detail-content {
+    color: #800000;
+}
+
+html[data-theme="Yotsuba"] .news-table tr,
+html[data-theme="Yotsuba"] .item-table tr,
+html[data-theme="Yotsuba"] .stats-table tr,
+body.theme-schizou[data-theme="Yotsuba"] .news-table tr,
+body.theme-schizou[data-theme="Yotsuba"] .item-table tr,
+body.theme-schizou[data-theme="Yotsuba"] .stats-table tr {
+    border-color: #d9bfb7;
+}
+
+html[data-theme="Yotsuba"] .news-table tr:hover,
+html[data-theme="Yotsuba"] .item-table tr:hover,
+html[data-theme="Yotsuba"] .stats-table tr:hover,
+body.theme-schizou[data-theme="Yotsuba"] .news-table tr:hover,
+body.theme-schizou[data-theme="Yotsuba"] .item-table tr:hover,
+body.theme-schizou[data-theme="Yotsuba"] .stats-table tr:hover {
+    background-color: #f0c0b0;
+}
+
+html[data-theme="Yotsuba"] .news-snippet,
+html[data-theme="Yotsuba"] .news-date,
+html[data-theme="Yotsuba"] .item-date,
+html[data-theme="Yotsuba"] .stats-paragraph,
+html[data-theme="Yotsuba"] .stats-table th,
+html[data-theme="Yotsuba"] .stats-table td,
+html[data-theme="Yotsuba"] .thread-replies,
+html[data-theme="Yotsuba"] .empty-notice,
+body.theme-schizou[data-theme="Yotsuba"] .news-snippet,
+body.theme-schizou[data-theme="Yotsuba"] .news-date,
+body.theme-schizou[data-theme="Yotsuba"] .item-date,
+body.theme-schizou[data-theme="Yotsuba"] .stats-paragraph,
+body.theme-schizou[data-theme="Yotsuba"] .stats-table th,
+body.theme-schizou[data-theme="Yotsuba"] .stats-table td,
+body.theme-schizou[data-theme="Yotsuba"] .thread-replies,
+body.theme-schizou[data-theme="Yotsuba"] .empty-notice {
+    color: #800000;
+}
+
+html[data-theme="Yotsuba"] .star-icon,
+body.theme-schizou[data-theme="Yotsuba"] .star-icon {
+    color: #d00000;
+}
+
+html[data-theme="Yotsuba"] .item-badge a,
+body.theme-schizou[data-theme="Yotsuba"] .item-badge a {
+    color: #800000;
+}
+
+html[data-theme="Yotsuba"] .images-grid .image-link,
+body.theme-schizou[data-theme="Yotsuba"] .images-grid .image-link {
+    border-color: #d9bfb7;
+    background: #f0e0d6;
+}
+
+html[data-theme="Yotsuba"] .images-grid .image-link:hover,
+body.theme-schizou[data-theme="Yotsuba"] .images-grid .image-link:hover {
+    border-color: #800000;
+    box-shadow: 0 0 6px rgba(128, 0, 0, 0.3);
+}
+
+html[data-theme="Yotsuba"] .site-footer,
+body.theme-schizou[data-theme="Yotsuba"] .site-footer {
+    border-top: 1px solid #d9bfb7;
+    color: #800000;
+}
+
+html[data-theme="Yotsuba"] .site-footer a,
+body.theme-schizou[data-theme="Yotsuba"] .site-footer a {
+    color: #0000ff;
+}
+
+html[data-theme="Yotsuba"] .site-footer a:hover,
+body.theme-schizou[data-theme="Yotsuba"] .site-footer a:hover {
+    color: #d00000;
+}
+

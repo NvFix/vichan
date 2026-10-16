@@ -96,3 +96,24 @@ function theme_settings($theme): array {
 
 	return $settings;
 }
+
+function is_theme_installed(string $theme): bool {
+	if ($themes = \Cache::get("themes")) {
+		foreach ($themes as $t) {
+			if (isset($t[0]) && $t[0] === $theme) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	$query = prepare("SELECT 1 FROM ``theme_settings`` WHERE `theme` = :theme AND `name` IS NULL AND `value` IS NULL LIMIT 1");
+	$query->bindValue(':theme', $theme);
+	$query->execute();
+	if ($query && $query->fetch()) {
+		return true;
+	}
+
+	return false;
+}
+

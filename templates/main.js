@@ -131,6 +131,10 @@ function changeStyle(styleName, link) {
 		localStorage.stylesheet = styleName;
 	{% endif %}
 	{% verbatim %}
+	document.documentElement.setAttribute('data-theme', styleName);
+	if (document.body) {
+		document.body.setAttribute('data-theme', styleName);
+	}
 
 	if (!document.getElementById('stylesheet')) {
 		let s = document.createElement('link');
@@ -150,7 +154,7 @@ function changeStyle(styleName, link) {
 		userStylesheetElement.rel = 'stylesheet';
 		userStylesheetElement.media = 'none';
 		userStylesheetElement.type = 'text/css';
-		userStylesheetElement.id = 'stylesheet';
+		userStylesheetElement.id = 'stylesheet-user';
 		let x = document.getElementsByTagName('head')[0];
 		x.appendChild(userStylesheetElement);
 	}
@@ -158,8 +162,10 @@ function changeStyle(styleName, link) {
 	// When the new one is loaded, disable the old one
 	userStylesheetElement.onload = function() {
 		this.media = 'all';
-		mainStylesheetElement.media = 'none';
-	}
+		if (mainStylesheetElement) {
+			mainStylesheetElement.media = 'none';
+		}
+	};
 
 	let style = styles[styleName];
 	if (style !== '') {
@@ -167,7 +173,10 @@ function changeStyle(styleName, link) {
 		style += `?v=${resourceVersion}`;
 	}
 
-	document.getElementById('stylesheet').href = style;
+	userStylesheetElement.href = style;
+	if (mainStylesheetElement) {
+		mainStylesheetElement.href = style;
+	}
 	selectedstyle = styleName;
 
 	if (document.getElementsByClassName('styles').length != 0) {
@@ -209,6 +218,10 @@ var resourceVersion = document.currentScript.getAttribute('data-resource-version
 {% else %}
 	{% verbatim %}
 	if (localStorage.stylesheet) {
+		document.documentElement.setAttribute('data-theme', localStorage.stylesheet);
+		if (document.body) {
+			document.body.setAttribute('data-theme', localStorage.stylesheet);
+		}
 		for (let styleName in styles) {
 			if (styleName == localStorage.stylesheet) {
 				changeStyle(styleName);
