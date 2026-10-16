@@ -385,8 +385,7 @@ span.spoiler:hover,div.post.reply div.body span.spoiler:hover a {
 }
 
 div.styles {
-  float: right;
-  padding-bottom: 20px;
+  display: none !important;
 }
 
 div.styles a {
@@ -975,23 +974,32 @@ div.boardlist {
 }
 
 div.boardlist.bottom {
-  margin-top: 12px;
-  clear: both;
+  display: none !important;
 }
 
 div.boardlist a {
   text-decoration: none;
 }
 
-/* Threads */
-/* Thread Footer */
+/* Board & Thread Interactions */
+#board-interactions,
 #thread-interactions {
   margin: 8px 0;
   clear: both;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#board-interactions div.pages {
+  margin: 0;
+  display: inline-block;
 }
 
 #thread-links {
-  float: left;
+  float: none;
 }
 
 #thread-links > a {
@@ -1013,9 +1021,11 @@ div.boardlist a {
   float: right;
 }
 
-#post-moderation-fields {
-  float: right;
+#board-interactions #post-moderation-fields,
+#thread-interactions #post-moderation-fields {
+  float: none;
   text-align: right;
+  margin-left: auto;
 }
 
 /* threadwatcher */

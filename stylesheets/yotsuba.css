@@ -81,3 +81,8 @@ table.modlog tr th {
 .desktop-style div.boardlist:nth-child(1) {
 	background-color: #F0E0D6;
 }
+
+div.boardlist.bottom,
+div.styles {
+	display: none !important;
+}

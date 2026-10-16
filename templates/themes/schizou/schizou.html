@@ -121,6 +121,7 @@
                             {% for img in recent_images %}
                                 <a href="{{ img.link }}" class="image-link" title="{{ img.board }}/{{ img.id }}">
                                     <img src="{{ img.src }}" alt="" class="thumb-cell" loading="lazy" />
+                                    <span class="thumb-overlay">&gt;&gt;{{ img.board }}/{{ img.id }}</span>
                                 </a>
                             {% endfor %}
                         </div>
@@ -132,30 +133,15 @@
                 <div class="box-header">Site Stats</div>
                 <div class="box-content stats-content">
                     <p class="stats-paragraph">
-                        <strong>{{ stats.posts_today }}</strong> posts have been made today, 
-                        and <strong>{{ stats.total_posts }}</strong> in total. 
                         <strong>{{ stats.total_files }}</strong> files are being served, totaling <strong>{{ stats.total_size }}</strong>.
                     </p>
-                    <table class="stats-table">
-                        <tbody>
-                            <tr>
-                                <th>Posts Today:</th>
-                                <td>{{ stats.posts_today }}</td>
-                            </tr>
-                            <tr>
-                                <th>Total Posts:</th>
-                                <td>{{ stats.total_posts }}</td>
-                            </tr>
-                            <tr>
-                                <th>Total Files:</th>
-                                <td>{{ stats.total_files }}</td>
-                            </tr>
-                            <tr>
-                                <th>Total File Size:</th>
-                                <td>{{ stats.total_size }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="stats-counter-box">
+                        <div class="stats-counter-label">total posts:</div>
+                        <div class="stats-counter-wrap">
+                            <img src="https://count.getloli.com/@schizou?theme=booru-lisu&amp;padding=3&amp;offset=0&amp;align=center&amp;scale=1&amp;pixelated=1&amp;darkmode=0&amp;num={{ stats.total_posts }}" alt="{{ stats.total_posts }}" class="stats-counter-img" loading="lazy" />
+                        </div>
+                        <div class="stats-today">posts today: {{ stats.posts_today }}</div>
+                    </div>
                 </div>
             </section>
         </div>

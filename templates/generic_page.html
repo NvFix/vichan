@@ -29,12 +29,13 @@
 	<input type="hidden" name="board" value="{{ board.uri }}" />
 	{% if mod %}<input type="hidden" name="mod" value="1" />{% endif %}
 	{{ body }}
-	{% include 'report_delete.html' %}
+	<div id="board-interactions">
+		<div class="pages">{{ btn.prev }} {% for page in pages %}
+			 [<a {% if page.selected %}class="selected"{% endif %}{% if not page.selected %}href="{{ page.link }}"{% endif %}>{{ page.num }}</a>]{% if loop.last %} {% endif %}
+		{% endfor %} {{ btn.next }}</div>
+		{% include 'report_delete.html' %}
+	</div>
 	</form>
-	<div class="pages">{{ btn.prev }} {% for page in pages %}
-		 [<a {% if page.selected %}class="selected"{% endif %}{% if not page.selected %}href="{{ page.link }}"{% endif %}>{{ page.num }}</a>]{% if loop.last %} {% endif %}
-	{% endfor %} {{ btn.next }}</div>
-	{{ boardlist.bottom }}
 	{% include 'footer.html' %}
 	<script type="text/javascript">{% verbatim %}
 		ready();

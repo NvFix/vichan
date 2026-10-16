@@ -184,10 +184,9 @@ function changeStyle(styleName, link) {
 		for (let i = 0; i < styleLinks.length; i++) {
 			styleLinks[i].className = '';
 		}
-	}
-
-	if (link) {
-		link.className = 'selected';
+		if (link && link.parentNode && link.parentNode.className === 'styles') {
+			link.className = 'selected';
+		}
 	}
 
 	if (typeof $ != 'undefined') {
@@ -234,23 +233,7 @@ var resourceVersion = document.currentScript.getAttribute('data-resource-version
 {% verbatim %}
 
 function initStyleChooser() {
-	let newElement = document.createElement('div');
-	newElement.className = 'styles';
-
-	for (styleName in styles) {
-		let style = document.createElement('a');
-		style.innerHTML = '[' + styleName + ']';
-		style.onclick = function() {
-			changeStyle(this.innerHTML.substring(1, this.innerHTML.length - 1), this);
-		};
-		if (styleName == selectedstyle) {
-			style.className = 'selected';
-		}
-		style.href = 'javascript:void(0);';
-		newElement.appendChild(style);
-	}
-
-	document.getElementsByTagName('body')[0].insertBefore(newElement, document.getElementsByTagName('body')[0].lastChild.nextSibling);
+	return;
 }
 
 function getCookie(cookie_name) {

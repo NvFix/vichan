@@ -96,7 +96,7 @@ function render_global_header($mod = false) {
 		}
 		$theme_links = [];
 		foreach ($stylesheets as $name => $f) {
-			$theme_links[] = '<a href="javascript:void(0)" class="gh-theme-link" data-theme="' . htmlspecialchars($name) . '" onclick="changeStyle(\'' . addslashes($name) . '\', this)">' . htmlspecialchars($name) . '</a>';
+			$theme_links[] = '<a href="javascript:void(0)" class="gh-theme-link" data-theme="' . htmlspecialchars($name) . '" onclick="changeStyle(\'' . addslashes($name) . '\'); return false;">' . htmlspecialchars($name) . '</a>';
 		}
 		$pos_style = $fixed_top ? 'position:fixed;top:0;left:0;right:0;' : 'position:relative;';
 		$header_html = '<header id="global-header" class="global-header" style="' . $pos_style . 'width:100%;height:' . $header_height . 'px;z-index:99999;background:#e8ddfa;border-bottom:1px solid #7c66bb;display:flex;justify-content:space-between;align-items:center;padding:0 16px;box-sizing:border-box;font-size:14.5px;color:#4a3875;"><div class="global-header-left">' . ($show_home ? '<span class="gh-home">[ <a href="' . $home_url . '">' . htmlspecialchars($home_label) . '</a> ]</span> ' : '') . ($show_boards ? '<span class="gh-boards">[ ' . implode(' / ', $boards_links) . ' ]</span>' : '') . '</div><div class="global-header-right">' . ($show_theme_changer ? '<span class="gh-theme-changer">[ ' . implode(' / ', $theme_links) . ' ]</span>' : '') . '</div></header><style>body, body.theme-schizou{margin-top:0 !important;padding-top:' . ($fixed_top ? $header_height : 0) . 'px !important;}</style>';

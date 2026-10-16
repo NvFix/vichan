@@ -162,3 +162,8 @@ table.modlog tr th {
 img.banner, img.board_image {
     border: 1px solid #7c66bb;
 }
+
+div.boardlist.bottom,
+div.styles {
+    display: none !important;
+}

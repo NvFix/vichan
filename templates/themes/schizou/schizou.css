@@ -47,6 +47,7 @@ body.theme-schizou {
     margin-bottom: 22px;
     box-sizing: border-box;
     box-shadow: 0 2px 6px rgba(124, 102, 187, 0.08);
+    overflow: hidden;
 }
 
 .box-header {
@@ -67,6 +68,7 @@ body.theme-schizou {
     line-height: 1.5;
     color: #281b38;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .news-box {
@@ -75,6 +77,7 @@ body.theme-schizou {
 
 .news-table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
 }
 
@@ -87,17 +90,32 @@ body.theme-schizou {
 }
 
 .news-table td {
-    padding: 7px 8px;
+    padding: 7px 6px;
     vertical-align: middle;
+}
+
+.news-table td:first-child {
+    padding-left: 0;
+}
+
+.news-table td:last-child {
+    padding-right: 0;
 }
 
 .news-title {
     width: 25%;
     font-weight: bold;
     font-size: 14.5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .news-title a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     color: #6841a8;
     text-decoration: none;
     transition: color 0.15s ease;
@@ -112,6 +130,9 @@ body.theme-schizou {
     width: 50%;
     color: #3b2852;
     font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .news-date {
@@ -168,6 +189,7 @@ body.theme-schizou {
 
 .item-table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: collapse;
 }
 
@@ -180,15 +202,23 @@ body.theme-schizou {
 }
 
 .item-table td {
-    padding: 7px 8px;
+    padding: 7px 6px;
     vertical-align: middle;
+}
+
+.item-table td:first-child {
+    padding-left: 0;
+}
+
+.item-table td:last-child {
+    padding-right: 0;
 }
 
 .item-badge {
     white-space: nowrap;
-    width: 1%;
+    width: 44px;
     font-weight: bold;
-    font-size: 14.5px;
+    font-size: 14px;
 }
 
 .item-badge a {
@@ -204,28 +234,30 @@ body.theme-schizou {
 
 .thread-replies {
     white-space: nowrap;
-    width: 1%;
+    width: 48px;
     font-weight: bold;
     color: #54338c;
-    padding-right: 10px;
     font-size: 14px;
 }
 
 .star-icon {
     color: #8f61c0;
-    font-size: 15px;
-    margin-right: 3px;
+    font-size: 14px;
+    margin-right: 2px;
 }
 
 .item-text {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 215px;
     font-size: 14.5px;
 }
 
 .item-text a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     color: #6841a8;
     text-decoration: none;
     transition: color 0.15s ease;
@@ -238,10 +270,10 @@ body.theme-schizou {
 
 .item-date {
     text-align: right;
-    font-size: 12.5px;
+    font-size: 12px;
     color: #6a5385;
     white-space: nowrap;
-    width: 1%;
+    width: 135px;
 }
 
 .images-grid {
@@ -259,7 +291,11 @@ body.theme-schizou {
     border: 1px solid #cbb0db;
     background: #ebdaf2;
     position: relative;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+}
+
+.images-grid .image-link:hover {
+    border-color: #8f61c0;
 }
 
 .images-grid .thumb-cell {
@@ -267,16 +303,33 @@ body.theme-schizou {
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.2s ease;
 }
 
-.images-grid .image-link:hover {
-    border-color: #bf83fa;
-    box-shadow: 0 0 8px rgba(191, 131, 250, 0.45);
+.images-grid .thumb-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    background: rgba(42, 18, 58, 0.72);
+    color: #ffffff !important;
+    font-size: 12px;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+    pointer-events: none;
+    box-sizing: border-box;
+    padding: 2px 4px;
+    word-break: break-all;
 }
 
-.images-grid .image-link:hover .thumb-cell {
-    transform: scale(1.08);
+.images-grid .image-link:hover .thumb-overlay {
+    display: flex;
 }
 
 .stats-content {
@@ -292,30 +345,43 @@ body.theme-schizou {
     font-size: 14.5px;
 }
 
-.stats-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: auto;
+.stats-counter-box {
+    margin: auto 0;
+    text-align: center;
+    padding: 10px 0 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.stats-table tr {
-    border-top: 1px solid #e5d1ec;
-}
-
-.stats-table th {
-    text-align: left;
-    padding: 7px 6px;
-    font-weight: 600;
-    color: #54338c;
-    font-size: 14px;
-}
-
-.stats-table td {
-    text-align: right;
-    padding: 7px 6px;
+.stats-counter-label {
+    font-size: 13.5px;
     font-weight: bold;
-    color: #281b38;
-    font-size: 14px;
+    color: #54338c;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.stats-counter-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.stats-counter-img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.stats-today {
+    font-size: 12px;
+    color: #6a5385;
+    margin-top: 8px;
+    text-align: center;
 }
 
 .empty-notice {
@@ -413,29 +479,21 @@ body.theme-schizou[data-theme="Yotsuba"] .stats-table tr {
     border-color: #d9bfb7;
 }
 
-html[data-theme="Yotsuba"] .news-table tr:hover,
-html[data-theme="Yotsuba"] .item-table tr:hover,
-html[data-theme="Yotsuba"] .stats-table tr:hover,
-body.theme-schizou[data-theme="Yotsuba"] .news-table tr:hover,
-body.theme-schizou[data-theme="Yotsuba"] .item-table tr:hover,
-body.theme-schizou[data-theme="Yotsuba"] .stats-table tr:hover {
-    background-color: #f0c0b0;
-}
 
 html[data-theme="Yotsuba"] .news-snippet,
 html[data-theme="Yotsuba"] .news-date,
 html[data-theme="Yotsuba"] .item-date,
 html[data-theme="Yotsuba"] .stats-paragraph,
-html[data-theme="Yotsuba"] .stats-table th,
-html[data-theme="Yotsuba"] .stats-table td,
+html[data-theme="Yotsuba"] .stats-counter-label,
+html[data-theme="Yotsuba"] .stats-today,
 html[data-theme="Yotsuba"] .thread-replies,
 html[data-theme="Yotsuba"] .empty-notice,
 body.theme-schizou[data-theme="Yotsuba"] .news-snippet,
 body.theme-schizou[data-theme="Yotsuba"] .news-date,
 body.theme-schizou[data-theme="Yotsuba"] .item-date,
 body.theme-schizou[data-theme="Yotsuba"] .stats-paragraph,
-body.theme-schizou[data-theme="Yotsuba"] .stats-table th,
-body.theme-schizou[data-theme="Yotsuba"] .stats-table td,
+body.theme-schizou[data-theme="Yotsuba"] .stats-counter-label,
+body.theme-schizou[data-theme="Yotsuba"] .stats-today,
 body.theme-schizou[data-theme="Yotsuba"] .thread-replies,
 body.theme-schizou[data-theme="Yotsuba"] .empty-notice {
     color: #800000;
@@ -460,8 +518,39 @@ body.theme-schizou[data-theme="Yotsuba"] .images-grid .image-link {
 html[data-theme="Yotsuba"] .images-grid .image-link:hover,
 body.theme-schizou[data-theme="Yotsuba"] .images-grid .image-link:hover {
     border-color: #800000;
-    box-shadow: 0 0 6px rgba(128, 0, 0, 0.3);
 }
+
+html[data-theme="Yotsuba"] .images-grid .thumb-overlay,
+body.theme-schizou[data-theme="Yotsuba"] .images-grid .thumb-overlay {
+    background: rgba(90, 15, 15, 0.75);
+}
+
+html[data-theme="Yotsuba B"] .images-grid .image-link,
+body.theme-schizou[data-theme="Yotsuba B"] .images-grid .image-link {
+    border-color: #b7c5d9;
+    background: #d6daf0;
+}
+
+html[data-theme="Yotsuba B"] .images-grid .image-link:hover,
+body.theme-schizou[data-theme="Yotsuba B"] .images-grid .image-link:hover {
+    border-color: #0000ee;
+}
+
+html[data-theme="Yotsuba B"] .images-grid .thumb-overlay,
+body.theme-schizou[data-theme="Yotsuba B"] .images-grid .thumb-overlay {
+    background: rgba(15, 25, 65, 0.75);
+}
+
+html[data-theme="Futaba"] .images-grid .thumb-overlay,
+body.theme-schizou[data-theme="Futaba"] .images-grid .thumb-overlay {
+    background: rgba(90, 20, 20, 0.75);
+}
+
+html[data-theme="Burichan"] .images-grid .thumb-overlay,
+body.theme-schizou[data-theme="Burichan"] .images-grid .thumb-overlay {
+    background: rgba(20, 35, 55, 0.75);
+}
+
 
 html[data-theme="Yotsuba"] .site-footer,
 body.theme-schizou[data-theme="Yotsuba"] .site-footer {

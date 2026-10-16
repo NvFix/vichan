@@ -117,22 +117,27 @@ body[data-theme="Yotsuba"] #global-header a.gh-active-theme {
     </div>
     <div class="global-header-right">
         {% if show_theme_changer %}
-            <span class="gh-theme-changer">[ {% for name, file in stylesheets %}<a href="javascript:void(0)" class="gh-theme-link" data-theme="{{ name }}" onclick="changeStyle('{{ name|e('js') }}', this)">{{ name }}</a>{% if not loop.last %} / {% endif %}{% endfor %} ]</span>
+            <span class="gh-theme-changer">[ {% for name, file in stylesheets %}<a href="javascript:void(0)" class="gh-theme-link" data-theme="{{ name }}" onclick="changeStyle('{{ name|e('js') }}'); return false;">{{ name }}</a>{% if not loop.last %} / {% endif %}{% endfor %} ]</span>
         {% endif %}
     </div>
 </header>
 <script type="text/javascript">
 (function() {
+    function getThemeCookie() {
+        var m = document.cookie.match('(^|;) ?stylesheet=([^;]*)(;|$)');
+        return m ? decodeURIComponent(m[2]) : null;
+    }
     function ghSyncTheme() {
-        var current = localStorage.getItem('stylesheet') || (typeof selectedstyle !== 'undefined' ? selectedstyle : 'Schizou');
+        var current = localStorage.getItem('stylesheet') || getThemeCookie() || (typeof selectedstyle !== 'undefined' ? selectedstyle : 'Schizou');
         document.documentElement.setAttribute('data-theme', current);
         if (document.body) document.body.setAttribute('data-theme', current);
-        var links = document.querySelectorAll('#global-header .gh-theme-link');
+        var links = document.querySelectorAll('#global-header .gh-theme-changer a, #global-header [data-theme]');
         for (var i = 0; i < links.length; i++) {
-            if (links[i].getAttribute('data-theme') === current) {
-                links[i].className = 'gh-theme-link selected gh-active-theme';
+            var themeName = links[i].getAttribute('data-theme');
+            if (themeName && current && themeName.toLowerCase() === current.toLowerCase()) {
+                links[i].classList.add('selected', 'gh-active-theme');
             } else {
-                links[i].className = 'gh-theme-link';
+                links[i].classList.remove('selected', 'gh-active-theme');
             }
         }
     }
@@ -149,14 +154,17 @@ body[data-theme="Yotsuba"] #global-header a.gh-active-theme {
             ghSyncTheme();
         });
     }
+    if (typeof $ !== 'undefined') {
+        $(window).on('stylesheet', ghSyncTheme);
+    }
     var origChangeStyle = window.changeStyle;
-    window.changeStyle = function(styleName, link) {
+    window.changeStyle = function(styleName) {
         document.documentElement.setAttribute('data-theme', styleName);
         if (document.body) document.body.setAttribute('data-theme', styleName);
+        localStorage.setItem('stylesheet', styleName);
         if (typeof origChangeStyle === 'function') {
-            origChangeStyle(styleName, link);
+            origChangeStyle(styleName);
         } else {
-            localStorage.setItem('stylesheet', styleName);
             var sheet = document.getElementById('stylesheet');
             if (sheet && typeof styles !== 'undefined' && styles[styleName]) {
                 sheet.href = styles[styleName];
