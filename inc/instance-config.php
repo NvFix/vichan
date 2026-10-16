@@ -26,7 +26,7 @@
 	$config['url_favicon'] = '/favicon.png';
 
 	// Resource cache buster version
-	$config['resource_version'] = 2;
+	$config['resource_version'] = 3;
 
 	// Database stuff
 	$config['db']['type']		= 'mysql';

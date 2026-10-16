@@ -4,8 +4,8 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   color: #281b38;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: 14.5px;
+  font-family: arial,helvetica,sans-serif;
+  font-size: 10pt;
   margin: 0;
   padding: 0;
 }
@@ -66,12 +66,9 @@ header {
 }
 
 h1 {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  letter-spacing: -0.5px;
-  font-size: 26px;
-  font-weight: 700;
-  color: #7c66bb;
-  text-align: center;
+  font-family: tahoma;
+  letter-spacing: -2px;
+  font-size: 20pt;
   margin: 0;
 }
 
@@ -81,9 +78,7 @@ header div.subtitle,h1 {
 }
 
 header div.subtitle {
-  color: #6a5385;
-  font-size: 13px;
-  margin-top: 4px;
+  font-size: 8pt;
 }
 
 form {
@@ -99,12 +94,7 @@ form table input {
 }
 
 input[type="text"],input[type="password"],textarea {
-  border: 1px solid #7c66bb;
-  background-color: #ffffff;
-  color: #281b38;
-  padding: 4px 6px;
-  border-radius: 2px;
-  box-sizing: border-box;
+  border: 1px solid #a9a9a9;
   text-indent: 0;
   text-shadow: none;
   text-transform: none;
@@ -113,9 +103,8 @@ input[type="text"],input[type="password"],textarea {
 }
 
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
-  border-color: #bf83fa;
+  border-color: #7c66bb;
   outline: none;
-  box-shadow: 0 0 5px rgba(191, 131, 250, 0.5);
 }
 
 #quick-reply input[type="text"], input[type="password"], #quick-reply textarea {
@@ -138,13 +127,12 @@ form table.mod tr td {
 
 form table tr th {
   text-align: left;
-  padding: 5px 10px;
-  background: linear-gradient(135deg, #7c66bb 0%, #8f61c0 100%);
+  padding: 0 5px;
+  font-size: 10pt;
+  font-weight: 700;
+  background-color: #7c66bb;
   color: #ffffff;
-  font-weight: bold;
-  border: 1px solid #6b41a8;
-  font-size: 13.5px;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  border: 1px solid #54338c;
 }
 
 form table tr td div.center {
@@ -294,8 +282,7 @@ div.post.reply div.body {
 
 div.post.reply.highlighted {
   background: #edd0e7;
-  border-color: #7c66bb;
-  box-shadow: 0 0 6px rgba(124, 102, 187, 0.25);
+  border-color: #bfa0e0;
 }
 
 div.post.reply div.body a {
@@ -317,13 +304,12 @@ div.post div.body {
 }
 
 div.post.reply {
+  margin: 0.2em 4px;
+  padding: 0.2em 0.3em 0.5em 0.6em;
+  border-width: 1px;
+  border-style: none solid solid none;
   background-color: #f4dded;
-  border: 1px solid #7c66bb;
-  border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(124, 102, 187, 0.08);
-  color: #281b38;
-  padding: 8px 12px;
-  margin: 4px 0;
+  border-color: #c9b0e8;
   display: inline-block;
   max-width: 94%!important;
 }
@@ -447,14 +433,13 @@ fieldset label {
 }
 
 div.pages {
-  background-color: #f4dded;
-  border: 1px solid #7c66bb;
-  border-radius: 4px;
-  padding: 8px 12px;
   color: #281b38;
-  margin: 16px 0;
-  font-size: 14px;
+  background: #f4dded;
   display: inline-block;
+  padding: 8px;
+  margin: 8px 0 4px 0;
+  border-right: 1px solid #c9b0e8;
+  border-bottom: 1px solid #c9b0e8;
 }
 
 div.pages.top {
@@ -475,18 +460,11 @@ div.pages.top {
 
 div.pages a.selected {
   color: #54338c;
-  font-weight: bold;
+  font-weight: bolder;
 }
 
 div.pages a {
-  color: #6841a8;
   text-decoration: none;
-  padding: 0 4px;
-}
-
-div.pages a:hover {
-  text-decoration: underline;
-  color: #8f61c0;
 }
 
 div.pages form {
@@ -585,7 +563,6 @@ table.mod.config-editor input[type="text"] {
   box-shadow: 0 1px 2px rgba(0, 0, 0, .15);
   border-bottom: 1px solid #7c66bb;
   background-color: #e8ddfa;
-  padding: 5px 12px;
 }
 
 .desktop-style body {
@@ -1008,7 +985,7 @@ span.pln {
 div.boardlist {
   margin-top: 3px;
   color: #7c66bb;
-  font-size: 13.5px;
+  font-size: 9pt;
 }
 
 div.boardlist.bottom {
@@ -1018,8 +995,6 @@ div.boardlist.bottom {
 div.boardlist a {
   color: #54338c;
   text-decoration: none;
-  font-weight: 600;
-  padding: 0 3px;
 }
 
 div.boardlist a:hover {
