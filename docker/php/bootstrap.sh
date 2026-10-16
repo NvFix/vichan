@@ -83,5 +83,8 @@ set_cfg 'secrets.php'
 # Link the composer dependencies.
 ln -nfs /code/vendor /var/www/
 
+# Ensure cache directories are owned by www-data
+chown -R www-data:www-data /var/cache/template-cache /var/tmp/vichan /var/cache/gen-cache 2>/dev/null || true
+
 # Start the php-fpm server.
 exec php-fpm

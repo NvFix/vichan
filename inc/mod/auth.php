@@ -131,7 +131,7 @@ function setCookies(): void {
 		'path' => $is_path_jailed ? $config['cookies']['path'] : '/',
 		'secure' => $is_https,
 		'httponly' => $config['cookies']['httponly'],
-		'samesite' => 'Strict'
+		'samesite' => 'Lax'
 	];
 
 	setcookie($name, $value, $options);
@@ -150,21 +150,21 @@ function destroyCookies(): void {
 			'path' => $jailed_path ,
 			'secure' => false,
 			'httponly' => $http_only,
-			'samesite' => 'Strict'
+			'samesite' => 'Lax'
 		],
 		"__Host-$base_name" => [
 			'expires' => $del_time,
 			'path' => $jailed_path,
 			'secure' => true,
 			'httponly' => $http_only,
-			'samesite' => 'Strict'
+			'samesite' => 'Lax'
 		],
 		"__Secure-$base_name" => [
 			'expires' => $del_time,
 			'path' => '/',
 			'secure' => true,
 			'httponly' => $http_only,
-			'samesite' => 'Strict'
+			'samesite' => 'Lax'
 		]
 	];
 
@@ -239,11 +239,23 @@ function check_login(Context $ctx, bool $prompt = false): void {
 	$is_https = Net\is_connection_secure($config['cookies']['secure_login_only'] === 1);
 	$is_path_jailed = $config['cookies']['jail'];
 	$expected_cookie_name = calc_cookie_name($is_https, $is_path_jailed, $config['cookies']['mod']);
+	$base_name = $config['cookies']['mod'];
 
-	// Validate session
+	// Validate session with fallback for alternate valid cookie prefixes
+	$cookie_raw = null;
 	if (isset($_COOKIE[$expected_cookie_name])) {
+		$cookie_raw = $_COOKIE[$expected_cookie_name];
+	} elseif (isset($_COOKIE["__Host-$base_name"])) {
+		$cookie_raw = $_COOKIE["__Host-$base_name"];
+	} elseif (isset($_COOKIE["__Secure-$base_name"])) {
+		$cookie_raw = $_COOKIE["__Secure-$base_name"];
+	} elseif (isset($_COOKIE[$base_name])) {
+		$cookie_raw = $_COOKIE[$base_name];
+	}
+
+	if ($cookie_raw !== null) {
 		// Should be username:hash:salt
-		$cookie = explode(':', $_COOKIE[$expected_cookie_name]);
+		$cookie = explode(':', $cookie_raw);
 		if (count($cookie) != 3) {
 			// Malformed cookies
 			destroyCookies();

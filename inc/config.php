@@ -1523,8 +1523,9 @@
 	$config['mod'] = [
 		// Limit how many bans can be removed via the ban list. Set to false (or zero) for no limit.
 		'unban_limit' => false,
-		// Whether or not to lock moderator sessions to IP addresses. This makes cookie theft less effective.
-		'lock_ip' => true,
+		// Whether or not to lock moderator sessions to IP addresses.
+		// Disabled by default to prevent unexpected logouts behind Cloudflare/reverse proxies or with dynamic IPs.
+		'lock_ip' => (getenv('VICHAN_MOD_LOCK_IP') !== false) ? (bool)getenv('VICHAN_MOD_LOCK_IP') : false,
 		// The page that is first shown when a moderator logs in. Defaults to the dashboard (?/).
 		'default' => '/',
 		// Do DNS lookups on IP addresses to get their hostname for the moderator IP pages (?/IP/x.x.x.x).

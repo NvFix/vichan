@@ -103,5 +103,9 @@ if(!$options['quiet'])
 	printf("Complete! Took %g seconds\n", microtime(true) - $start);
 
 unset($b_item);
+if (is_dir('/var/cache/template-cache')) {
+	@exec('chown -R www-data:www-data /var/cache/template-cache /var/tmp/vichan /var/cache/gen-cache 2>/dev/null');
+}
 modLog('Rebuilt everything using tools/rebuild.php');
+
 
