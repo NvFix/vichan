@@ -1,0 +1,29 @@
+/**
+ * Yotsuba B stylesheet
+ */
+body {
+  background: #EEF2FF url('img/fade-blue.png') repeat-x 50% 0%;
+  color: black;
+}
+
+a, a:visited {
+  text-decoration: underline;
+  color: #34345C;
+}
+
+a:hover, .intro a.post_no:hover {
+  color: #ff0000;
+}
+
+div.post.reply {
+  background: #D6DAF0;
+  border-color: #B7C5D9;
+}
+
+div.post.reply.highlighted {
+  background: #D1D5EE;
+}
+
+header div.subtitle, h1 {
+  color: #AF0A0F;
+}

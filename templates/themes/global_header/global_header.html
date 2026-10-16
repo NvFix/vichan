@@ -158,7 +158,20 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
         } else {
             var sheet = document.getElementById('stylesheet');
             if (sheet && typeof styles !== 'undefined' && styles[styleName]) {
-                sheet.href = styles[styleName];
+                var newHref = styles[styleName];
+                var preload = document.createElement('link');
+                preload.rel = 'stylesheet';
+                preload.type = 'text/css';
+                preload.href = newHref;
+                preload.onload = function() {
+                    sheet.href = newHref;
+                    if (preload.parentNode) preload.parentNode.removeChild(preload);
+                };
+                preload.onerror = function() {
+                    sheet.href = newHref;
+                    if (preload.parentNode) preload.parentNode.removeChild(preload);
+                };
+                document.head.appendChild(preload);
             }
         }
         ghSyncTheme();

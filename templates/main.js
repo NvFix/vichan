@@ -156,36 +156,46 @@ function changeStyle(styleName, link) {
 
 	selectedstyle = styleName;
 
-	// If main stylesheet already points to this style, ensure it's active and skip redundant download
+	document.documentElement.setAttribute('data-theme', styleName);
+	if (document.body) document.body.setAttribute('data-theme', styleName);
+
+	// If main stylesheet already points to this style, ensure it's active and clean up
 	if (mainStylesheetElement && (mainStylesheetElement.getAttribute('href') === style || (styles[styleName] && mainStylesheetElement.href.indexOf(styles[styleName]) !== -1))) {
 		mainStylesheetElement.media = 'all';
-		if (userStylesheetElement) {
+		if (userStylesheetElement && userStylesheetElement.parentNode) {
 			userStylesheetElement.parentNode.removeChild(userStylesheetElement);
 		}
-	} else {
-		// Override main stylesheet with the user selected one.
-		if (!userStylesheetElement) {
-			userStylesheetElement = document.createElement('link');
-			userStylesheetElement.rel = 'stylesheet';
-			userStylesheetElement.media = 'none';
-			userStylesheetElement.type = 'text/css';
-			userStylesheetElement.id = 'stylesheet-user';
-			let x = document.getElementsByTagName('head')[0];
-			x.appendChild(userStylesheetElement);
-		}
+	} else if (style) {
+		// Double-buffered preload: keep current theme visible until new theme is completely downloaded
+		var pending = document.createElement('link');
+		pending.rel = 'stylesheet';
+		pending.type = 'text/css';
+		pending.media = 'all';
+		pending.href = style;
 
-		// When the new one is loaded, disable the old one
-		userStylesheetElement.onload = function() {
-			this.media = 'all';
+		pending.onload = function() {
 			if (mainStylesheetElement) {
-				mainStylesheetElement.media = 'none';
+				mainStylesheetElement.href = style;
+				mainStylesheetElement.media = 'all';
+			}
+			if (pending.parentNode) {
+				pending.parentNode.removeChild(pending);
+			}
+			if (userStylesheetElement && userStylesheetElement.parentNode) {
+				userStylesheetElement.parentNode.removeChild(userStylesheetElement);
 			}
 		};
 
-		userStylesheetElement.href = style;
-		if (mainStylesheetElement) {
-			mainStylesheetElement.href = style;
-		}
+		pending.onerror = function() {
+			if (mainStylesheetElement) {
+				mainStylesheetElement.href = style;
+			}
+			if (pending.parentNode) {
+				pending.parentNode.removeChild(pending);
+			}
+		};
+
+		document.getElementsByTagName('head')[0].appendChild(pending);
 	}
 
 	if (document.getElementsByClassName('styles').length != 0) {

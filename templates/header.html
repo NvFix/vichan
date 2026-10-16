@@ -1,8 +1,15 @@
+{% if not no_board_style %}
 <link rel="stylesheet" media="screen" href="{{ config.url_stylesheet }}?v={{ config.resource_version }}">
+{% endif %}
 {% if config.url_favicon %}<link rel="shortcut icon" href="{{ config.url_favicon }}">{% endif %}
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
 {% if config.meta_keywords %}<meta name="keywords" content="{{ config.meta_keywords }}">{% endif %}
+<style id="theme-inline-bg">
+	html[data-theme="Schizou"], html[data-theme="Schizou"] body { background-color: #f6f2fc; }
+	html[data-theme="Yotsuba"], html[data-theme="Yotsuba"] body { background-color: #ffffee; }
+	html[data-theme="Yotsuba B"], html[data-theme="Yotsuba B"] body { background-color: #EEF2FF; }
+</style>
 <script type="text/javascript">
 	var configRoot="{{ config.root }}";
 	var inMod = {% if mod %} true {% else %} false {% endif %};
@@ -20,6 +27,7 @@
 		if (!theme) theme = defaultTheme;
 		document.documentElement.setAttribute('data-theme', theme);
 
+		{% if not no_board_style %}
 		var styles = {
 		{% for name, file in config.stylesheets %}
 			'{{ name|addslashes }}': '{{ config.uri_stylesheets }}{{ file|addslashes }}',
@@ -31,11 +39,14 @@
 			href += (href.indexOf('?') === -1 ? '?v=' : '&v=') + '{{ config.resource_version }}';
 			document.write('<link rel="stylesheet" type="text/css" id="stylesheet" href="' + href + '">');
 		}
+		{% endif %}
 	})();
 </script>
+{% if not no_board_style %}
 <noscript>
 	{% if config.default_stylesheet.1 != '' %}<link rel="stylesheet" type="text/css" id="stylesheet" href="{{ config.uri_stylesheets }}{{ config.default_stylesheet.1 }}?v={{ config.resource_version }}">{% endif %}
 </noscript>
+{% endif %}
 {% if config.font_awesome %}<link rel="stylesheet" href="{{ config.root }}{{ config.font_awesome_css }}?v={{ config.resource_version }}">{% endif %}
 {% if config.country_flags_condensed %}<link rel="stylesheet" href="{{ config.root }}{{ config.country_flags_condensed_css }}?v={{ config.resource_version }}">{% endif %}
 {% if not nojavascript %}
