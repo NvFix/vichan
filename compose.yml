@@ -8,6 +8,7 @@ services:
     volumes:
       - ./local-instances/${INSTANCE:-0}/www:/var/www/html
       - ./templates/themes:/code/templates/themes
+      - ./stylesheets:/code/stylesheets
       - ./docker/nginx/vichan.conf:/etc/nginx/conf.d/default.conf
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./docker/nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf
@@ -30,6 +31,7 @@ services:
     volumes:
       - ./local-instances/${INSTANCE:-0}/www:/var/www
       - ./templates/themes:/code/templates/themes
+      - ./stylesheets:/code/stylesheets
       - ./docker/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
       - ./docker/php/jit.ini:/usr/local/etc/php/conf.d/jit.ini
       - ./docker/php/php.ini:/usr/local/etc/php/php.ini
