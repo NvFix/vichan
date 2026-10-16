@@ -35,6 +35,18 @@
 				copy($src_logo, $dst_logo);
 			}
 
+			$src_favicon = 'templates/themes/schizou/SchizoFavicon.png';
+			$dst_favicon = $config['dir']['home'] . 'favicon.png';
+			if (file_exists($src_favicon) && (!file_exists($dst_favicon) || filemtime($src_favicon) > filemtime($dst_favicon) || $action == 'all')) {
+				copy($src_favicon, $dst_favicon);
+			}
+
+			$src_ico = 'templates/themes/schizou/favicon.ico';
+			$dst_ico = $config['dir']['home'] . 'favicon.ico';
+			if (file_exists($src_ico) && (!file_exists($dst_ico) || filemtime($src_ico) > filemtime($dst_ico) || $action == 'all')) {
+				copy($src_ico, $dst_ico);
+			}
+
 			$target_html = $config['dir']['home'] . (!empty($settings['html']) ? $settings['html'] : 'index.html');
 
 			// Always rebuild and write the fresh homepage immediately
@@ -61,10 +73,6 @@
 			// 1. Logo URL and cache-busting timestamp
 			$logo_file = !empty($settings['logo']) ? $settings['logo'] : 'schizou_logo.png';
 			$logo_path_on_disk = $config['dir']['home'] . basename($logo_file);
-			$logo_src_in_theme = 'templates/themes/schizou/' . basename($logo_file);
-			if (file_exists($logo_src_in_theme) && (!file_exists($logo_path_on_disk) || filemtime($logo_src_in_theme) > filemtime($logo_path_on_disk))) {
-				copy($logo_src_in_theme, $logo_path_on_disk);
-			}
 			$logo_mtime = file_exists($logo_path_on_disk) ? filemtime($logo_path_on_disk) : time();
 
 			if (!preg_match('#^https?://#', $logo_file) && !preg_match('#^/#', $logo_file)) {
@@ -76,10 +84,6 @@
 			// CSS cache-busting timestamp
 			$css_file = !empty($settings['css']) ? $settings['css'] : 'schizou.css';
 			$css_path_on_disk = $config['dir']['home'] . basename($css_file);
-			$css_src_in_theme = 'templates/themes/schizou/' . (!empty($settings['basecss']) ? $settings['basecss'] : 'schizou.css');
-			if (file_exists($css_src_in_theme) && (!file_exists($css_path_on_disk) || filemtime($css_src_in_theme) > filemtime($css_path_on_disk))) {
-				copy($css_src_in_theme, $css_path_on_disk);
-			}
 			$css_mtime = file_exists($css_path_on_disk) ? filemtime($css_path_on_disk) : time();
 
 			// 2. Latest News
@@ -210,22 +214,21 @@
 					$midnight_iran_ts = ($now + $offset) - (($now + $offset) % 86400) - $offset;
 				}
 
-				$q_today = [];
-				$q_total = [];
+				$q_counts = [];
 				$q_files = [];
 				foreach ($active_boards as $b) {
-					$q_today[] = sprintf("SELECT COUNT(*) AS `c` FROM ``posts_%s`` WHERE `time` >= %d", $b['uri'], $midnight_iran_ts);
-					$q_total[] = sprintf("SELECT COUNT(*) AS `c` FROM ``posts_%s``", $b['uri']);
+					$q_counts[] = sprintf("SELECT SUM(CASE WHEN `time` >= %d THEN 1 ELSE 0 END) AS `today`, COUNT(*) AS `total` FROM ``posts_%s``", $midnight_iran_ts, $b['uri']);
 					$q_files[] = sprintf("SELECT `files` FROM ``posts_%s`` WHERE `num_files` > 0", $b['uri']);
 				}
 
-				// Posts today (Iran Time)
-				$res_today = query("SELECT SUM(`c`) FROM (" . implode(' UNION ALL ', $q_today) . ") AS `t`") or error(db_error());
-				$stats['posts_today'] = number_format((int)$res_today->fetchColumn());
-
-				// Total posts
-				$res_total = query("SELECT SUM(`c`) FROM (" . implode(' UNION ALL ', $q_total) . ") AS `t`") or error(db_error());
-				$stats['total_posts'] = number_format((int)$res_total->fetchColumn());
+				// Combined post counts
+				$res_counts = query("SELECT SUM(`today`), SUM(`total`) FROM (" . implode(' UNION ALL ', $q_counts) . ") AS `t`") or error(db_error());
+				$counts = $res_counts->fetch(PDO::FETCH_NUM);
+				$raw_today = (int)($counts[0] ?? 0);
+				$raw_total = (int)($counts[1] ?? 0);
+				$stats['posts_today'] = number_format($raw_today);
+				$stats['total_posts'] = number_format($raw_total);
+				$stats['raw_total_posts'] = $raw_total;
 
 				// Files & sizes
 				$res_files = query(implode(' UNION ALL ', $q_files)) or error(db_error());

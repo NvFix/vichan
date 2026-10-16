@@ -22,6 +22,9 @@
 	// The default stylesheet to use on board pages.
 	$config['default_stylesheet'] = array('Schizou', $config['stylesheets']['Schizou']);
 
+	// Website favicon
+	$config['url_favicon'] = '/favicon.png';
+
 	// Database stuff
 	$config['db']['type']		= 'mysql';
 	$config['db']['server']		= 'localhost';

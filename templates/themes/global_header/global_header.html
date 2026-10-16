@@ -5,9 +5,6 @@ html {
 }
 html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
     margin: 0 !important;
-    margin-top: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
     padding-left: 0 !important;
     padding-right: 0 !important;
 {% if fixed_top %}
@@ -34,10 +31,6 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
     max-width: 100% !important;
     height: {{ header_height }}px;
     margin: 0 !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
     background: #e8ddfa;
     border-bottom: 1px solid #7c66bb;
     box-sizing: border-box;
@@ -73,24 +66,19 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
     color: #43226a;
     text-decoration: underline;
 }
-html[data-theme="Yotsuba"] #global-header.global-header,
-body[data-theme="Yotsuba"] #global-header.global-header {
+[data-theme="Yotsuba"] #global-header.global-header {
     background: #ea8;
     border-bottom: 1px solid #800;
     color: #800000;
 }
-html[data-theme="Yotsuba"] #global-header a,
-body[data-theme="Yotsuba"] #global-header a {
+[data-theme="Yotsuba"] #global-header a {
     color: #0000ff;
 }
-html[data-theme="Yotsuba"] #global-header a:hover,
-body[data-theme="Yotsuba"] #global-header a:hover {
+[data-theme="Yotsuba"] #global-header a:hover {
     color: #d00000;
 }
-html[data-theme="Yotsuba"] #global-header a.selected,
-html[data-theme="Yotsuba"] #global-header a.gh-active-theme,
-body[data-theme="Yotsuba"] #global-header a.selected,
-body[data-theme="Yotsuba"] #global-header a.gh-active-theme {
+[data-theme="Yotsuba"] #global-header a.selected,
+[data-theme="Yotsuba"] #global-header a.gh-active-theme {
     color: #800000;
     font-weight: 700;
 }

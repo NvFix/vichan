@@ -8,7 +8,6 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>{{ settings.title }}</title>
-    {% if config.url_favicon %}<link rel="shortcut icon" href="{{ config.url_favicon }}">{% endif %}
     {% include 'header.html' %}
     <link rel="stylesheet" media="screen" href="{{ config.root }}{{ settings.css }}?v={{ css_mtime }}">
 </head>
@@ -138,7 +137,7 @@
                     <div class="stats-counter-box">
                         <div class="stats-counter-label">total posts:</div>
                         <div class="stats-counter-wrap">
-                            <img src="https://count.getloli.com/@schizou?theme=booru-lisu&amp;padding=3&amp;offset=0&amp;align=center&amp;scale=1&amp;pixelated=1&amp;darkmode=0&amp;num={{ stats.total_posts }}" alt="{{ stats.total_posts }}" class="stats-counter-img" loading="lazy" />
+                            <img src="https://count.getloli.com/@schizou?theme=booru-lisu&amp;padding=3&amp;offset=0&amp;align=center&amp;scale=1&amp;pixelated=1&amp;darkmode=0&amp;num={{ stats.raw_total_posts }}" alt="{{ stats.total_posts }}" class="stats-counter-img" loading="lazy" />
                         </div>
                         <div class="stats-today">posts today: {{ stats.posts_today }}</div>
                     </div>
