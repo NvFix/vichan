@@ -499,18 +499,6 @@ body.theme-schizou[data-theme="Yotsuba"] {
     background: rgba(90, 15, 15, 0.75);
 }
 
-[data-theme="Yotsuba B"] .images-grid .image-link {
-    border-color: #b7c5d9;
-    background: #d6daf0;
-}
-
-[data-theme="Yotsuba B"] .images-grid .image-link:hover {
-    border-color: #0000ee;
-}
-
-[data-theme="Yotsuba B"] .images-grid .thumb-overlay {
-    background: rgba(15, 25, 65, 0.75);
-}
 
 [data-theme="Futaba"] .images-grid .thumb-overlay {
     background: rgba(90, 20, 20, 0.75);

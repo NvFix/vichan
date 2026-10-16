@@ -1014,8 +1014,7 @@
 	// available stylesheets (or create your own).
 	$config['stylesheets'] = [
 		'Schizou' => 'schizou.css',
-		'Yotsuba' => 'yotsuba.css',
-		'Yotsuba B' => 'yotsuba-b.css'
+		'Yotsuba' => 'yotsuba.css'
 	];
 	// $config['stylesheets']['Futaba'] = 'futaba.css';
 	// $config['stylesheets']['Dark'] = 'dark.css';
