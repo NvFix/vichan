@@ -149,7 +149,10 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
     window.changeStyle = function(styleName) {
         document.documentElement.setAttribute('data-theme', styleName);
         if (document.body) document.body.setAttribute('data-theme', styleName);
-        localStorage.setItem('stylesheet', styleName);
+        try {
+            localStorage.setItem('stylesheet', styleName);
+        } catch (e) {}
+        document.cookie = 'stylesheet=' + encodeURIComponent(styleName) + ';path=/;max-age=31536000';
         if (typeof origChangeStyle === 'function') {
             origChangeStyle(styleName);
         } else {

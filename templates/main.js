@@ -148,36 +148,45 @@ function changeStyle(styleName, link) {
 	let mainStylesheetElement = document.getElementById('stylesheet');
 	let userStylesheetElement = document.getElementById('stylesheet-user');
 
-	// Override main stylesheet with the user selected one.
-	if (!userStylesheetElement) {
-		userStylesheetElement = document.createElement('link');
-		userStylesheetElement.rel = 'stylesheet';
-		userStylesheetElement.media = 'none';
-		userStylesheetElement.type = 'text/css';
-		userStylesheetElement.id = 'stylesheet-user';
-		let x = document.getElementsByTagName('head')[0];
-		x.appendChild(userStylesheetElement);
-	}
-
-	// When the new one is loaded, disable the old one
-	userStylesheetElement.onload = function() {
-		this.media = 'all';
-		if (mainStylesheetElement) {
-			mainStylesheetElement.media = 'none';
-		}
-	};
-
 	let style = styles[styleName];
 	if (style !== '') {
 		// Add the version of the resource if the style is not the embedded one.
 		style += `?v=${resourceVersion}`;
 	}
 
-	userStylesheetElement.href = style;
-	if (mainStylesheetElement) {
-		mainStylesheetElement.href = style;
-	}
 	selectedstyle = styleName;
+
+	// If main stylesheet already points to this style, ensure it's active and skip redundant download
+	if (mainStylesheetElement && (mainStylesheetElement.getAttribute('href') === style || (styles[styleName] && mainStylesheetElement.href.indexOf(styles[styleName]) !== -1))) {
+		mainStylesheetElement.media = 'all';
+		if (userStylesheetElement) {
+			userStylesheetElement.parentNode.removeChild(userStylesheetElement);
+		}
+	} else {
+		// Override main stylesheet with the user selected one.
+		if (!userStylesheetElement) {
+			userStylesheetElement = document.createElement('link');
+			userStylesheetElement.rel = 'stylesheet';
+			userStylesheetElement.media = 'none';
+			userStylesheetElement.type = 'text/css';
+			userStylesheetElement.id = 'stylesheet-user';
+			let x = document.getElementsByTagName('head')[0];
+			x.appendChild(userStylesheetElement);
+		}
+
+		// When the new one is loaded, disable the old one
+		userStylesheetElement.onload = function() {
+			this.media = 'all';
+			if (mainStylesheetElement) {
+				mainStylesheetElement.media = 'none';
+			}
+		};
+
+		userStylesheetElement.href = style;
+		if (mainStylesheetElement) {
+			mainStylesheetElement.href = style;
+		}
+	}
 
 	if (document.getElementsByClassName('styles').length != 0) {
 		let styleLinks = document.getElementsByClassName('styles')[0].childNodes;

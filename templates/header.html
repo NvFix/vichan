@@ -3,18 +3,41 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
 {% if config.meta_keywords %}<meta name="keywords" content="{{ config.meta_keywords }}">{% endif %}
-{% if config.default_stylesheet.1 != '' %}<link rel="stylesheet" type="text/css" id="stylesheet" href="{{ config.uri_stylesheets }}{{ config.default_stylesheet.1 }}?v={{ config.resource_version }}">{% endif %}
-{% if config.font_awesome %}<link rel="stylesheet" href="{{ config.root }}{{ config.font_awesome_css }}?v={{ config.resource_version }}">{% endif %}
-{% if config.country_flags_condensed %}<link rel="stylesheet" href="{{ config.root }}{{ config.country_flags_condensed_css }}?v={{ config.resource_version }}">{% endif %}
 <script type="text/javascript">
 	var configRoot="{{ config.root }}";
 	var inMod = {% if mod %} true {% else %} false {% endif %};
 	var modRoot = "{{ config.root }}" + (inMod ? "mod.php?/" : "");
 	(function() {
-		var theme = localStorage.getItem('stylesheet') || '{{ config.default_stylesheet.0|addslashes }}';
+		var defaultTheme = '{{ config.default_stylesheet.0|addslashes }}';
+		var theme = null;
+		try {
+			theme = localStorage.getItem('stylesheet');
+		} catch (e) {}
+		if (!theme) {
+			var m = document.cookie.match('(^|;) ?stylesheet=([^;]*)(;|$)');
+			if (m) theme = decodeURIComponent(m[2]);
+		}
+		if (!theme) theme = defaultTheme;
 		document.documentElement.setAttribute('data-theme', theme);
+
+		var styles = {
+		{% for name, file in config.stylesheets %}
+			'{{ name|addslashes }}': '{{ config.uri_stylesheets }}{{ file|addslashes }}',
+		{% endfor %}
+		};
+
+		var href = styles[theme] || styles[defaultTheme] || '{{ config.uri_stylesheets }}{{ config.default_stylesheet.1|addslashes }}';
+		if (href) {
+			href += (href.indexOf('?') === -1 ? '?v=' : '&v=') + '{{ config.resource_version }}';
+			document.write('<link rel="stylesheet" type="text/css" id="stylesheet" href="' + href + '">');
+		}
 	})();
 </script>
+<noscript>
+	{% if config.default_stylesheet.1 != '' %}<link rel="stylesheet" type="text/css" id="stylesheet" href="{{ config.uri_stylesheets }}{{ config.default_stylesheet.1 }}?v={{ config.resource_version }}">{% endif %}
+</noscript>
+{% if config.font_awesome %}<link rel="stylesheet" href="{{ config.root }}{{ config.font_awesome_css }}?v={{ config.resource_version }}">{% endif %}
+{% if config.country_flags_condensed %}<link rel="stylesheet" href="{{ config.root }}{{ config.country_flags_condensed_css }}?v={{ config.resource_version }}">{% endif %}
 {% if not nojavascript %}
 	<script type="text/javascript" src="{{ config.url_javascript }}?v={{ config.resource_version }} data-resource-version="{{ config.resource_version }}"></script>
 	{% if not config.additional_javascript_compile %}

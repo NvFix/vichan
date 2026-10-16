@@ -34,11 +34,8 @@
                             {% for entry in news %}
                                 <tr>
                                     <td class="news-title">
-                                        <a href="#news-{{ entry.id }}">
-                                            {% if entry.subject %}{{ entry.subject }}{% else %}<em>Untitled</em>{% endif %}
-                                        </a>
+                                        <a href="{{ config.root }}news.html#{{ entry.id }}" title="{{ entry.subject|e }}">{% if entry.subject %}{{ entry.subject }}{% else %}<em>Untitled</em>{% endif %}</a>
                                     </td>
-                                    <td class="news-snippet">{{ entry.snippet }}</td>
                                     <td class="news-date">{{ entry.date_formatted }}</td>
                                 </tr>
                             {% endfor %}
