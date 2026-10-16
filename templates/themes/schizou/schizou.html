@@ -1,0 +1,180 @@
+{% apply spaceless %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>{{ settings.title }}</title>
+    {% if config.url_favicon %}<link rel="shortcut icon" href="{{ config.url_favicon }}">{% endif %}
+    {% include 'header.html' %}
+    <link rel="stylesheet" media="screen" href="{{ config.root }}{{ settings.css }}?v={{ css_mtime }}">
+</head>
+<body class="theme-schizou">
+    <header class="top-nav">
+        <nav class="board-nav">
+            [ {% for b in boards %}<a href="{{ config.board_path|sprintf(b.uri) }}">{{ b.uri }}</a>{% if not loop.last %} / {% endif %}{% endfor %} ]
+        </nav>
+    </header>
+
+    <div class="site-container">
+        <div class="logo-wrap">
+            <a href="{{ config.root }}">
+                <img class="site-logo" src="{{ logo_url }}?v={{ logo_mtime }}" alt="{{ settings.title }}">
+            </a>
+        </div>
+
+        <section class="box news-box">
+            <div class="box-header">Latest News</div>
+            <div class="box-content">
+                {% if news|length == 0 %}
+                    <p class="empty-notice">No news to show.</p>
+                {% else %}
+                    <table class="news-table">
+                        <tbody>
+                            {% for entry in news %}
+                                <tr>
+                                    <td class="news-title">
+                                        <a href="#news-{{ entry.id }}">
+                                            {% if entry.subject %}{{ entry.subject }}{% else %}<em>Untitled</em>{% endif %}
+                                        </a>
+                                    </td>
+                                    <td class="news-snippet">{{ entry.snippet }}</td>
+                                    <td class="news-date">{{ entry.date_formatted }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="box detail-box">
+            <div class="box-header">{{ settings.detail_title }}</div>
+            <div class="box-content detail-content">
+                {{ settings.detail_body|nl2br }}
+            </div>
+        </section>
+
+        <div class="grid-section">
+            <section class="box latest-posts-box">
+                <div class="box-header">Latest Posts</div>
+                <div class="box-content">
+                    {% if recent_posts|length == 0 %}
+                        <p class="empty-notice">No posts yet.</p>
+                    {% else %}
+                        <table class="item-table">
+                            <tbody>
+                                {% for post in recent_posts %}
+                                    <tr>
+                                        <td class="item-badge">
+                                            <a href="{{ config.board_path|sprintf(post.board) }}">/{{ post.board }}/</a>
+                                        </td>
+                                        <td class="item-text">
+                                            <a href="{{ post.link }}" title="{{ post.snippet_full }}">
+                                                {{ post.snippet|raw }}
+                                            </a>
+                                        </td>
+                                        <td class="item-date">{{ post.date_formatted }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                </div>
+            </section>
+
+            <section class="box hot-threads-box">
+                <div class="box-header">Hot Threads</div>
+                <div class="box-content">
+                    {% if hot_threads|length == 0 %}
+                        <p class="empty-notice">No active threads yet.</p>
+                    {% else %}
+                        <table class="item-table">
+                            <tbody>
+                                {% for thread in hot_threads %}
+                                    <tr>
+                                        <td class="thread-replies">
+                                            <span class="star-icon">&#9733;</span> {{ thread.reply_count }}
+                                        </td>
+                                        <td class="item-text">
+                                            <a href="{{ thread.link }}" title="{{ thread.title_full }}">
+                                                {{ thread.title|raw }}
+                                            </a>
+                                        </td>
+                                        <td class="item-date">{{ thread.date_formatted }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                </div>
+            </section>
+
+            <section class="box latest-images-box">
+                <div class="box-header">Latest Images</div>
+                <div class="box-content">
+                    {% if recent_images|length == 0 %}
+                        <p class="empty-notice">No images uploaded yet.</p>
+                    {% else %}
+                        <div class="images-grid">
+                            {% for img in recent_images %}
+                                <a href="{{ img.link }}" class="image-link" title="{{ img.board }}/{{ img.id }}">
+                                    <img src="{{ img.src }}" alt="" class="thumb-cell" loading="lazy" />
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+
+            <section class="box site-stats-box">
+                <div class="box-header">Site Stats</div>
+                <div class="box-content stats-content">
+                    <p class="stats-paragraph">
+                        <strong>{{ stats.posts_today }}</strong> posts have been made today, 
+                        and <strong>{{ stats.total_posts }}</strong> in total. 
+                        <strong>{{ stats.total_files }}</strong> files are being served, totaling <strong>{{ stats.total_size }}</strong>.
+                    </p>
+                    <table class="stats-table">
+                        <tbody>
+                            <tr>
+                                <th>Posts Today:</th>
+                                <td>{{ stats.posts_today }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total Posts:</th>
+                                <td>{{ stats.total_posts }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total Files:</th>
+                                <td>{{ stats.total_files }}</td>
+                            </tr>
+                            <tr>
+                                <th>Total File Size:</th>
+                                <td>{{ stats.total_size }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <p class="unimportant">
+                - Tinyboard + <a href="https://github.com/vichan-devel/vichan">vichan</a> 5.2.2 Running Containerized -<br>
+                Tinyboard Copyright &copy; 2010-2014 Tinyboard Development Group<br>
+                <a href="https://github.com/vichan-devel/vichan">vichan</a> Copyright &copy; 2012-2025 vichan-devel
+            </p>
+            <p class="unimportant">
+                All trademarks, copyrights, comments, and images on this page are owned by and are the responsibility of their respective parties.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
+{% endapply %}

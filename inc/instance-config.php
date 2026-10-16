@@ -10,6 +10,9 @@
 
 
 
+	// Enable automatic template reloading so edits to templates are picked up immediately
+	$config['twig_auto_reload'] = true;
+
 	// Database stuff
 	$config['db']['type']		= 'mysql';
 	$config['db']['server']		= 'localhost';

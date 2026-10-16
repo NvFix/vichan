@@ -716,6 +716,8 @@ function mod_news_delete(Context $ctx, $id) {
 
 	modLog('Deleted a news entry');
 
+	Vichan\Functions\Theme\rebuild_themes('news');
+
 	header('Location: ?/edit_news', true, $config['redirect_http']);
 }
 
