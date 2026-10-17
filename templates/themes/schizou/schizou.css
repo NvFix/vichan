@@ -424,6 +424,91 @@ body.theme-schizou {
     color: #8f61c0;
 }
 
+[data-theme="Deluded Nightly"] body.theme-schizou,
+body.theme-schizou[data-theme="Deluded Nightly"] {
+    background-color: #0f071b;
+    background-image: none;
+    color: #989bbc;
+}
+
+[data-theme="Deluded Nightly"] body.theme-schizou a,
+[data-theme="Deluded Nightly"] body.theme-schizou a:visited {
+    color: #9766c8;
+}
+
+[data-theme="Deluded Nightly"] body.theme-schizou a:hover {
+    color: #b585ea;
+}
+
+[data-theme="Deluded Nightly"] .box {
+    border: 1px solid #3a166b;
+    background-color: #1e1035;
+    box-shadow: 0 2px 6px rgba(10, 5, 20, 0.4);
+}
+
+[data-theme="Deluded Nightly"] .box-header {
+    background: #2b114f;
+    color: #d4d3e1;
+    border-bottom: 1px solid #3a166b;
+    text-shadow: none;
+}
+
+[data-theme="Deluded Nightly"] .box-content,
+[data-theme="Deluded Nightly"] .detail-content {
+    background-color: #1e1035;
+    color: #989bbc;
+}
+
+[data-theme="Deluded Nightly"] .news-table tr,
+[data-theme="Deluded Nightly"] .item-table tr,
+[data-theme="Deluded Nightly"] .stats-table tr {
+    border-color: #3a166b;
+}
+
+[data-theme="Deluded Nightly"] .news-date,
+[data-theme="Deluded Nightly"] .item-date,
+[data-theme="Deluded Nightly"] .stats-paragraph,
+[data-theme="Deluded Nightly"] .stats-counter-label,
+[data-theme="Deluded Nightly"] .stats-today,
+[data-theme="Deluded Nightly"] .thread-replies,
+[data-theme="Deluded Nightly"] .empty-notice {
+    color: #73748e;
+}
+
+[data-theme="Deluded Nightly"] .star-icon {
+    color: #9766c8;
+}
+
+[data-theme="Deluded Nightly"] .item-badge a {
+    color: #9766c8;
+}
+
+[data-theme="Deluded Nightly"] .images-grid .image-link {
+    border-color: #3a166b;
+    background: #160b29;
+}
+
+[data-theme="Deluded Nightly"] .images-grid .image-link:hover {
+    border-color: #7c4bb3;
+}
+
+[data-theme="Deluded Nightly"] .images-grid .thumb-overlay {
+    background: rgba(30, 16, 53, 0.85);
+}
+
+[data-theme="Deluded Nightly"] .site-footer {
+    border-top: 1px solid #2b114f;
+    color: #73748e;
+}
+
+[data-theme="Deluded Nightly"] .site-footer a {
+    color: #9766c8;
+}
+
+[data-theme="Deluded Nightly"] .site-footer a:hover {
+    color: #b585ea;
+}
+
 [data-theme="Yotsuba"] body.theme-schizou,
 body.theme-schizou[data-theme="Yotsuba"] {
     background-color: #ffffee;

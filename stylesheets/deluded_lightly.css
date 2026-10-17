@@ -1,0 +1,252 @@
+/* Deluded Lightly Theme */
+html, body {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+body {
+	background-color: #f6f2fc;
+	background-image: linear-gradient(180deg, #ede2fc 0%, #f6f2fc 160px, #f6f2fc 100%);
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	color: #281b38;
+}
+
+a:link, a:visited {
+	color: #6841a8;
+}
+
+a:link:hover {
+	color: #8f61c0;
+}
+
+a.post_no {
+	color: #54338c;
+}
+
+a.post_no:hover {
+	color: #8f61c0;
+}
+
+div.post.reply {
+	background: #f4dded;
+	border-color: #c9b0e8;
+}
+
+div.post.reply.highlighted {
+	background: #edd0e7;
+	border-color: #bfa0e0;
+}
+
+div.post.reply div.body a {
+	color: #6841a8;
+}
+
+.intro span.subject {
+	color: #54338c;
+}
+
+.intro span.name,
+span.name,
+.intro a.email span.name {
+	color: #c974da;
+	font-weight: bold;
+}
+
+.intro span.capcode, p.intro a.capcode, p.intro a.nametag {
+	color: #7c66bb;
+}
+
+form table tr th {
+	background-color: #7c66bb;
+	color: #ffffff;
+	font-weight: 700;
+	border: 1px solid #54338c;
+	padding: 0 5px;
+	font-size: 10pt;
+}
+
+div.ban h2 {
+	background: #e8ddfa;
+	color: #54338c;
+}
+
+div.ban {
+	border-color: #7c66bb;
+	background: #f4dded;
+}
+
+div.ban p {
+	color: #281b38;
+}
+
+div.pages {
+	background: #f4dded;
+	border-color: #c9b0e8;
+}
+
+div.pages a.selected {
+	color: #54338c;
+}
+
+header div.subtitle, h1 {
+	color: #7c66bb;
+	text-align: center;
+}
+
+hr {
+	border: none;
+	border-top: 1px solid #d2c0e8;
+	height: 0;
+}
+
+div.boardlist {
+	color: #7c66bb;
+}
+
+div.boardlist a {
+	color: #54338c;
+}
+
+div.boardlist a:hover {
+	color: #8f61c0;
+}
+
+table.modlog tr th {
+	background: #7c66bb;
+	color: #ffffff;
+}
+
+/* options.js */
+#options_div, #alert_div {
+	background: #f4dded;
+	border-color: #7c66bb;
+}
+
+.desktop-style div.boardlist:nth-child(1) {
+	background-color: #e8ddfa;
+}
+
+img.banner, img.board_image {
+	border: 1px solid #7c66bb;
+}
+
+/* Submit New Thread & Submit New Reply buttons & Modal */
+.submit-new-thread-btn,
+.submit-new-reply-btn {
+	background: linear-gradient(180deg, #876fc6 0%, #6841a8 100%);
+	border: 1px solid #54338c;
+	color: #ffffff;
+	box-shadow: 0 1px 3px rgba(84, 51, 140, 0.3);
+	text-shadow: 0 1px 2px rgba(40, 27, 56, 0.4);
+}
+
+.submit-new-thread-btn:hover,
+.submit-new-reply-btn:hover {
+	background: linear-gradient(180deg, #967ed5 0%, #774eb8 100%);
+	border-color: #43296f;
+	color: #ffffff;
+	box-shadow: 0 2px 6px rgba(84, 51, 140, 0.4);
+}
+
+.submit-new-thread-btn:active,
+.submit-new-reply-btn:active {
+	background: linear-gradient(180deg, #613b9e 0%, #4f2e82 100%);
+}
+
+.post-form-modal {
+	background: #f4dded;
+	border-color: #7c66bb;
+	color: #281b38;
+}
+
+.post-form-modal .post-form-header {
+	background: #e8ddfa;
+	border-bottom: 1px solid #c9b0e8;
+}
+
+.post-form-modal .post-form-title {
+	color: #54338c;
+}
+
+.post-form-modal form table tr th {
+	background-color: #7c66bb !important;
+	color: #ffffff !important;
+	border: 1px solid #54338c !important;
+}
+
+.post-form-modal input[type="text"],
+.post-form-modal input[type="password"],
+.post-form-modal select,
+.post-form-modal textarea {
+	background-color: #ffffff;
+	color: #281b38;
+	border: 1px solid #a9a9a9;
+}
+
+.post-form-modal input[type="text"]:focus,
+.post-form-modal input[type="password"]:focus,
+.post-form-modal select:focus,
+.post-form-modal textarea:focus {
+	border-color: #7c66bb;
+}
+
+form[name="post"] input[type="submit"],
+.post-form-modal input[type="submit"],
+#delete-fields input[type="submit"],
+#report-fields input[type="submit"] {
+	background: #7c66bb;
+	color: #ffffff;
+	border: 1px solid #54338c;
+	border-radius: 2px;
+	padding: 2px 8px;
+	font-weight: 700;
+	font-size: 10pt;
+	cursor: pointer;
+	font-family: inherit;
+	transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+form[name="post"] input[type="submit"]:hover,
+.post-form-modal input[type="submit"]:hover,
+#delete-fields input[type="submit"]:hover,
+#report-fields input[type="submit"]:hover {
+	background: #8f61c0;
+	border-color: #43296f;
+}
+
+#delete-fields input[type="password"],
+#report-fields input[type="text"] {
+	border: 1px solid #a9a9a9;
+}
+
+#delete-fields input[type="password"]:focus,
+#report-fields input[type="text"]:focus {
+	border-color: #7c66bb;
+	outline: none;
+}
+
+.post-form-modal label {
+	color: #281b38;
+}
+
+.post-form-modal a {
+	color: #6841a8;
+}
+
+.post-form-modal .unimportant,
+.post-form-modal .unimportant * {
+	color: #7c66bb;
+}
+
+/* Catalog */
+.theme-catalog div.thread {
+	background: #f4dded;
+	border: 1px solid #c9b0e8;
+	color: #281b38;
+}
+
+.theme-catalog div.thread:hover {
+	background: #edd0e7;
+	border-color: #bfa0e0;
+}

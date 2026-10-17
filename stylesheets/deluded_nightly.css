@@ -1,0 +1,425 @@
+/* Deluded Nightly Theme */
+html, body {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+body {
+	background: #0f071b !important;
+	background-color: #0f071b !important;
+	background-image: none !important;
+	color: #989bbc;
+}
+
+a:link, a:visited {
+	color: #9766c8;
+}
+
+a:link:hover {
+	color: #b585ea;
+}
+
+a.post_no {
+	color: #73748e !important;
+}
+
+a.post_no:hover {
+	color: #9766c8 !important;
+}
+
+/* Quote links (>>38, >>39) */
+div.body a,
+a.quote {
+	color: #9e4763 !important;
+}
+
+div.body a:hover,
+a.quote:hover {
+	color: #c95c80 !important;
+}
+
+div.post.reply {
+	background: #1e1035;
+	border-color: #3a166b;
+	color: #989bbc;
+}
+
+div.post.reply.highlighted {
+	background: #271545;
+	border-color: #552794;
+}
+
+div.post.reply div.body a {
+	color: #9e4763 !important;
+}
+
+div.post.reply div.body a:hover {
+	color: #c95c80 !important;
+}
+
+.intro span.subject,
+span.subject {
+	color: #c95c80 !important;
+	font-weight: 700;
+}
+
+.intro span.name,
+span.name,
+.intro a.email span.name {
+	color: #c974da !important;
+	font-weight: 700;
+}
+
+.intro span.trip,
+span.trip {
+	color: #7a7d9b;
+}
+
+.intro span.capcode,
+p.intro a.capcode,
+p.intro a.nametag,
+span.capcode {
+	color: #ec0004 !important;
+}
+
+p.intro,
+p.intro label,
+p.intro time,
+.omittedposts,
+p.fileinfo,
+p.fileinfo .unimportant {
+	color: #73748e;
+}
+
+p.fileinfo a {
+	color: #9766c8;
+}
+
+p.fileinfo a:hover {
+	color: #b585ea;
+}
+
+/* Greentext */
+span.quote {
+	color: #6d842b !important;
+}
+
+form table tr th {
+	background-color: #2b114f;
+	color: #d4d3e1;
+	font-weight: 700;
+	border: 1px solid #4a2280;
+	padding: 0 5px;
+	font-size: 10pt;
+}
+
+div.ban h2 {
+	background: #2b114f;
+	color: #d4d3e1;
+}
+
+div.ban {
+	border-color: #3a166b;
+	background: #1e1035;
+}
+
+div.ban p {
+	color: #989bbc;
+}
+
+div.pages {
+	background: #1e1035;
+	border-color: #3a166b;
+	color: #989bbc;
+}
+
+div.pages a {
+	color: #9766c8;
+}
+
+div.pages a.selected {
+	color: #ffffff;
+	font-weight: 700;
+}
+
+header div.subtitle, h1 {
+	color: #d4d3e1;
+	text-align: center;
+}
+
+hr {
+	border: none;
+	border-top: 1px solid #2b114f;
+	height: 0;
+}
+
+div.boardlist {
+	color: #73748e;
+}
+
+div.boardlist a {
+	color: #9766c8;
+}
+
+div.boardlist a:hover {
+	color: #b585ea;
+}
+
+table.modlog tr th {
+	background: #2b114f;
+	color: #d4d3e1;
+}
+
+/* options.js */
+#options_div, #alert_div {
+	background: #1e1035;
+	border-color: #3a166b;
+	color: #989bbc;
+}
+
+.desktop-style div.boardlist:nth-child(1) {
+	background-color: #100a1c;
+}
+
+img.banner, img.board_image {
+	border: 1px solid #3a166b;
+}
+
+/* Submit New Thread & Submit New Reply buttons & Modal */
+.submit-new-thread-btn,
+.submit-new-reply-btn {
+	background: linear-gradient(180deg, #4d238c 0%, #341561 100%) !important;
+	border: 1px solid #5a2ea3 !important;
+	color: #ffffff !important;
+	box-shadow: 0 1px 3px rgba(10, 5, 20, 0.5) !important;
+	text-shadow: 0 1px 2px rgba(10, 5, 20, 0.6) !important;
+}
+
+.submit-new-thread-btn:hover,
+.submit-new-reply-btn:hover {
+	background: linear-gradient(180deg, #5e2ca8 0%, #441c7c 100%) !important;
+	border-color: #733dc9 !important;
+	color: #ffffff !important;
+	box-shadow: 0 2px 6px rgba(40, 15, 80, 0.5) !important;
+}
+
+.submit-new-thread-btn:active,
+.submit-new-reply-btn:active {
+	background: linear-gradient(180deg, #2b114f 0%, #1c0a34 100%) !important;
+}
+
+.post-form-modal {
+	background: #1e1035 !important;
+	border-color: #3a166b !important;
+	color: #989bbc !important;
+}
+
+.post-form-modal .post-form-header {
+	background: #2b114f !important;
+	border-bottom: 1px solid #3a166b !important;
+}
+
+.post-form-modal .post-form-title {
+	color: #d4d3e1 !important;
+}
+
+html body .post-form-modal form table tr th,
+html[data-theme="Deluded Nightly"] body .post-form-modal form table tr th,
+.post-form-modal form table tr th {
+	background-color: #2b114f !important;
+	color: #d4d3e1 !important;
+	border: 1px solid #4a2280 !important;
+}
+
+input[type="text"],
+input[type="password"],
+select,
+textarea,
+.post-form-modal input[type="text"],
+.post-form-modal input[type="password"],
+.post-form-modal select,
+.post-form-modal textarea,
+#delete-fields input[type="password"],
+#report-fields input[type="text"] {
+	background-color: #160b29;
+	color: #d4d3e1;
+	border: 1px solid #3a166b;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+select:focus,
+textarea:focus,
+.post-form-modal input[type="text"]:focus,
+.post-form-modal input[type="password"]:focus,
+.post-form-modal select:focus,
+.post-form-modal textarea:focus,
+#delete-fields input[type="password"]:focus,
+#report-fields input[type="text"]:focus {
+	border-color: #7c4bb3;
+	outline: none;
+}
+
+form[name="post"] input[type="submit"],
+.post-form-modal input[type="submit"],
+#delete-fields input[type="submit"],
+#report-fields input[type="submit"] {
+	background: linear-gradient(180deg, #4d238c 0%, #341561 100%) !important;
+	color: #ffffff !important;
+	border: 1px solid #5a2ea3 !important;
+	border-radius: 2px !important;
+	padding: 2px 8px !important;
+	font-weight: 700 !important;
+	font-size: 10pt !important;
+	cursor: pointer !important;
+	font-family: inherit !important;
+	box-shadow: 0 1px 3px rgba(10, 5, 20, 0.4) !important;
+	text-shadow: 0 1px 2px rgba(10, 5, 20, 0.6) !important;
+	transition: background 0.15s ease, border-color 0.15s ease !important;
+}
+
+form[name="post"] input[type="submit"]:hover,
+.post-form-modal input[type="submit"]:hover,
+#delete-fields input[type="submit"]:hover,
+#report-fields input[type="submit"]:hover {
+	background: linear-gradient(180deg, #5e2ca8 0%, #441c7c 100%) !important;
+	border-color: #733dc9 !important;
+	color: #ffffff !important;
+	box-shadow: 0 2px 6px rgba(40, 15, 80, 0.5) !important;
+}
+
+form[name="post"] input[type="submit"]:active,
+.post-form-modal input[type="submit"]:active,
+#delete-fields input[type="submit"]:active,
+#report-fields input[type="submit"]:active {
+	background: linear-gradient(180deg, #2b114f 0%, #1c0a34 100%) !important;
+}
+
+.post-form-modal label {
+	color: #989bbc;
+}
+
+.post-form-modal a {
+	color: #9766c8;
+}
+
+.post-form-modal .unimportant,
+.post-form-modal .unimportant * {
+	color: #73748e;
+}
+
+/* Styling toolbar */
+.styling-toggle {
+	color: #9766c8;
+}
+
+.styling-toggle:hover {
+	color: #b585ea;
+}
+
+.styling-btn {
+	background: #241142;
+	border: 1px solid #3a166b;
+	color: #d4d3e1;
+}
+
+.styling-btn:hover {
+	background: #341561;
+	border-color: #5a2ea3;
+	color: #ffffff;
+}
+
+.styling-btn-spoiler {
+	background: #000000 !important;
+	border-color: #3a166b !important;
+	color: #000000 !important;
+}
+
+.styling-btn-spoiler:hover {
+	color: #ffffff !important;
+}
+
+.post-option-label {
+	color: #989bbc;
+}
+
+.char-counter {
+	color: #73748e;
+}
+
+.char-counter.char-counter-limit {
+	color: #c95c80;
+}
+
+/* Upload dropzone & preview */
+.upload-dropzone {
+	border: 2px dashed #5a2ea3 !important;
+	background-color: rgba(43, 17, 79, 0.3) !important;
+}
+
+.upload-dropzone:hover,
+.upload-dropzone.dragover {
+	border-color: #733dc9 !important;
+	background-color: rgba(58, 22, 107, 0.45) !important;
+}
+
+.upload-dropzone-text {
+	color: #9766c8 !important;
+}
+
+.upload-preview-thumb-wrap {
+	border-color: #3a166b !important;
+	background: #160b29 !important;
+}
+
+.upload-preview-remove {
+	background: #5a2ea3 !important;
+	border-color: #ffffff !important;
+}
+
+.upload-preview-remove:hover {
+	background: #733dc9 !important;
+}
+
+.upload-preview-info {
+	color: #d4d3e1 !important;
+}
+
+.upload-preview-size {
+	color: #73748e !important;
+}
+
+.upload-preview-spoiler {
+	color: #989bbc !important;
+}
+
+/* Catalog */
+.theme-catalog div.thread {
+	background: #1e1035;
+	border: 1px solid #3a166b;
+	color: #989bbc;
+}
+
+.theme-catalog div.thread:hover {
+	background: #271545;
+	border-color: #552794;
+}
+
+/* Footer & unimportant text */
+.footer,
+p.unimportant,
+.unimportant {
+	color: #73748e;
+}
+
+.footer a,
+p.unimportant a,
+.unimportant a {
+	color: #9766c8;
+}
+
+.footer a:hover,
+p.unimportant a:hover,
+.unimportant a:hover {
+	color: #b585ea;
+}

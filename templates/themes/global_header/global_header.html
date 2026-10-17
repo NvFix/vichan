@@ -66,6 +66,22 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
     color: #43226a;
     text-decoration: underline;
 }
+[data-theme="Deluded Nightly"] #global-header.global-header {
+    background: #100a1c;
+    border-bottom: 1px solid #2b114f;
+    color: #878aa6;
+}
+[data-theme="Deluded Nightly"] #global-header a {
+    color: #9766c8;
+}
+[data-theme="Deluded Nightly"] #global-header a:hover {
+    color: #b585ea;
+}
+[data-theme="Deluded Nightly"] #global-header a.selected,
+[data-theme="Deluded Nightly"] #global-header a.gh-active-theme {
+    color: #ffffff;
+    font-weight: 700;
+}
 [data-theme="Yotsuba"] #global-header.global-header {
     background: #ea8;
     border-bottom: 1px solid #800;
@@ -116,7 +132,8 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
         return m ? decodeURIComponent(m[2]) : null;
     }
     function ghSyncTheme() {
-        var current = localStorage.getItem('stylesheet') || getThemeCookie() || (typeof selectedstyle !== 'undefined' ? selectedstyle : 'Schizou');
+        var current = localStorage.getItem('stylesheet') || getThemeCookie() || (typeof selectedstyle !== 'undefined' ? selectedstyle : 'Deluded Lightly');
+        if (current === 'Schizou') current = 'Deluded Lightly';
         document.documentElement.setAttribute('data-theme', current);
         if (document.body) document.body.setAttribute('data-theme', current);
         var links = document.querySelectorAll('#global-header .gh-theme-changer a, #global-header [data-theme]');

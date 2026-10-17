@@ -1434,7 +1434,8 @@ div.mix {
 }
 
 html body .post-form-modal form table tr th,
-html[data-theme] body .post-form-modal form table tr th {
+html[data-theme="Deluded Lightly"] body .post-form-modal form table tr th,
+html[data-theme="Schizou"] body .post-form-modal form table tr th {
   background-color: #7c66bb !important;
   color: #ffffff !important;
   border: 1px solid #54338c !important;
@@ -1468,7 +1469,9 @@ html[data-theme] body .post-form-modal form table tr th {
 }
 
 form[name="post"] input[type="submit"],
-.post-form-modal input[type="submit"] {
+.post-form-modal input[type="submit"],
+#delete-fields input[type="submit"],
+#report-fields input[type="submit"] {
   background: #7c66bb;
   color: #ffffff;
   border: 1px solid #54338c;
@@ -1483,7 +1486,9 @@ form[name="post"] input[type="submit"],
 }
 
 form[name="post"] input[type="submit"]:hover,
-.post-form-modal input[type="submit"]:hover {
+.post-form-modal input[type="submit"]:hover,
+#delete-fields input[type="submit"]:hover,
+#report-fields input[type="submit"]:hover {
   background: #8f61c0;
   border-color: #43296f;
 }
@@ -1499,6 +1504,104 @@ form[name="post"] input[type="submit"]:hover,
 .post-form-modal .unimportant,
 .post-form-modal .unimportant * {
   color: #7c66bb;
+}
+
+/* ==========================================================================
+   Deluded Nightly Theme Overrides for Button & Modal
+   ========================================================================== */
+
+html[data-theme="Deluded Nightly"] .submit-new-thread-btn,
+html[data-theme="Deluded Nightly"] .submit-new-reply-btn {
+  background: linear-gradient(180deg, #4d238c 0%, #341561 100%) !important;
+  border: 1px solid #5a2ea3 !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(10, 5, 20, 0.5) !important;
+  text-shadow: 0 1px 2px rgba(10, 5, 20, 0.6) !important;
+}
+
+html[data-theme="Deluded Nightly"] .submit-new-thread-btn:hover,
+html[data-theme="Deluded Nightly"] .submit-new-reply-btn:hover {
+  background: linear-gradient(180deg, #5e2ca8 0%, #441c7c 100%) !important;
+  border-color: #733dc9 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 6px rgba(40, 15, 80, 0.5) !important;
+}
+
+html[data-theme="Deluded Nightly"] .submit-new-thread-btn:active,
+html[data-theme="Deluded Nightly"] .submit-new-reply-btn:active {
+  background: linear-gradient(180deg, #2b114f 0%, #1c0a34 100%) !important;
+}
+
+html[data-theme="Deluded Nightly"] .post-form-modal {
+  background-color: #1e1035 !important;
+  color: #989bbc !important;
+  border-color: #3a166b !important;
+  box-shadow: 0 8px 32px rgba(10, 5, 20, 0.6) !important;
+}
+
+html[data-theme="Deluded Nightly"] .post-form-modal .post-form-header {
+  background: #2b114f !important;
+  border-bottom: 1px solid #3a166b !important;
+}
+
+html[data-theme="Deluded Nightly"] .post-form-modal .post-form-title {
+  color: #d4d3e1 !important;
+}
+
+html[data-theme="Deluded Nightly"] body .post-form-modal form table tr th,
+html[data-theme="Deluded Nightly"] .post-form-modal form table tr th {
+  background-color: #2b114f !important;
+  color: #d4d3e1 !important;
+  border: 1px solid #4a2280 !important;
+}
+
+html[data-theme="Deluded Nightly"] .post-form-modal input[type="text"],
+html[data-theme="Deluded Nightly"] .post-form-modal input[type="password"],
+html[data-theme="Deluded Nightly"] .post-form-modal select,
+html[data-theme="Deluded Nightly"] .post-form-modal textarea {
+  background-color: #160b29 !important;
+  color: #d4d3e1 !important;
+  border: 1px solid #3a166b !important;
+}
+
+html[data-theme="Deluded Nightly"] .post-form-modal input[type="text"]:focus,
+html[data-theme="Deluded Nightly"] .post-form-modal input[type="password"]:focus,
+html[data-theme="Deluded Nightly"] .post-form-modal select:focus,
+html[data-theme="Deluded Nightly"] .post-form-modal textarea:focus {
+  border-color: #7c4bb3 !important;
+  outline: none !important;
+}
+
+html[data-theme="Deluded Nightly"] form[name="post"] input[type="submit"],
+html[data-theme="Deluded Nightly"] .post-form-modal input[type="submit"],
+html[data-theme="Deluded Nightly"] #delete-fields input[type="submit"],
+html[data-theme="Deluded Nightly"] #report-fields input[type="submit"] {
+  background: linear-gradient(180deg, #4d238c 0%, #341561 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid #5a2ea3 !important;
+  border-radius: 2px !important;
+}
+
+html[data-theme="Deluded Nightly"] form[name="post"] input[type="submit"]:hover,
+html[data-theme="Deluded Nightly"] .post-form-modal input[type="submit"]:hover,
+html[data-theme="Deluded Nightly"] #delete-fields input[type="submit"]:hover,
+html[data-theme="Deluded Nightly"] #report-fields input[type="submit"]:hover {
+  background: linear-gradient(180deg, #5e2ca8 0%, #441c7c 100%) !important;
+  border-color: #733dc9 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="Deluded Nightly"] .post-form-modal label {
+  color: #989bbc !important;
+}
+
+html[data-theme="Deluded Nightly"] .post-form-modal a {
+  color: #9766c8 !important;
+}
+
+html[data-theme="Deluded Nightly"] .post-form-modal .unimportant,
+html[data-theme="Deluded Nightly"] .post-form-modal .unimportant * {
+  color: #73748e !important;
 }
 
 /* ==========================================================================
@@ -1564,7 +1667,9 @@ html[data-theme="Yotsuba"] .post-form-modal textarea:focus {
 }
 
 html[data-theme="Yotsuba"] form[name="post"] input[type="submit"],
-html[data-theme="Yotsuba"] .post-form-modal input[type="submit"] {
+html[data-theme="Yotsuba"] .post-form-modal input[type="submit"],
+html[data-theme="Yotsuba"] #delete-fields input[type="submit"],
+html[data-theme="Yotsuba"] #report-fields input[type="submit"] {
   background: #ea8;
   color: #800;
   border: 1px solid #800;
@@ -1579,7 +1684,9 @@ html[data-theme="Yotsuba"] .post-form-modal input[type="submit"] {
 }
 
 html[data-theme="Yotsuba"] form[name="post"] input[type="submit"]:hover,
-html[data-theme="Yotsuba"] .post-form-modal input[type="submit"]:hover {
+html[data-theme="Yotsuba"] .post-form-modal input[type="submit"]:hover,
+html[data-theme="Yotsuba"] #delete-fields input[type="submit"]:hover,
+html[data-theme="Yotsuba"] #report-fields input[type="submit"]:hover {
   background: #fca;
   border-color: #600;
 }
@@ -1986,4 +2093,90 @@ html[data-theme="Yotsuba"] .upload-preview-size {
 html[data-theme="Yotsuba"] .upload-preview-spoiler {
   color: #800000;
 }
+
+/* Deluded Nightly theme overrides for styling toolbar */
+html[data-theme="Deluded Nightly"] .styling-toggle {
+  color: #9766c8;
+}
+
+html[data-theme="Deluded Nightly"] .styling-toggle:hover {
+  color: #b585ea;
+}
+
+html[data-theme="Deluded Nightly"] .styling-btn {
+  background: #241142;
+  border-color: #3a166b;
+  color: #d4d3e1;
+}
+
+html[data-theme="Deluded Nightly"] .styling-btn:hover {
+  background: #341561;
+  border-color: #5a2ea3;
+  color: #ffffff;
+}
+
+html[data-theme="Deluded Nightly"] .styling-btn-spoiler {
+  background: #000000 !important;
+  border-color: #3a166b !important;
+  color: #000000 !important;
+}
+
+html[data-theme="Deluded Nightly"] .styling-btn-spoiler:hover {
+  color: #ffffff !important;
+}
+
+html[data-theme="Deluded Nightly"] .post-option-label {
+  color: #989bbc;
+}
+
+html[data-theme="Deluded Nightly"] .char-counter {
+  color: #73748e;
+}
+
+html[data-theme="Deluded Nightly"] .char-counter.char-counter-limit {
+  color: #c95c80;
+}
+
+/* Deluded Nightly theme overrides for upload dropzone & preview */
+html[data-theme="Deluded Nightly"] .upload-dropzone {
+  border-color: #5a2ea3;
+  background-color: rgba(43, 17, 79, 0.3);
+}
+
+html[data-theme="Deluded Nightly"] .upload-dropzone:hover,
+html[data-theme="Deluded Nightly"] .upload-dropzone.dragover {
+  border-color: #733dc9;
+  background-color: rgba(58, 22, 107, 0.45);
+}
+
+html[data-theme="Deluded Nightly"] .upload-dropzone-text {
+  color: #9766c8;
+}
+
+html[data-theme="Deluded Nightly"] .upload-preview-thumb-wrap {
+  border-color: #3a166b;
+  background: #160b29;
+}
+
+html[data-theme="Deluded Nightly"] .upload-preview-remove {
+  background: #5a2ea3;
+  border-color: #ffffff;
+}
+
+html[data-theme="Deluded Nightly"] .upload-preview-remove:hover {
+  background: #733dc9;
+}
+
+html[data-theme="Deluded Nightly"] .upload-preview-info {
+  color: #d4d3e1;
+}
+
+html[data-theme="Deluded Nightly"] .upload-preview-size {
+  color: #73748e;
+}
+
+html[data-theme="Deluded Nightly"] .upload-preview-spoiler {
+  color: #989bbc;
+}
+
 

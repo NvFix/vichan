@@ -15,12 +15,13 @@
 
 	// Custom stylesheets available for the user to choose.
 	$config['stylesheets'] = [
-		'Schizou' => 'schizou.css',
+		'Deluded Lightly' => 'deluded_lightly.css',
+		'Deluded Nightly' => 'deluded_nightly.css',
 		'Yotsuba' => 'yotsuba.css'
 	];
 
 	// The default stylesheet to use on board pages.
-	$config['default_stylesheet'] = array('Schizou', $config['stylesheets']['Schizou']);
+	$config['default_stylesheet'] = array('Deluded Lightly', $config['stylesheets']['Deluded Lightly']);
 
 	// Website favicon
 	$config['url_favicon'] = '/favicon.png';

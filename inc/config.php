@@ -1020,7 +1020,8 @@
 	// Custom stylesheets available for the user to choose. See the "stylesheets/" folder for a list of
 	// available stylesheets (or create your own).
 	$config['stylesheets'] = [
-		'Schizou' => 'schizou.css',
+		'Deluded Lightly' => 'deluded_lightly.css',
+		'Deluded Nightly' => 'deluded_nightly.css',
 		'Yotsuba' => 'yotsuba.css'
 	];
 	// $config['stylesheets']['Futaba'] = 'futaba.css';
@@ -1030,7 +1031,7 @@
 	// $config['uri_stylesheets'] = 'http://static.example.org/stylesheets/';
 
 	// The default stylesheet to use.
-	$config['default_stylesheet'] = array('Schizou', $config['stylesheets']['Schizou']);
+	$config['default_stylesheet'] = array('Deluded Lightly', $config['stylesheets']['Deluded Lightly']);
 
 	// Make stylesheet selections board-specific.
 	$config['stylesheets_board'] = false;

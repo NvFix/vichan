@@ -41,14 +41,15 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	border-color: #800 !important;
 }
 div.ban h2 {
-	background: #FCA;
-	color: inherit;
+	background: #ea8;
+	color: #800000;
 }
 div.ban {
 	border-color: #800;
+	background: #f0e0d6;
 }
 div.ban p {
-	color: black;
+	color: #800000;
 }
 div.pages {
 	background: #F0E0D6;
@@ -146,16 +147,32 @@ table.modlog tr th {
 }
 
 form[name="post"] input[type="submit"],
-.post-form-modal input[type="submit"] {
+.post-form-modal input[type="submit"],
+#delete-fields input[type="submit"],
+#report-fields input[type="submit"] {
 	background: #ea8;
 	color: #800;
 	border: 1px solid #800;
+	border-radius: 2px;
+	padding: 2px 8px;
+	font-weight: 700;
+	font-size: 10pt;
+	cursor: pointer;
+	font-family: inherit;
+	transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 form[name="post"] input[type="submit"]:hover,
-.post-form-modal input[type="submit"]:hover {
+.post-form-modal input[type="submit"]:hover,
+#delete-fields input[type="submit"]:hover,
+#report-fields input[type="submit"]:hover {
 	background: #fca;
 	border-color: #600;
+}
+
+#delete-fields input[type="password"],
+#report-fields input[type="text"] {
+	border: 1px solid #800;
 }
 
 .post-form-modal label {
