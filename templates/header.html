@@ -36,7 +36,8 @@
 	html[data-theme="Schizou"] div.ban h2 { background: #e8ddfa !important; color: #54338c !important; }
 	html[data-theme="Deluded Lightly"] div.ban p,
 	html[data-theme="Schizou"] div.ban p { color: #281b38 !important; }
-	html[data-theme="Deluded Nightly"], html[data-theme="Deluded Nightly"] body { background: #0f071b !important; background-color: #0f071b !important; background-image: none !important; color: #989bbc !important; }
+	html[data-theme="Deluded Nightly"] { color-scheme: dark !important; }
+	html[data-theme="Deluded Nightly"], html[data-theme="Deluded Nightly"] body { background: #0f071b !important; background-color: #0f071b !important; background-image: none !important; color: #989bbc !important; color-scheme: dark !important; }
 	html[data-theme="Deluded Nightly"] div.post.reply { background: #1e1035 !important; border-color: #3a166b !important; }
 	html[data-theme="Deluded Nightly"] form table tr th { background: #2b114f !important; color: #d4d3e1 !important; border-color: #4a2280 !important; }
 	html[data-theme="Deluded Nightly"] h1, html[data-theme="Deluded Nightly"] header div.subtitle, html[data-theme="Deluded Nightly"] h2 { color: #d4d3e1 !important; }
@@ -49,16 +50,53 @@
 	html[data-theme="Deluded Nightly"] .post-form-title { color: #d4d3e1 !important; }
 	html[data-theme="Deluded Nightly"] body .post-form-modal form table tr th,
 	html[data-theme="Deluded Nightly"] .post-form-modal form table tr th { background-color: #2b114f !important; color: #d4d3e1 !important; border: 1px solid #4a2280 !important; }
+	html[data-theme="Deluded Nightly"] input[type="text"],
+	html[data-theme="Deluded Nightly"] input[type="password"],
+	html[data-theme="Deluded Nightly"] input[type="search"],
+	html[data-theme="Deluded Nightly"] input[type="email"],
+	html[data-theme="Deluded Nightly"] select,
+	html[data-theme="Deluded Nightly"] textarea,
+	html[data-theme="Deluded Nightly"] form[name="post"] input[type="text"],
+	html[data-theme="Deluded Nightly"] form[name="post"] input[type="password"],
+	html[data-theme="Deluded Nightly"] form[name="post"] select,
+	html[data-theme="Deluded Nightly"] form[name="post"] textarea,
 	html[data-theme="Deluded Nightly"] .post-form-modal input[type="text"],
 	html[data-theme="Deluded Nightly"] .post-form-modal input[type="password"],
 	html[data-theme="Deluded Nightly"] .post-form-modal select,
-	html[data-theme="Deluded Nightly"] .post-form-modal textarea { background-color: #160b29 !important; color: #d4d3e1 !important; border: 1px solid #3a166b !important; }
+	html[data-theme="Deluded Nightly"] .post-form-modal textarea,
+	html[data-theme="Deluded Nightly"] #quick-reply input[type="text"],
+	html[data-theme="Deluded Nightly"] #quick-reply input[type="password"],
+	html[data-theme="Deluded Nightly"] #quick-reply textarea,
+	html[data-theme="Deluded Nightly"] #delete-fields input[type="password"],
+	html[data-theme="Deluded Nightly"] #delete-fields input[type="text"],
+	html[data-theme="Deluded Nightly"] #report-fields input[type="text"] { background-color: #160b29 !important; color: #d4d3e1 !important; border: 1px solid #3a166b !important; color-scheme: dark !important; }
+	html[data-theme="Deluded Nightly"] input[type="text"]:focus,
+	html[data-theme="Deluded Nightly"] input[type="password"]:focus,
+	html[data-theme="Deluded Nightly"] select:focus,
+	html[data-theme="Deluded Nightly"] textarea:focus,
+	html[data-theme="Deluded Nightly"] form[name="post"] input[type="text"]:focus,
+	html[data-theme="Deluded Nightly"] form[name="post"] input[type="password"]:focus,
+	html[data-theme="Deluded Nightly"] form[name="post"] select:focus,
+	html[data-theme="Deluded Nightly"] form[name="post"] textarea:focus,
+	html[data-theme="Deluded Nightly"] .post-form-modal input[type="text"]:focus,
+	html[data-theme="Deluded Nightly"] .post-form-modal input[type="password"]:focus,
+	html[data-theme="Deluded Nightly"] .post-form-modal select:focus,
+	html[data-theme="Deluded Nightly"] .post-form-modal textarea:focus,
+	html[data-theme="Deluded Nightly"] #quick-reply input[type="text"]:focus,
+	html[data-theme="Deluded Nightly"] #quick-reply input[type="password"]:focus,
+	html[data-theme="Deluded Nightly"] #quick-reply textarea:focus,
+	html[data-theme="Deluded Nightly"] #delete-fields input[type="password"]:focus,
+	html[data-theme="Deluded Nightly"] #delete-fields input[type="text"]:focus,
+	html[data-theme="Deluded Nightly"] #report-fields input[type="text"]:focus { border-color: #7c4bb3 !important; outline: none !important; }
+	html[data-theme="Deluded Nightly"] input::placeholder,
+	html[data-theme="Deluded Nightly"] textarea::placeholder { color: #73748e !important; }
 	html[data-theme="Deluded Nightly"] .upload-dropzone { border-color: #5a2ea3 !important; background-color: rgba(43, 17, 79, 0.3) !important; }
 	html[data-theme="Deluded Nightly"] .upload-dropzone-text { color: #9766c8 !important; }
 	html[data-theme="Deluded Nightly"] form[name="post"] input[type="submit"],
 	html[data-theme="Deluded Nightly"] .post-form-modal input[type="submit"],
 	html[data-theme="Deluded Nightly"] #delete-fields input[type="submit"],
-	html[data-theme="Deluded Nightly"] #report-fields input[type="submit"] { background: linear-gradient(180deg, #4d238c 0%, #341561 100%) !important; border: 1px solid #5a2ea3 !important; color: #ffffff !important; border-radius: 2px !important; }
+	html[data-theme="Deluded Nightly"] #report-fields input[type="submit"],
+	html[data-theme="Deluded Nightly"] #quick-reply input[type="submit"] { background: linear-gradient(180deg, #4d238c 0%, #341561 100%) !important; border: 1px solid #5a2ea3 !important; color: #ffffff !important; border-radius: 2px !important; }
 	html[data-theme="Deluded Nightly"] .intro span.subject, html[data-theme="Deluded Nightly"] span.subject { color: #c95c80 !important; }
 	html[data-theme="Deluded Nightly"] .intro span.name, html[data-theme="Deluded Nightly"] span.name, html[data-theme="Deluded Nightly"] .intro a.email span.name { color: #c974da !important; }
 	html[data-theme="Deluded Nightly"] div.ban { background: #1e1035 !important; border-color: #3a166b !important; }
@@ -93,24 +131,44 @@
 			'{{ name|addslashes }}': '{{ config.uri_stylesheets }}{{ file|addslashes }}',
 		{% endfor %}
 		};
+		window.styles = styles;
 		var defaultTheme = '{{ config.default_stylesheet.0|addslashes }}';
+		window.defaultTheme = defaultTheme;
 		var theme = null;
 		try {
-			theme = localStorage.getItem('stylesheet');
+			theme = localStorage.getItem('stylesheet') || localStorage.stylesheet;
 		} catch (e) {}
 		if (!theme) {
-			var m = document.cookie.match('(^|;) ?stylesheet=([^;]*)(;|$)');
-			if (m) theme = decodeURIComponent(m[2]);
+			try {
+				var m = document.cookie.match('(^|;) ?stylesheet=([^;]*)(;|$)');
+				if (m) theme = decodeURIComponent(m[2]);
+			} catch (e) {}
 		}
-		if (theme === 'Schizou') theme = 'Deluded Lightly';
-		if (!theme || !styles[theme]) {
-			theme = defaultTheme;
-			try { localStorage.setItem('stylesheet', defaultTheme); } catch (e) {}
+		if (theme) {
+			theme = String(theme).trim().replace(/^["']|["']$/g, '').replace(/\+/g, ' ');
+			if (theme.toLowerCase() === 'schizou') theme = 'Deluded Lightly';
 		}
-		document.documentElement.setAttribute('data-theme', theme);
+		var activeTheme = null;
+		if (theme) {
+			if (styles[theme]) {
+				activeTheme = theme;
+			} else {
+				var lower = theme.toLowerCase();
+				for (var k in styles) {
+					if (k.toLowerCase() === lower) {
+						activeTheme = k;
+						break;
+					}
+				}
+			}
+		}
+		if (!activeTheme) {
+			activeTheme = defaultTheme;
+		}
+		document.documentElement.setAttribute('data-theme', activeTheme);
 
 		{% if not no_board_style %}
-		var href = styles[theme] || styles[defaultTheme] || '{{ config.uri_stylesheets }}{{ config.default_stylesheet.1|addslashes }}';
+		var href = styles[activeTheme] || styles[defaultTheme] || '{{ config.uri_stylesheets }}{{ config.default_stylesheet.1|addslashes }}';
 		if (href) {
 			href += (href.indexOf('?') === -1 ? '?v=' : '&v=') + '{{ config.resource_version }}';
 			document.write('<link rel="stylesheet" type="text/css" id="stylesheet" href="' + href + '">');

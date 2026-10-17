@@ -424,11 +424,16 @@ body.theme-schizou {
     color: #8f61c0;
 }
 
+[data-theme="Deluded Nightly"] {
+    color-scheme: dark;
+}
+
 [data-theme="Deluded Nightly"] body.theme-schizou,
 body.theme-schizou[data-theme="Deluded Nightly"] {
     background-color: #0f071b;
     background-image: none;
     color: #989bbc;
+    color-scheme: dark;
 }
 
 [data-theme="Deluded Nightly"] body.theme-schizou a,

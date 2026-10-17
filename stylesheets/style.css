@@ -1510,6 +1510,10 @@ form[name="post"] input[type="submit"]:hover,
    Deluded Nightly Theme Overrides for Button & Modal
    ========================================================================== */
 
+html[data-theme="Deluded Nightly"] {
+  color-scheme: dark !important;
+}
+
 html[data-theme="Deluded Nightly"] .submit-new-thread-btn,
 html[data-theme="Deluded Nightly"] .submit-new-reply-btn {
   background: linear-gradient(180deg, #4d238c 0%, #341561 100%) !important;
@@ -1555,27 +1559,66 @@ html[data-theme="Deluded Nightly"] .post-form-modal form table tr th {
   border: 1px solid #4a2280 !important;
 }
 
+html[data-theme="Deluded Nightly"] input[type="text"],
+html[data-theme="Deluded Nightly"] input[type="password"],
+html[data-theme="Deluded Nightly"] input[type="search"],
+html[data-theme="Deluded Nightly"] input[type="email"],
+html[data-theme="Deluded Nightly"] select,
+html[data-theme="Deluded Nightly"] textarea,
+html[data-theme="Deluded Nightly"] form[name="post"] input[type="text"],
+html[data-theme="Deluded Nightly"] form[name="post"] input[type="password"],
+html[data-theme="Deluded Nightly"] form[name="post"] select,
+html[data-theme="Deluded Nightly"] form[name="post"] textarea,
 html[data-theme="Deluded Nightly"] .post-form-modal input[type="text"],
 html[data-theme="Deluded Nightly"] .post-form-modal input[type="password"],
 html[data-theme="Deluded Nightly"] .post-form-modal select,
-html[data-theme="Deluded Nightly"] .post-form-modal textarea {
+html[data-theme="Deluded Nightly"] .post-form-modal textarea,
+html[data-theme="Deluded Nightly"] #quick-reply input[type="text"],
+html[data-theme="Deluded Nightly"] #quick-reply input[type="password"],
+html[data-theme="Deluded Nightly"] #quick-reply textarea,
+html[data-theme="Deluded Nightly"] #delete-fields input[type="password"],
+html[data-theme="Deluded Nightly"] #delete-fields input[type="text"],
+html[data-theme="Deluded Nightly"] #report-fields input[type="text"] {
   background-color: #160b29 !important;
   color: #d4d3e1 !important;
   border: 1px solid #3a166b !important;
+  color-scheme: dark !important;
 }
 
+html[data-theme="Deluded Nightly"] input[type="text"]:focus,
+html[data-theme="Deluded Nightly"] input[type="password"]:focus,
+html[data-theme="Deluded Nightly"] input[type="search"]:focus,
+html[data-theme="Deluded Nightly"] input[type="email"]:focus,
+html[data-theme="Deluded Nightly"] select:focus,
+html[data-theme="Deluded Nightly"] textarea:focus,
+html[data-theme="Deluded Nightly"] form[name="post"] input[type="text"]:focus,
+html[data-theme="Deluded Nightly"] form[name="post"] input[type="password"]:focus,
+html[data-theme="Deluded Nightly"] form[name="post"] select:focus,
+html[data-theme="Deluded Nightly"] form[name="post"] textarea:focus,
 html[data-theme="Deluded Nightly"] .post-form-modal input[type="text"]:focus,
 html[data-theme="Deluded Nightly"] .post-form-modal input[type="password"]:focus,
 html[data-theme="Deluded Nightly"] .post-form-modal select:focus,
-html[data-theme="Deluded Nightly"] .post-form-modal textarea:focus {
+html[data-theme="Deluded Nightly"] .post-form-modal textarea:focus,
+html[data-theme="Deluded Nightly"] #quick-reply input[type="text"]:focus,
+html[data-theme="Deluded Nightly"] #quick-reply input[type="password"]:focus,
+html[data-theme="Deluded Nightly"] #quick-reply textarea:focus,
+html[data-theme="Deluded Nightly"] #delete-fields input[type="password"]:focus,
+html[data-theme="Deluded Nightly"] #delete-fields input[type="text"]:focus,
+html[data-theme="Deluded Nightly"] #report-fields input[type="text"]:focus {
   border-color: #7c4bb3 !important;
   outline: none !important;
+}
+
+html[data-theme="Deluded Nightly"] input::placeholder,
+html[data-theme="Deluded Nightly"] textarea::placeholder {
+  color: #73748e !important;
 }
 
 html[data-theme="Deluded Nightly"] form[name="post"] input[type="submit"],
 html[data-theme="Deluded Nightly"] .post-form-modal input[type="submit"],
 html[data-theme="Deluded Nightly"] #delete-fields input[type="submit"],
-html[data-theme="Deluded Nightly"] #report-fields input[type="submit"] {
+html[data-theme="Deluded Nightly"] #report-fields input[type="submit"],
+html[data-theme="Deluded Nightly"] #quick-reply input[type="submit"] {
   background: linear-gradient(180deg, #4d238c 0%, #341561 100%) !important;
   color: #ffffff !important;
   border: 1px solid #5a2ea3 !important;

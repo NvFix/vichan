@@ -121,16 +121,28 @@ if (typeof board_name === 'undefined') {
 }
 
 function changeStyle(styleName, link) {
+	if (!styleName) return;
 	{% endverbatim %}
 	{% if config.stylesheets_board %}{% verbatim %}
 		if (board_name) {
-			stylesheet_choices[board_name] = styleName;
-			localStorage.board_stylesheets = JSON.stringify(stylesheet_choices);
+			try {
+				stylesheet_choices[board_name] = styleName;
+				localStorage.board_stylesheets = JSON.stringify(stylesheet_choices);
+			} catch (e) {}
 		}
 	{% endverbatim %}{% else %}
-		localStorage.stylesheet = styleName;
+		try {
+			localStorage.stylesheet = styleName;
+			localStorage.setItem('stylesheet', styleName);
+		} catch (e) {}
 	{% endif %}
 	{% verbatim %}
+	try {
+		var cookieStr = 'stylesheet=' + encodeURIComponent(styleName) + ';path=/;max-age=31536000;SameSite=Lax';
+		if (location.protocol === 'https:') cookieStr += ';Secure';
+		document.cookie = cookieStr;
+	} catch (e) {}
+
 	document.documentElement.setAttribute('data-theme', styleName);
 	if (document.body) {
 		document.body.setAttribute('data-theme', styleName);
@@ -235,20 +247,40 @@ var resourceVersion = document.currentScript.getAttribute('data-resource-version
 	{% endverbatim%}
 {% else %}
 	{% verbatim %}
-	if (localStorage.stylesheet) {
-		if (!styles[localStorage.stylesheet]) {
-			localStorage.stylesheet = '{% endverbatim %}{{ config.default_stylesheet.0|addslashes }}{% verbatim %}';
-		}
-		document.documentElement.setAttribute('data-theme', localStorage.stylesheet);
-		if (document.body) {
-			document.body.setAttribute('data-theme', localStorage.stylesheet);
-		}
-		for (let styleName in styles) {
-			if (styleName == localStorage.stylesheet) {
-				changeStyle(styleName);
-				break;
+	var storedTheme = null;
+	try {
+		storedTheme = localStorage.getItem('stylesheet') || localStorage.stylesheet;
+	} catch (e) {}
+	if (!storedTheme) {
+		try {
+			var m = document.cookie.match('(^|;) ?stylesheet=([^;]*)(;|$)');
+			if (m) storedTheme = decodeURIComponent(m[2]);
+		} catch (e) {}
+	}
+	if (storedTheme) {
+		storedTheme = String(storedTheme).trim().replace(/^["']|["']$/g, '').replace(/\+/g, ' ');
+		if (storedTheme.toLowerCase() === 'schizou') storedTheme = 'Deluded Lightly';
+	}
+	var matchedStyle = null;
+	if (storedTheme) {
+		if (styles[storedTheme]) {
+			matchedStyle = storedTheme;
+		} else {
+			var lower = storedTheme.toLowerCase();
+			for (let s in styles) {
+				if (s.toLowerCase() === lower) {
+					matchedStyle = s;
+					break;
+				}
 			}
 		}
+	}
+	if (matchedStyle) {
+		document.documentElement.setAttribute('data-theme', matchedStyle);
+		if (document.body) {
+			document.body.setAttribute('data-theme', matchedStyle);
+		}
+		changeStyle(matchedStyle);
 	}
 	{% endverbatim %}
 {% endif %}

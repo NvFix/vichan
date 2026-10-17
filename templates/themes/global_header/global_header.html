@@ -128,23 +128,41 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
 <script type="text/javascript">
 (function() {
     function getThemeCookie() {
-        var m = document.cookie.match('(^|;) ?stylesheet=([^;]*)(;|$)');
-        return m ? decodeURIComponent(m[2]) : null;
+        try {
+            var m = document.cookie.match('(^|;) ?stylesheet=([^;]*)(;|$)');
+            if (m) {
+                return decodeURIComponent(m[2]).trim().replace(/^["']|["']$/g, '').replace(/\+/g, ' ');
+            }
+        } catch (e) {}
+        return null;
     }
     function ghSyncTheme() {
-        var current = localStorage.getItem('stylesheet') || getThemeCookie() || (typeof selectedstyle !== 'undefined' ? selectedstyle : 'Deluded Lightly');
-        if (current === 'Schizou') current = 'Deluded Lightly';
-        document.documentElement.setAttribute('data-theme', current);
-        if (document.body) document.body.setAttribute('data-theme', current);
+        var current = null;
+        try {
+            current = localStorage.getItem('stylesheet') || localStorage.stylesheet;
+        } catch (e) {}
+        if (!current) current = getThemeCookie();
+        if (!current && typeof selectedstyle !== 'undefined') current = selectedstyle;
+        if (!current && typeof window.defaultTheme !== 'undefined') current = window.defaultTheme;
+        if (!current) current = 'Deluded Lightly';
+
+        current = String(current).trim().replace(/^["']|["']$/g, '').replace(/\+/g, ' ');
+        if (current.toLowerCase() === 'schizou') current = 'Deluded Lightly';
+
         var links = document.querySelectorAll('#global-header .gh-theme-changer a, #global-header [data-theme]');
+        var matched = current;
         for (var i = 0; i < links.length; i++) {
             var themeName = links[i].getAttribute('data-theme');
-            if (themeName && current && themeName.toLowerCase() === current.toLowerCase()) {
+            if (themeName && themeName.toLowerCase() === current.toLowerCase()) {
+                matched = themeName;
                 links[i].classList.add('selected', 'gh-active-theme');
             } else {
                 links[i].classList.remove('selected', 'gh-active-theme');
             }
         }
+
+        document.documentElement.setAttribute('data-theme', matched);
+        if (document.body) document.body.setAttribute('data-theme', matched);
     }
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', ghSyncTheme);
@@ -164,32 +182,52 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
     }
     var origChangeStyle = window.changeStyle;
     window.changeStyle = function(styleName) {
+        if (!styleName) return;
         document.documentElement.setAttribute('data-theme', styleName);
         if (document.body) document.body.setAttribute('data-theme', styleName);
         try {
             localStorage.setItem('stylesheet', styleName);
+            localStorage.stylesheet = styleName;
         } catch (e) {}
-        document.cookie = 'stylesheet=' + encodeURIComponent(styleName) + ';path=/;max-age=31536000';
-        if (typeof origChangeStyle === 'function') {
-            origChangeStyle(styleName);
-        } else {
-            var sheet = document.getElementById('stylesheet');
-            if (sheet && typeof styles !== 'undefined' && styles[styleName]) {
-                var newHref = styles[styleName];
-                var preload = document.createElement('link');
-                preload.rel = 'stylesheet';
-                preload.type = 'text/css';
-                preload.href = newHref;
-                preload.onload = function() {
-                    sheet.href = newHref;
-                    if (preload.parentNode) preload.parentNode.removeChild(preload);
-                };
-                preload.onerror = function() {
-                    sheet.href = newHref;
-                    if (preload.parentNode) preload.parentNode.removeChild(preload);
-                };
-                document.head.appendChild(preload);
+        try {
+            var cookieStr = 'stylesheet=' + encodeURIComponent(styleName) + ';path=/;max-age=31536000;SameSite=Lax';
+            if (location.protocol === 'https:') cookieStr += ';Secure';
+            document.cookie = cookieStr;
+        } catch (e) {}
+
+        var allStyles = (typeof styles !== 'undefined') ? styles : (window.styles || null);
+        var targetHref = (allStyles && allStyles[styleName]) ? allStyles[styleName] : null;
+        if (!targetHref && allStyles) {
+            var lower = styleName.toLowerCase();
+            for (var k in allStyles) {
+                if (k.toLowerCase() === lower) {
+                    targetHref = allStyles[k];
+                    break;
+                }
             }
+        }
+
+        var sheet = document.getElementById('stylesheet');
+        if (sheet && targetHref) {
+            var preload = document.createElement('link');
+            preload.rel = 'stylesheet';
+            preload.type = 'text/css';
+            preload.href = targetHref;
+            preload.onload = function() {
+                sheet.href = targetHref;
+                if (preload.parentNode) preload.parentNode.removeChild(preload);
+            };
+            preload.onerror = function() {
+                sheet.href = targetHref;
+                if (preload.parentNode) preload.parentNode.removeChild(preload);
+            };
+            document.head.appendChild(preload);
+        }
+
+        if (typeof origChangeStyle === 'function') {
+            try {
+                origChangeStyle(styleName);
+            } catch (e) {}
         }
         ghSyncTheme();
     };
