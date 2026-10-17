@@ -144,6 +144,33 @@ function loadConfig() {
 
 		require 'inc/instance-config.php';
 
+		// Automatically migrate legacy 'Schizou' configuration to 'Deluded Lightly' & 'Deluded Nightly'
+		if (isset($config['stylesheets']['Schizou'])) {
+			$new_stylesheets = [];
+			foreach ($config['stylesheets'] as $theme_name => $theme_file) {
+				if ($theme_name === 'Schizou') {
+					$new_stylesheets['Deluded Lightly'] = 'deluded_lightly.css';
+					$new_stylesheets['Deluded Nightly'] = 'deluded_nightly.css';
+				} else {
+					$new_stylesheets[$theme_name] = $theme_file;
+				}
+			}
+			$config['stylesheets'] = $new_stylesheets;
+		} elseif (!isset($config['stylesheets']['Deluded Nightly']) && isset($config['stylesheets']['Deluded Lightly'])) {
+			$new_stylesheets = [];
+			foreach ($config['stylesheets'] as $theme_name => $theme_file) {
+				$new_stylesheets[$theme_name] = $theme_file;
+				if ($theme_name === 'Deluded Lightly') {
+					$new_stylesheets['Deluded Nightly'] = 'deluded_nightly.css';
+				}
+			}
+			$config['stylesheets'] = $new_stylesheets;
+		}
+
+		if (isset($config['default_stylesheet']) && is_array($config['default_stylesheet']) && $config['default_stylesheet'][0] === 'Schizou') {
+			$config['default_stylesheet'] = ['Deluded Lightly', 'deluded_lightly.css'];
+		}
+
 		if (isset($board['dir']) && file_exists($board['dir'] . '/config.php')) {
 			require $board['dir'] . '/config.php';
 		}
