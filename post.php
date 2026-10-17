@@ -799,7 +799,7 @@ if (isset($_POST['delete'])) {
 
 	$post['name'] = $_POST['name'] != '' ? $_POST['name'] : $config['anonymous'];
 	$post['subject'] = $_POST['subject'];
-	$post['email'] = str_replace(' ', '%20', htmlspecialchars($_POST['email']));
+	$post['email'] = isset($_POST['email']) ? str_replace(' ', '%20', htmlspecialchars($_POST['email'])) : '';
 	$post['body'] = $_POST['body'];
 	$post['password'] = hashPassword($_POST['password']);
 	$post['has_file'] = (!isset($post['embed']) && (($post['op'] && !isset($post['no_longer_require_an_image_for_op']) && $config['force_image_op']) || count($_FILES) > 0));
@@ -888,14 +888,47 @@ if (isset($_POST['delete'])) {
 		$post['trip'] = isset($trip[1]) ? $trip[1] : ''; // XX: Dropped posts and tripcodes
 	}
 
+	$is_fortune = false;
 	$noko = false;
-	if (strtolower($post['email']) == 'noko') {
-		$noko = true;
-		$post['email'] = '';
-	} elseif (strtolower($post['email']) == 'nonoko'){
-		$noko = false;
-		$post['email'] = '';
-	} else $noko = $config['always_noko'];
+
+	if (isset($_POST['post_options'])) {
+		$noko = !empty($_POST['noko']);
+		if (!empty($_POST['sage'])) {
+			$post['email'] = 'sage';
+		} else {
+			$post['email'] = '';
+		}
+		if (!empty($_POST['fortune'])) {
+			$is_fortune = true;
+		}
+	} else {
+		if (stripos($post['email'], 'fortune') !== false) {
+			$is_fortune = true;
+			$post['email'] = trim(str_ireplace('fortune', '', $post['email']));
+		}
+		if (stripos($post['email'], 'sage') !== false) {
+			$post['email'] = 'sage';
+		}
+
+		if (strtolower($post['email']) == 'noko') {
+			$noko = true;
+			$post['email'] = '';
+		} elseif (strtolower($post['email']) == 'nonoko'){
+			$noko = false;
+			$post['email'] = '';
+		} else $noko = $config['always_noko'];
+	}
+
+	if (!empty($_POST['fortune'])) {
+		$is_fortune = true;
+	}
+	if (preg_match('/#fortune\b/i', $post['name'])) {
+		$is_fortune = true;
+		$post['name'] = trim(preg_replace('/#fortune\b/i', '', $post['name']));
+		if ($post['name'] === '') {
+			$post['name'] = $config['anonymous'];
+		}
+	}
 
 	if ($post['has_file']) {
 		$i = 0;
@@ -1012,6 +1045,11 @@ if (isset($_POST['delete'])) {
 		if ($config['proxy_save'] && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 		$proxy = preg_replace("/[^0-9a-fA-F.,: ]/", '', $_SERVER['HTTP_X_FORWARDED_FOR']);
 		$post['body'] .= "\n<tinyboard proxy>".$proxy."</tinyboard>";
+	}
+
+	if ($is_fortune) {
+		$fortune_data = generate_fortune_data();
+		$post['body'] .= "\n<tinyboard fortune>" . $fortune_data['color'] . "|" . $fortune_data['outcome'] . "</tinyboard>";
 	}
 
 	$post['body_nomarkup'] = strip_symbols($post['body']);

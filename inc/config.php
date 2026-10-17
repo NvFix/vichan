@@ -724,8 +724,15 @@
 
 	$config['markup'] = [
 		// Inline dice roll markup.
-		[ "/!([-+]?\d+)?([d])([-+]?\d+)([-+]\d+)?/iu", fn($m) => inline_dice_roll_markup($m, 'static/d10.svg') ],
-		// "Wiki" markup syntax ($config['wiki_markup'] in pervious versions):
+		[ "/!([-+]?\d+)?([d])([-+]?\d+)([-+]\d+)?/iu", fn($m) => \Vichan\Functions\Dice\inline_dice_roll_markup($m, 'static/d10.svg') ],
+		// Simplified markup syntax:
+		[ "/\[b\](.*?)\[\/b\]/is", "<strong>\$1</strong>" ],
+		[ "/\[i\](.*?)\[\/i\]/is", "<em>\$1</em>" ],
+		[ "/\[spoiler\](.*?)\[\/spoiler\]/is", "<span class=\"spoiler\">\$1</span>" ],
+		// 6 sizing options: [s1]..[s6] (and legacy [size=1]..[size=6])
+		[ "/\[s([1-6])\](.*?)\[\/s\\1\]/is", "<span class=\"size-\$1\">\$2</span>" ],
+		[ "/\[size=([1-6])\](.*?)\[\/size\]/is", "<span class=\"size-\$1\">\$2</span>" ],
+		// "Wiki" markup syntax ($config['wiki_markup'] in previous versions):
 		[ "/'''(.+?)'''/", "<strong>\$1</strong>" ],
 		[ "/''(.+?)''/", "<em>\$1</em>" ],
 		[ "/\*\*(.+?)\*\*/", "<span class=\"spoiler\">\$1</span>" ],
@@ -1135,7 +1142,7 @@
 
 	// Version number for main.js (or $config['url_javascript']).
 	// You can use this to bypass the user's browsers and CDN caches.
-	$config['resource_version'] = 5;
+	$config['resource_version'] = 7;
 
 	// Dispatch thumbnail loading and image configuration with JavaScript. It will need a certain javascript
 	// code to work.

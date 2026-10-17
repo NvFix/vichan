@@ -2146,7 +2146,53 @@ function markup(&$body, $track_cites = false, $op = false) {
 	// replace tabs with 8 spaces
 	$body = str_replace("\t", '		', $body);
 
+	if (isset($modifiers['fortune'])) {
+		$parts = explode('|', $modifiers['fortune'], 2);
+		if (count($parts) === 2) {
+			$fortcol = $parts[0];
+			$outcome = $parts[1];
+			$fortune_html = '<span class="fortune" style="color: ' . $fortcol . ';"><font color="' . $fortcol . '"><b>Your fortune: ' . $outcome . '</b></font></span>';
+			if ($body !== '') {
+				$body = $body . '<br/><br/>' . $fortune_html;
+			} else {
+				$body = $fortune_html;
+			}
+		}
+	}
+
 	return $tracked_cites;
+}
+
+function generate_fortune_data() {
+	$fortunes = array(
+		"Bad Luck",
+		"Average Luck",
+		"Good Luck",
+		"Excellent Luck",
+		"Reply hazy, try again",
+		"Godly Luck",
+		"Very Bad Luck",
+		"Outlook good",
+		"Better not tell you now",
+		"You will meet a dark handsome stranger",
+		"&#65399;&#65408;&#9473;&#9473;&#9473;&#9473;&#9473;&#9473;(&#65439;&#8704;&#65439;)&#9473;&#9473;&#9473;&#9473;&#9473;&#9473; !!!!",
+		"&#65288;&#12288;´_ゝ`&#65289;&#65420;&#65392;&#65437; ",
+		"Good news will come to you by mail"
+	);
+	$total = count($fortunes);
+	$index = mt_rand(0, $total - 1);
+	$outcome = $fortunes[$index];
+
+	$r = (int)(127 + 127 * sin(2 * M_PI * $index / $total));
+	$g = (int)(127 + 127 * sin(2 * M_PI * $index / $total + 2/3 * M_PI));
+	$b = (int)(127 + 127 * sin(2 * M_PI * $index / $total + 4/3 * M_PI));
+	$color = sprintf("#%02x%02x%02x", $r, $g, $b);
+
+	return array(
+		'color' => $color,
+		'outcome' => $outcome,
+		'index' => $index
+	);
 }
 
 function escape_markup_modifiers($string) {

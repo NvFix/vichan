@@ -127,8 +127,9 @@ img.banner, img.board_image {
 	border: 1px solid #7c66bb;
 }
 
-/* Submit New Thread button & Modal */
-.submit-new-thread-btn {
+/* Submit New Thread & Submit New Reply buttons & Modal */
+.submit-new-thread-btn,
+.submit-new-reply-btn {
 	background: linear-gradient(180deg, #876fc6 0%, #6841a8 100%);
 	border: 1px solid #54338c;
 	color: #ffffff;
@@ -136,14 +137,16 @@ img.banner, img.board_image {
 	text-shadow: 0 1px 2px rgba(40, 27, 56, 0.4);
 }
 
-.submit-new-thread-btn:hover {
+.submit-new-thread-btn:hover,
+.submit-new-reply-btn:hover {
 	background: linear-gradient(180deg, #967ed5 0%, #774eb8 100%);
 	border-color: #43296f;
 	color: #ffffff;
 	box-shadow: 0 2px 6px rgba(84, 51, 140, 0.4);
 }
 
-.submit-new-thread-btn:active {
+.submit-new-thread-btn:active,
+.submit-new-reply-btn:active {
 	background: linear-gradient(180deg, #613b9e 0%, #4f2e82 100%);
 }
 
@@ -184,12 +187,14 @@ img.banner, img.board_image {
 	border-color: #7c66bb;
 }
 
+form[name="post"] input[type="submit"],
 .post-form-modal input[type="submit"] {
 	background: #7c66bb;
 	color: #ffffff;
 	border: 1px solid #54338c;
 }
 
+form[name="post"] input[type="submit"]:hover,
 .post-form-modal input[type="submit"]:hover {
 	background: #8f61c0;
 	border-color: #43296f;
@@ -207,4 +212,53 @@ img.banner, img.board_image {
 .post-form-modal .unimportant * {
 	color: #7c66bb;
 }
+
+/* Styling toolbar */
+.styling-toggle {
+	color: #6841a8;
+}
+
+.styling-toggle:hover {
+	color: #8f61c0;
+}
+
+.styling-btn {
+	background: #ffffff;
+	border: 1px solid #7c66bb;
+	color: #281b38;
+}
+
+.styling-btn:hover {
+	background: #edd0e7;
+	border-color: #54338c;
+}
+
+.styling-btn-spoiler {
+	background: #000000 !important;
+	border-color: #7c66bb !important;
+}
+
+.post-option-label {
+	color: #281b38;
+}
+
+.post-form-modal .styling-toggle {
+	color: #6841a8;
+}
+
+.post-form-modal .styling-btn {
+	background: #ffffff;
+	border: 1px solid #7c66bb;
+	color: #281b38;
+}
+
+.post-form-modal .styling-btn:hover {
+	background: #edd0e7;
+	border-color: #54338c;
+}
+
+.post-form-modal .post-option-label {
+	color: #281b38;
+}
+
 

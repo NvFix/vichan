@@ -25,8 +25,11 @@
 	// Website favicon
 	$config['url_favicon'] = '/favicon.png';
 
+	// Enable spoiler images
+	$config['spoiler_images'] = true;
+
 	// Resource cache buster version
-	$config['resource_version'] = 5;
+	$config['resource_version'] = 14;
 
 	// Database stuff
 	$config['db']['type']		= 'mysql';

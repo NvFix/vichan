@@ -96,6 +96,16 @@ form#postcontrols,
 
 .active-thread form[name="post"] table {
   margin: 0 0 0 4px;
+  width: 100%;
+  max-width: 304px;
+  box-sizing: border-box;
+}
+
+form[name="post"] table {
+  margin: auto;
+  width: 100%;
+  max-width: 304px;
+  box-sizing: border-box;
 }
 
 form table {
@@ -126,6 +136,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 
 textarea {
   width: 100%;
+  box-sizing: border-box;
 }
 
 form table tr td {
@@ -1311,15 +1322,17 @@ div.mix {
 }
 
 /* ==========================================================================
-   Posting Form Redesign: "Submit New Thread" Button & Modal Dialog
+   Posting Form Redesign: "Submit New Thread" & "Submit New Reply" Buttons & Modal Dialog
    ========================================================================== */
 
-.new-thread-btn-container {
+.new-thread-btn-container,
+.new-reply-btn-container {
   text-align: center;
   margin: 14px 0 18px 0;
 }
 
-.submit-new-thread-btn {
+.submit-new-thread-btn,
+.submit-new-reply-btn {
   display: inline-block;
   padding: 8px 24px;
   font-size: 15px;
@@ -1337,14 +1350,16 @@ div.mix {
   user-select: none;
 }
 
-.submit-new-thread-btn:hover {
+.submit-new-thread-btn:hover,
+.submit-new-reply-btn:hover {
   background: linear-gradient(180deg, #967ed5 0%, #774eb8 100%);
   border-color: #43296f;
   color: #ffffff;
   box-shadow: 0 2px 6px rgba(84, 51, 140, 0.4);
 }
 
-.submit-new-thread-btn:active {
+.submit-new-thread-btn:active,
+.submit-new-reply-btn:active {
   background: linear-gradient(180deg, #613b9e 0%, #4f2e82 100%);
   transform: translateY(1px);
   box-shadow: 0 1px 2px rgba(40, 27, 56, 0.4);
@@ -1381,7 +1396,7 @@ div.mix {
   border: 1px solid #7c66bb;
   border-radius: 4px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
-  max-width: 480px;
+  max-width: 360px;
   width: 95vw;
   box-sizing: border-box;
   overflow: hidden;
@@ -1413,6 +1428,9 @@ div.mix {
 
 .post-form-modal form table {
   margin: 0 auto;
+  width: 100%;
+  max-width: 304px;
+  box-sizing: border-box;
 }
 
 html body .post-form-modal form table tr th,
@@ -1449,6 +1467,7 @@ html[data-theme] body .post-form-modal form table tr th {
   box-sizing: border-box;
 }
 
+form[name="post"] input[type="submit"],
 .post-form-modal input[type="submit"] {
   background: #7c66bb;
   color: #ffffff;
@@ -1459,8 +1478,11 @@ html[data-theme] body .post-form-modal form table tr th {
   font-size: 10pt;
   cursor: pointer;
   margin-left: 2px;
+  font-family: inherit;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
+form[name="post"] input[type="submit"]:hover,
 .post-form-modal input[type="submit"]:hover {
   background: #8f61c0;
   border-color: #43296f;
@@ -1483,7 +1505,8 @@ html[data-theme] body .post-form-modal form table tr th {
    Yotsuba Theme Overrides for Button & Modal
    ========================================================================== */
 
-html[data-theme="Yotsuba"] .submit-new-thread-btn {
+html[data-theme="Yotsuba"] .submit-new-thread-btn,
+html[data-theme="Yotsuba"] .submit-new-reply-btn {
   background: linear-gradient(180deg, #f5c49b 0%, #ea8 100%);
   border: 1px solid #800000;
   color: #800000;
@@ -1491,14 +1514,16 @@ html[data-theme="Yotsuba"] .submit-new-thread-btn {
   text-shadow: none;
 }
 
-html[data-theme="Yotsuba"] .submit-new-thread-btn:hover {
+html[data-theme="Yotsuba"] .submit-new-thread-btn:hover,
+html[data-theme="Yotsuba"] .submit-new-reply-btn:hover {
   background: linear-gradient(180deg, #ffd4ab 0%, #f0b58e 100%);
   border-color: #600;
   color: #800000;
   box-shadow: 0 2px 6px rgba(128, 0, 0, 0.3);
 }
 
-html[data-theme="Yotsuba"] .submit-new-thread-btn:active {
+html[data-theme="Yotsuba"] .submit-new-thread-btn:active,
+html[data-theme="Yotsuba"] .submit-new-reply-btn:active {
   background: linear-gradient(180deg, #df9b70 0%, #d49060 100%);
 }
 
@@ -1538,12 +1563,22 @@ html[data-theme="Yotsuba"] .post-form-modal textarea:focus {
   border-color: #800000;
 }
 
+html[data-theme="Yotsuba"] form[name="post"] input[type="submit"],
 html[data-theme="Yotsuba"] .post-form-modal input[type="submit"] {
   background: #ea8;
   color: #800;
   border: 1px solid #800;
+  border-radius: 2px;
+  padding: 2px 8px;
+  font-weight: 700;
+  font-size: 10pt;
+  cursor: pointer;
+  margin-left: 2px;
+  font-family: inherit;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
+html[data-theme="Yotsuba"] form[name="post"] input[type="submit"]:hover,
 html[data-theme="Yotsuba"] .post-form-modal input[type="submit"]:hover {
   background: #fca;
   border-color: #600;
@@ -1561,3 +1596,394 @@ html[data-theme="Yotsuba"] .post-form-modal .unimportant,
 html[data-theme="Yotsuba"] .post-form-modal .unimportant * {
   color: #800000;
 }
+
+/* Comment Form & Styling Toolbar Rows */
+.comment-row td {
+  padding: 2px 0;
+}
+
+.comment-row textarea#body {
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  resize: vertical;
+}
+
+.char-counter-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 2px 1px 1px 0;
+  line-height: 1;
+}
+
+.char-counter {
+  font-size: 8pt;
+  color: #706085;
+  user-select: none;
+  font-family: inherit;
+}
+
+.char-counter.char-counter-limit {
+  color: #d00000;
+  font-weight: bold;
+}
+
+.styling-row td {
+  padding: 1px 0 3px 0;
+  max-width: 0;
+  width: 100%;
+}
+
+/* Styling Toolbar */
+.styling-toolbar {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  font-size: 10pt;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.styling-toggle {
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+  font-weight: bold;
+  font-size: 9pt;
+  padding: 1px 3px;
+  margin-bottom: 3px;
+  color: #6841a8;
+  transition: color 0.15s ease;
+}
+
+.styling-toggle:hover {
+  color: #8f61c0;
+}
+
+.styling-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 2px;
+  margin-bottom: 4px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.styling-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.styling-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 7px;
+  border: 1px solid #7c66bb;
+  background: #ffffff;
+  color: #281b38;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 9.5pt;
+  line-height: 1.3;
+  user-select: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.styling-btn:hover {
+  background: #edd0e7;
+  border-color: #54338c;
+}
+
+.styling-btn:active {
+  background: #deb5d6;
+}
+
+.styling-btn-bold {
+  font-weight: bold;
+}
+
+.styling-btn-italics {
+  font-style: italic;
+}
+
+.styling-btn-spoiler {
+  background: #000000 !important;
+  border-color: #7c66bb;
+  color: #000000;
+  min-width: 48px;
+}
+
+.styling-btn-spoiler .spoiler-preview {
+  background: #000000;
+  color: #000000;
+  transition: color 0.15s ease;
+}
+
+.styling-btn-spoiler:hover .spoiler-preview {
+  color: #ffffff;
+}
+
+.styling-btn-quote {
+  color: #789922;
+}
+
+.styling-btn-quote .quote-preview {
+  color: #789922;
+}
+
+.styling-btn-size {
+  min-width: 36px;
+}
+
+.size-btn-1 { font-size: 0.75em !important; }
+.size-btn-2 { font-size: 0.85em !important; }
+.size-btn-3 { font-size: 1.0em !important; }
+.size-btn-4 { font-size: 1.15em !important; }
+.size-btn-5 { font-size: 1.3em !important; }
+.size-btn-6 { font-size: 1.45em !important; }
+
+/* Post body sizing rules */
+.size-1 { font-size: 0.75em; }
+.size-2 { font-size: 0.85em; }
+.size-3 { font-size: 1.0em; }
+.size-4 { font-size: 1.25em; }
+.size-5 { font-size: 1.5em; }
+.size-6 { font-size: 1.75em; }
+
+/* Options Checkboxes in Form */
+.post-option-label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 12px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 10pt;
+}
+
+.post-option-label input[type="checkbox"] {
+  margin: 0 4px 0 0;
+  cursor: pointer;
+}
+
+.fortune {
+  font-weight: bold;
+}
+
+/* File Upload Dropzone & Preview */
+.upload-row td {
+  padding: 4px 0 2px 0;
+}
+
+.upload-container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.upload-dropzone {
+  border: 2px dashed #7c66bb;
+  border-radius: 4px;
+  background-color: rgba(124, 102, 187, 0.08);
+  padding: 12px 14px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  width: 100%;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.upload-dropzone:hover,
+.upload-dropzone.dragover {
+  background-color: rgba(124, 102, 187, 0.16);
+  border-color: #54338c;
+}
+
+.upload-dropzone-text {
+  font-size: 9.5pt;
+  line-height: 1.45;
+  color: #54338c;
+  font-family: inherit;
+  pointer-events: none;
+}
+
+.upload-preview {
+  margin-top: 8px;
+  margin-bottom: 4px;
+}
+
+.upload-preview-card {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+}
+
+.upload-preview-thumb-wrap {
+  position: relative;
+  display: inline-block;
+  background: #ffffff;
+  border: 1px solid #7c66bb;
+  border-radius: 3px;
+  padding: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+
+.upload-preview-img {
+  display: block;
+  max-width: 130px;
+  max-height: 130px;
+  object-fit: contain;
+  border-radius: 2px;
+}
+
+.upload-preview-remove {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #3a3247;
+  color: #ffffff;
+  border: 1px solid #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 18px;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.upload-preview-remove:hover {
+  background: #d00000;
+  transform: scale(1.15);
+}
+
+.upload-preview-info {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 9pt;
+  color: #281b38;
+}
+
+.upload-preview-filename {
+  font-weight: bold;
+  word-break: break-all;
+  max-width: 140px;
+  line-height: 1.25;
+}
+
+.upload-preview-size {
+  color: #706085;
+  font-size: 8.5pt;
+}
+
+.upload-preview-spoiler {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  font-size: 9pt;
+  margin-top: 3px;
+}
+
+.upload-preview-spoiler input[type="checkbox"] {
+  margin: 0 4px 0 0;
+  cursor: pointer;
+}
+
+/* Yotsuba theme overrides for styling toolbar */
+html[data-theme="Yotsuba"] .styling-toggle {
+  color: #800000;
+}
+
+html[data-theme="Yotsuba"] .styling-toggle:hover {
+  color: #d00;
+}
+
+html[data-theme="Yotsuba"] .styling-btn {
+  background: #ffffff;
+  border-color: #800000;
+  color: #800000;
+}
+
+html[data-theme="Yotsuba"] .styling-btn:hover {
+  background: #f0e0d6;
+  border-color: #800000;
+}
+
+html[data-theme="Yotsuba"] .styling-btn-spoiler {
+  background: #000000 !important;
+  border-color: #800000 !important;
+}
+
+html[data-theme="Yotsuba"] .post-option-label {
+  color: #800000;
+}
+
+html[data-theme="Yotsuba"] .char-counter {
+  color: #a05a46;
+}
+
+html[data-theme="Yotsuba"] .char-counter.char-counter-limit {
+  color: #d00000;
+}
+
+/* Yotsuba theme overrides for upload dropzone & preview */
+html[data-theme="Yotsuba"] .upload-dropzone {
+  border-color: #800000;
+  background-color: rgba(128, 0, 0, 0.05);
+}
+
+html[data-theme="Yotsuba"] .upload-dropzone:hover,
+html[data-theme="Yotsuba"] .upload-dropzone.dragover {
+  border-color: #600000;
+  background-color: rgba(128, 0, 0, 0.12);
+}
+
+html[data-theme="Yotsuba"] .upload-dropzone-text {
+  color: #800000;
+}
+
+html[data-theme="Yotsuba"] .upload-preview-thumb-wrap {
+  border-color: #800000;
+  background: #ffffff;
+}
+
+html[data-theme="Yotsuba"] .upload-preview-remove {
+  background: #800000;
+  border-color: #ffffff;
+}
+
+html[data-theme="Yotsuba"] .upload-preview-remove:hover {
+  background: #d00000;
+}
+
+html[data-theme="Yotsuba"] .upload-preview-info {
+  color: #800000;
+}
+
+html[data-theme="Yotsuba"] .upload-preview-size {
+  color: #a05a46;
+}
+
+html[data-theme="Yotsuba"] .upload-preview-spoiler {
+  color: #800000;
+}
+
