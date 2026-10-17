@@ -382,6 +382,11 @@ if (isset($_POST['delete'])) {
 	if (!isset($_POST['board'], $_POST['password']))
 		error($config['error']['bot']);
 
+	// Check the referrer
+	if ($config['referer_match'] !== false &&
+		(!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], rawurldecode($_SERVER['HTTP_REFERER']))))
+		error($config['error']['referer']);
+
 	if (empty($_POST['password'])){
 		error($config['error']['invalidpassword']);
 	}
@@ -482,6 +487,11 @@ if (isset($_POST['delete'])) {
 } elseif (isset($_POST['report'])) {
 	if (!isset($_POST['board'], $_POST['reason']))
 		error($config['error']['bot']);
+
+	// Check the referrer
+	if ($config['referer_match'] !== false &&
+		(!isset($_SERVER['HTTP_REFERER']) || !preg_match($config['referer_match'], rawurldecode($_SERVER['HTTP_REFERER']))))
+		error($config['error']['referer']);
 
 	$report = array();
 	foreach ($_POST as $post => $value) {

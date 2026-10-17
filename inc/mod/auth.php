@@ -270,8 +270,16 @@ function check_login(Context $ctx, bool $prompt = false): void {
 		$query->execute() or error(db_error($query));
 		$user = $query->fetch(PDO::FETCH_ASSOC);
 
+		if (!$user) {
+			destroyCookies();
+			if ($prompt) {
+				mod_login($ctx);
+			}
+			exit;
+		}
+
 		// validate password hash
-		if ($cookie[1] !== mkhash($cookie[0], $user['password'], $cookie[2])) {
+		if (!hash_equals($cookie[1], mkhash($cookie[0], $user['password'], $cookie[2]))) {
 			// Malformed cookies
 			destroyCookies();
 			if ($prompt) {

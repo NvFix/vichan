@@ -1838,7 +1838,7 @@ function markup_url($matches) {
 	$link = (object) array(
 		'href' => $config['link_prefix'] . $url,
 		'text' => $url,
-		'rel' => 'nofollow',
+		'rel' => 'nofollow noopener noreferrer',
 		'target' => '_blank',
 	);
 
@@ -2913,20 +2913,42 @@ function hashPassword($password) {
 	return hash('sha3-256', $password . $config['secure_password_salt']);
 }
 
-// Thanks to https://gist.github.com/marijn/3901938
 function trace_url($url) {
+	$parsed = parse_url($url);
+	if (!$parsed || empty($parsed['scheme']) || !in_array(strtolower($parsed['scheme']), ['http', 'https']) || empty($parsed['host'])) {
+		return $url;
+	}
+
+	$host = $parsed['host'];
+	$ips = @dns_get_record($host, DNS_A + (defined('DNS_AAAA') ? DNS_AAAA : 0));
+	if (empty($ips)) {
+		return $url;
+	}
+
+	foreach ($ips as $record) {
+		$target_ip = isset($record['ip']) ? $record['ip'] : (isset($record['ipv6']) ? $record['ipv6'] : null);
+		if ($target_ip && !filter_var($target_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+			// Resolved to private, loopback, or reserved IP (SSRF protection)
+			return $url;
+		}
+	}
+
 	$ch = curl_init($url);
 	curl_setopt_array($ch, array(
-		CURLOPT_FOLLOWLOCATION => TRUE,  // the magic sauce
-		CURLOPT_RETURNTRANSFER => TRUE,
-		CURLOPT_SSL_VERIFYHOST => FALSE, // suppress certain SSL errors
-		CURLOPT_SSL_VERIFYPEER => FALSE,
-		CURLOPT_TIMEOUT => 30,
+		CURLOPT_FOLLOWLOCATION => true,
+		CURLOPT_MAXREDIRS => 5,
+		CURLOPT_RETURNTRANSFER => true,
+		CURLOPT_NOBODY => true,
+		CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
+		CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
+		CURLOPT_SSL_VERIFYHOST => 2,
+		CURLOPT_SSL_VERIFYPEER => true,
+		CURLOPT_TIMEOUT => 5,
 	));
 	curl_exec($ch);
-	$url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+	$effective_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
 	curl_close($ch);
-	return $url;
+	return $effective_url ? $effective_url : $url;
 }
 
 // Thanks to https://stackoverflow.com/questions/10002227/linkify-regex-function-php-daring-fireball-method/10002262#10002262

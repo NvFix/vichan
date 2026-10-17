@@ -2,7 +2,12 @@
 /* This file is dedicated to the public domain; you may do as you wish with it. */
 $v = @(string)$_GET['v'];
 $t = @(string)$_GET['t'];
-$loop = @(boolean)$_GET['loop'];
+$loop = !empty($_GET['loop']);
+
+// Validate video URL to prevent XSS (disallow javascript:, data:, etc.)
+if (!preg_match('/^(?:https?:\/\/[^\s"\'<>]+|\/[^\s"\'<>]|[a-zA-Z0-9_\-\.\/]+)\.(?:webm|mp4|ogv|ogg)$/i', $v)) {
+	$v = '';
+}
 
 $params = '?v=' . urlencode($v) . '&amp;t=' . urlencode($t);
 ?><!DOCTYPE html>
