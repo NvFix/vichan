@@ -77,20 +77,53 @@ class TinyboardTwigCache extends Twig\Cache\FilesystemCache {
 		$this->directory = $directory;
 	}
 
+	public function write($key, $content): void {
+		$dir = \dirname($key);
+		if (!is_dir($dir)) {
+			$old = umask(0000);
+			@mkdir($dir, 0777, true);
+			@chmod($dir, 0777);
+			umask($old);
+		} elseif (!is_writable($dir)) {
+			@chmod($dir, 0777);
+			if (!is_writable($dir) && function_exists('posix_getuid') && posix_getuid() === 0) {
+				@chown($dir, 'www-data');
+				@chgrp($dir, 'www-data');
+			}
+		}
+
+		parent::write($key, $content);
+
+		@chmod($key, 0666);
+		@chmod($dir, 0777);
+	}
+
 	/**
 	 * This function was removed in Twig 2.x due to developer views on the Twig library.
 	 * Who says we can't keep it for ourselves though?
 	 */
 	public function clear() {
+		if (!is_dir($this->directory)) {
+			return;
+		}
+
 		$iter = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator($this->directory),
-			RecursiveIteratorIterator::LEAVES_ONLY
+			new RecursiveDirectoryIterator($this->directory, RecursiveDirectoryIterator::SKIP_DOTS),
+			RecursiveIteratorIterator::CHILD_FIRST
 		);
 
 		foreach ($iter as $file) {
-			if ($file->isFile()) {
+			if ($file->isDir()) {
+				@rmdir($file->getPathname());
+			} else {
 				@unlink($file->getPathname());
 			}
+		}
+
+		@chmod($this->directory, 0777);
+		if (function_exists('posix_getuid') && posix_getuid() === 0) {
+			@chown($this->directory, 'www-data');
+			@chgrp($this->directory, 'www-data');
 		}
 	}
 }

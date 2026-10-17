@@ -11,6 +11,15 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 set_time_limit(0);
+umask(0000);
+
+register_shutdown_function(function() {
+	if (function_exists('posix_getuid') && posix_getuid() === 0) {
+		@exec('chown -R www-data:www-data /var/cache/template-cache /var/tmp/vichan /var/cache/gen-cache /var/www/templates/cache 2>/dev/null');
+		@exec('chmod -R 777 /var/cache/template-cache /var/tmp/vichan /var/cache/gen-cache 2>/dev/null');
+	}
+});
+
 $shell_path = getcwd();
 
 if (php_sapi_name() != 'cli') {
