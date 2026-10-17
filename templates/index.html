@@ -53,7 +53,29 @@
 	{{ config.ad.top }}
 
 	{% if not no_post_form %}
-		{% include 'post_form.html' %}
+		<div class="new-thread-btn-container">
+			<button type="button" class="submit-new-thread-btn" id="show-post-form-btn">{% trans %}Submit New Thread{% endtrans %}</button>
+		</div>
+
+		<div id="post-form-overlay" class="post-form-overlay" style="display:none;">
+			<div class="post-form-modal">
+				<div class="post-form-header">
+					<span class="post-form-title">{% trans %}Posting mode: Thread{% endtrans %}</span>
+				</div>
+				<div class="post-form-body">
+					{% include 'post_form.html' %}
+				</div>
+			</div>
+		</div>
+		<noscript>
+			<style>
+				.new-thread-btn-container { display: none !important; }
+				#post-form-overlay { display: block !important; position: static !important; background: none !important; padding: 0 !important; }
+				.post-form-modal { margin: 0 auto !important; box-shadow: none !important; border: none !important; background: none !important; max-width: 100% !important; }
+				.post-form-header { display: none !important; }
+				.post-form-body { padding: 0 !important; }
+			</style>
+		</noscript>
 	{% else %}
 		{% include 'boardlist.html' %}
 	{% endif %}
@@ -80,7 +102,7 @@
         	</form>
     	<!-- End Search Form -->
     	{% endif %}
-	<form name="postcontrols" action="{{ config.post_url }}" method="post">
+	<form name="postcontrols" id="postcontrols" action="{{ config.post_url }}" method="post">
 	<input type="hidden" name="board" value="{{ board.uri }}" />
 	{% if mod %}<input type="hidden" name="mod" value="1" />{% endif %}
 	{{ body }}

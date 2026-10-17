@@ -47,38 +47,36 @@
 
 	{% include 'attention_bar.html' %}
 
-	<div class="banner">{% trans %}Posting mode: Reply{% endtrans %} <a class="unimportant" href="{{ return }}">[{% trans %}Return{% endtrans %}]</a> <a class="unimportant" href="#bottom">[{% trans %}Go to bottom {% endtrans %}]</a></div>
-
 	{{ config.ad.top }}
-
-	{% include 'post_form.html' %}
 
 	{% if config.global_message %}<hr /><div class="blotter">{{ config.global_message }}</div>{% endif %}
 	<hr />
-	<form name="postcontrols" action="{{ config.post_url }}" method="post">
+	<form name="postcontrols" id="postcontrols" action="{{ config.post_url }}" method="post">
 		<input type="hidden" name="board" value="{{ board.uri }}" />
 		{% if mod %}<input type="hidden" name="mod" value="1" />{% endif %}
 		
 		{{ body }}
-		
-		<div id="thread-interactions">
-			<span id="thread-links">
-				<a id="thread-return" href="{{ return }}">[{% trans %}Return{% endtrans %}]</a>
-				<a id="thread-top" href="#top">[{% trans %}Go to top{% endtrans %}]</a>
-                		{% if config.catalog_link %}
-					<a id="thread-catalog" href="{{ config.root }}{% if mod %}{{ config.file_mod }}?/{% endif %}{{ board.dir }}{{ config.catalog_link }}">{% trans %}Catalog{% endtrans %}</a>
-		                {% endif %}
-			</span>
-			
-			<span id="thread-quick-reply">
-				<a id="link-quick-reply" href="#">[{% trans %}Post a Reply{% endtrans %}]</a>
-			</span>
-			
-			{% include 'report_delete.html' %}
-		</div>
-		
-		<div class="clearfix"></div>
 	</form>
+
+	{% include 'post_form.html' %}
+
+	<div id="thread-interactions">
+		<span id="thread-links">
+			<a id="thread-return" href="{{ return }}">[{% trans %}Return{% endtrans %}]</a>
+			<a id="thread-top" href="#top">[{% trans %}Go to top{% endtrans %}]</a>
+			{% if config.catalog_link %}
+				<a id="thread-catalog" href="{{ config.root }}{% if mod %}{{ config.file_mod }}?/{% endif %}{{ board.dir }}{{ config.catalog_link }}">{% trans %}Catalog{% endtrans %}</a>
+			{% endif %}
+		</span>
+		
+		<span id="thread-quick-reply">
+			<a id="link-quick-reply" href="#">[{% trans %}Post a Reply{% endtrans %}]</a>
+		</span>
+		
+		{% include 'report_delete.html' %}
+	</div>
+	
+	<div class="clearfix"></div>
 	
 	<a name="bottom"></a>
 

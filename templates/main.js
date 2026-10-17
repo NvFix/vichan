@@ -435,8 +435,79 @@ var script_settings = function(script_name) {
 	}
 };
 
+function initPostFormModal() {
+	var overlay = document.getElementById('post-form-overlay');
+	if (!overlay || overlay.dataset.modalInit === '1') {
+		return;
+	}
+	overlay.dataset.modalInit = '1';
+
+	var btn = document.getElementById('show-post-form-btn');
+	var isMouseDownOnOverlay = false;
+
+	function openModal() {
+		overlay.classList.add('visible');
+		overlay.style.display = 'flex';
+		document.body.style.overflow = 'hidden';
+		var postForm = document.forms['post'];
+		if (postForm) {
+			if (postForm.elements['subject'] && !postForm.elements['subject'].value) {
+				postForm.elements['subject'].focus();
+			} else if (postForm.elements['body']) {
+				postForm.elements['body'].focus();
+			}
+		}
+	}
+
+	function closeModal() {
+		overlay.classList.remove('visible');
+		overlay.style.display = 'none';
+		document.body.style.overflow = '';
+	}
+
+	if (btn) {
+		btn.addEventListener('click', function(e) {
+			e.preventDefault();
+			openModal();
+		});
+	}
+
+	overlay.addEventListener('mousedown', function(e) {
+		isMouseDownOnOverlay = (e.target === overlay);
+	});
+
+	overlay.addEventListener('click', function(e) {
+		if (e.target === overlay && isMouseDownOnOverlay) {
+			closeModal();
+		}
+		isMouseDownOnOverlay = false;
+	});
+
+	document.addEventListener('keydown', function(e) {
+		if (e.key === 'Escape' || e.keyCode === 27) {
+			if (overlay.classList.contains('visible') || overlay.style.display === 'flex') {
+				closeModal();
+			}
+		}
+	});
+
+	if (typeof $ !== 'undefined') {
+		$(window).on('cite', function() {
+			openModal();
+		});
+	}
+
+	if (window.location.hash === '#postform' || window.location.hash === '#reply') {
+		openModal();
+	}
+
+	window.openPostFormModal = openModal;
+	window.closePostFormModal = closeModal;
+}
+
 function init() {
 	initStyleChooser();
+	initPostFormModal();
 
 	{% endverbatim %}
 	{% if config.allow_delete %}

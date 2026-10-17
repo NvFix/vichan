@@ -8,12 +8,20 @@
 <style id="theme-inline-bg">
 	html[data-theme="Schizou"], html[data-theme="Schizou"] body { background-color: #f6f2fc; color: #281b38; }
 	html[data-theme="Schizou"] h1, html[data-theme="Schizou"] h2 { color: #7c66bb; }
+	html[data-theme="Schizou"] .submit-new-thread-btn { background: linear-gradient(180deg, #876fc6 0%, #6841a8 100%) !important; border-color: #54338c !important; color: #ffffff !important; }
+	html[data-theme="Schizou"] .post-form-modal { background: #f4dded !important; border-color: #7c66bb !important; color: #281b38 !important; }
+	html[data-theme="Schizou"] .post-form-header { background: #e8ddfa !important; border-bottom-color: #c9b0e8 !important; }
+	html[data-theme="Schizou"] .post-form-title { color: #54338c !important; }
 	html[data-theme="Yotsuba"], html[data-theme="Yotsuba"] body { background: #ffe url('/stylesheets/img/fade-yotsuba.png') repeat-x 50% 0%; color: #800000; }
 	html[data-theme="Yotsuba"] div.post.reply { background: #f0e0d6 !important; border-color: #d9bfb7 !important; }
 	html[data-theme="Yotsuba"] form table tr th { background: #ea8 !important; color: #800000 !important; border-color: #800000 !important; }
 	html[data-theme="Yotsuba"] div.pages { background: #f0e0d6 !important; border-color: #d9bfb7 !important; color: #800000 !important; }
 	html[data-theme="Yotsuba"] div.boardlist a { color: #800000 !important; }
 	html[data-theme="Yotsuba"] h1, html[data-theme="Yotsuba"] header div.subtitle, html[data-theme="Yotsuba"] h2 { color: #800000 !important; }
+	html[data-theme="Yotsuba"] .submit-new-thread-btn { background: linear-gradient(180deg, #f5c49b 0%, #ea8 100%) !important; border-color: #800000 !important; color: #800000 !important; text-shadow: none !important; }
+	html[data-theme="Yotsuba"] .post-form-modal { background: #f0e0d6 !important; border-color: #800000 !important; color: #800000 !important; }
+	html[data-theme="Yotsuba"] .post-form-header { background: #ea8 !important; border-bottom-color: #800000 !important; }
+	html[data-theme="Yotsuba"] .post-form-title { color: #800000 !important; }
 </style>
 <script type="text/javascript">
 	var configRoot="{{ config.root }}";
@@ -57,7 +65,7 @@
 {% if config.font_awesome %}<link rel="stylesheet" href="{{ config.root }}{{ config.font_awesome_css }}?v={{ config.resource_version }}">{% endif %}
 {% if config.country_flags_condensed %}<link rel="stylesheet" href="{{ config.root }}{{ config.country_flags_condensed_css }}?v={{ config.resource_version }}">{% endif %}
 {% if not nojavascript %}
-	<script type="text/javascript" src="{{ config.url_javascript }}?v={{ config.resource_version }} data-resource-version="{{ config.resource_version }}"></script>
+	<script type="text/javascript" src="{{ config.url_javascript }}?v={{ config.resource_version }}" data-resource-version="{{ config.resource_version }}"></script>
 	{% if not config.additional_javascript_compile %}
 	{% for javascript in config.additional_javascript %}<script type="text/javascript" src="{{ config.additional_javascript_url }}{{ javascript }}?v={{ config.resource_version }}"></script>{% endfor %}
 	{% endif %}

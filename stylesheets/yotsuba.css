@@ -81,3 +81,85 @@ table.modlog tr th {
 .desktop-style div.boardlist:nth-child(1) {
 	background-color: #F0E0D6;
 }
+
+/* Submit New Thread button & Modal */
+.submit-new-thread-btn {
+	background: linear-gradient(180deg, #f5c49b 0%, #ea8 100%);
+	border: 1px solid #800000;
+	color: #800000;
+	box-shadow: 0 1px 3px rgba(128, 0, 0, 0.2);
+	text-shadow: none;
+}
+
+.submit-new-thread-btn:hover {
+	background: linear-gradient(180deg, #ffd4ab 0%, #f0b58e 100%);
+	border-color: #600;
+	color: #800000;
+	box-shadow: 0 2px 6px rgba(128, 0, 0, 0.3);
+}
+
+.submit-new-thread-btn:active {
+	background: linear-gradient(180deg, #df9b70 0%, #d49060 100%);
+}
+
+.post-form-modal {
+	background: #f0e0d6;
+	border-color: #800000;
+	color: #800000;
+}
+
+.post-form-modal .post-form-header {
+	background: #ea8;
+	border-bottom: 1px solid #800000;
+}
+
+.post-form-modal .post-form-title {
+	color: #800000;
+}
+
+.post-form-modal form table tr th {
+	background-color: #ea8 !important;
+	color: #800 !important;
+	border: 1px solid #800 !important;
+}
+
+.post-form-modal input[type="text"],
+.post-form-modal input[type="password"],
+.post-form-modal select,
+.post-form-modal textarea {
+	background-color: #ffffff;
+	color: #800000;
+	border: 1px solid #a9a9a9;
+}
+
+.post-form-modal input[type="text"]:focus,
+.post-form-modal input[type="password"]:focus,
+.post-form-modal select:focus,
+.post-form-modal textarea:focus {
+	border-color: #800000;
+}
+
+.post-form-modal input[type="submit"] {
+	background: #ea8;
+	color: #800;
+	border: 1px solid #800;
+}
+
+.post-form-modal input[type="submit"]:hover {
+	background: #fca;
+	border-color: #600;
+}
+
+.post-form-modal label {
+	color: #800000;
+}
+
+.post-form-modal a {
+	color: #0000ff;
+}
+
+.post-form-modal .unimportant,
+.post-form-modal .unimportant * {
+	color: #800000;
+}
+
