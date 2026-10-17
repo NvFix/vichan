@@ -184,18 +184,23 @@ function error($message, $priority = true, $debug_stuff = []) {
 	if ($debug_stuff)
 		$debug_stuff = array_filter($debug_stuff, $debug_callback);
 
-	die(Element($config['file_page_template'], array(
-		'config' => $config,
-		'title' => _('Error'),
-		'subtitle' => _('An error has occured.'),
-		'body' => Element($config['file_error'], array(
+	try {
+		die(Element($config['file_page_template'], array(
 			'config' => $config,
-			'message' => $message,
-			'mod' => $mod,
-			'board' => isset($board) ? $board : false,
-			'debug' => $config['debug'] ? (is_array($debug_stuff) ? str_replace("\n", '&#10;', utf8tohtml(print_r($debug_stuff, true))) : utf8tohtml($debug_stuff)) : null
-		))
-	)));
+			'title' => _('Error'),
+			'subtitle' => _('An error has occured.'),
+			'body' => Element($config['file_error'], array(
+				'config' => $config,
+				'message' => $message,
+				'mod' => $mod,
+				'board' => isset($board) ? $board : false,
+				'debug' => $config['debug'] ? (is_array($debug_stuff) ? str_replace("\n", '&#10;', utf8tohtml(print_r($debug_stuff, true))) : utf8tohtml($debug_stuff)) : null
+			))
+		)));
+	} catch (\Throwable $e) {
+		$extra = (!empty($config['debug'])) ? '<br><br><small>' . htmlspecialchars($e->getMessage()) . '</small>' : '';
+		basic_error_function_because_the_other_isnt_loaded_yet($message . $extra, $priority);
+	}
 }
 
 function loginForm($error=false, $username=false, $redirect=false) {

@@ -92,10 +92,21 @@ class TinyboardTwigCache extends Twig\Cache\FilesystemCache {
 			}
 		}
 
-		parent::write($key, $content);
-
-		@chmod($key, 0666);
-		@chmod($dir, 0777);
+		if (is_writable($dir)) {
+			try {
+				parent::write($key, $content);
+				@chmod($key, 0666);
+				@chmod($dir, 0777);
+			} catch (\Throwable $e) {
+				error_log("TinyboardTwigCache: could not write cache key: " . $e->getMessage());
+			}
+		} else {
+			// Directory not writable by current user (e.g. created by root in CLI).
+			// Do NOT throw RuntimeException!
+			// Twig Environment automatically falls back to in-memory evaluation,
+			// allowing the page to render cleanly without crashing or returning HTTP 400.
+			error_log("TinyboardTwigCache: directory $dir is not writable, falling back to in-memory template evaluation.");
+		}
 	}
 
 	/**
