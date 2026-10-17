@@ -200,27 +200,4 @@ form[name="post"] input[type="submit"]:hover,
 	color: #800000;
 }
 
-.post-form-modal .styling-toggle {
-	color: #800000;
-}
-
-.post-form-modal .styling-toggle:hover {
-	color: #d00;
-}
-
-.post-form-modal .styling-btn {
-	background: #ffffff;
-	border: 1px solid #800;
-	color: #800000;
-}
-
-.post-form-modal .styling-btn:hover {
-	background: #f0e0d6;
-	border-color: #800;
-}
-
-.post-form-modal .post-option-label {
-	color: #800000;
-}
-
 

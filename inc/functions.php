@@ -2164,7 +2164,7 @@ function markup(&$body, $track_cites = false, $op = false) {
 }
 
 function generate_fortune_data() {
-	$fortunes = array(
+	static $fortunes = array(
 		"Bad Luck",
 		"Average Luck",
 		"Good Luck",
@@ -2179,7 +2179,7 @@ function generate_fortune_data() {
 		"&#65288;&#12288;´_ゝ`&#65289;&#65420;&#65392;&#65437; ",
 		"Good news will come to you by mail"
 	);
-	$total = count($fortunes);
+	static $total = 13;
 	$index = mt_rand(0, $total - 1);
 	$outcome = $fortunes[$index];
 

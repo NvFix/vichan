@@ -29,7 +29,7 @@
 	$config['spoiler_images'] = true;
 
 	// Resource cache buster version
-	$config['resource_version'] = 14;
+	$config['resource_version'] = 15;
 
 	// Database stuff
 	$config['db']['type']		= 'mysql';

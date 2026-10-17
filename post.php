@@ -893,14 +893,7 @@ if (isset($_POST['delete'])) {
 
 	if (isset($_POST['post_options'])) {
 		$noko = !empty($_POST['noko']);
-		if (!empty($_POST['sage'])) {
-			$post['email'] = 'sage';
-		} else {
-			$post['email'] = '';
-		}
-		if (!empty($_POST['fortune'])) {
-			$is_fortune = true;
-		}
+		$post['email'] = !empty($_POST['sage']) ? 'sage' : '';
 	} else {
 		if (stripos($post['email'], 'fortune') !== false) {
 			$is_fortune = true;
@@ -913,10 +906,12 @@ if (isset($_POST['delete'])) {
 		if (strtolower($post['email']) == 'noko') {
 			$noko = true;
 			$post['email'] = '';
-		} elseif (strtolower($post['email']) == 'nonoko'){
+		} elseif (strtolower($post['email']) == 'nonoko') {
 			$noko = false;
 			$post['email'] = '';
-		} else $noko = $config['always_noko'];
+		} else {
+			$noko = $config['always_noko'];
+		}
 	}
 
 	if (!empty($_POST['fortune'])) {

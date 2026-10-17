@@ -537,10 +537,22 @@ function initReplyScrollButton() {
 	btn.addEventListener('click', scrollToReplyForm);
 }
 
-function applyCommentStyling(type, textarea) {
-	if (!textarea) {
-		textarea = document.getElementById('body');
+function replaceTextareaRange(textarea, text, start, end, selectMode) {
+	if (typeof textarea.setRangeText === 'function') {
+		textarea.setRangeText(text, start, end, selectMode);
+	} else {
+		textarea.value = textarea.value.substring(0, start) + text + textarea.value.substring(end);
+		if (selectMode === 'select') {
+			textarea.selectionStart = start;
+			textarea.selectionEnd = start + text.length;
+		} else {
+			textarea.selectionStart = textarea.selectionEnd = start + text.length;
+		}
 	}
+}
+
+function applyCommentStyling(type, textarea) {
+	if (!textarea) textarea = document.getElementById('body');
 	if (!textarea) return;
 
 	var start = textarea.selectionStart;
@@ -548,107 +560,45 @@ function applyCommentStyling(type, textarea) {
 	var value = textarea.value;
 	var selectedText = value.substring(start, end);
 
-	var prefix = '';
-	var suffix = '';
-	var isGreentext = false;
+	var prefix = '', suffix = '', isGreentext = false;
 
-	switch (type) {
-		case 'bold':
-			prefix = "[b]";
-			suffix = "[/b]";
-			break;
-		case 'italics':
-			prefix = "[i]";
-			suffix = "[/i]";
-			break;
-		case 'spoiler':
-			prefix = "[spoiler]";
-			suffix = "[/spoiler]";
-			break;
-		case 'greentext':
-			isGreentext = true;
-			break;
-		case 'size-1':
-			prefix = "[s1]";
-			suffix = "[/s1]";
-			break;
-		case 'size-2':
-			prefix = "[s2]";
-			suffix = "[/s2]";
-			break;
-		case 'size-3':
-			prefix = "[s3]";
-			suffix = "[/s3]";
-			break;
-		case 'size-4':
-			prefix = "[s4]";
-			suffix = "[/s4]";
-			break;
-		case 'size-5':
-			prefix = "[s5]";
-			suffix = "[/s5]";
-			break;
-		case 'size-6':
-			prefix = "[s6]";
-			suffix = "[/s6]";
-			break;
-		default:
-			return;
+	if (type === 'bold') {
+		prefix = '[b]'; suffix = '[/b]';
+	} else if (type === 'italics') {
+		prefix = '[i]'; suffix = '[/i]';
+	} else if (type === 'spoiler') {
+		prefix = '[spoiler]'; suffix = '[/spoiler]';
+	} else if (type === 'greentext') {
+		isGreentext = true;
+	} else if (/^size-[1-6]$/.test(type)) {
+		var s = type.charAt(5);
+		prefix = '[s' + s + ']'; suffix = '[/s' + s + ']';
+	} else {
+		return;
 	}
 
 	textarea.focus();
 
 	if (isGreentext) {
 		if (selectedText.length > 0) {
-			var lines = selectedText.split('\n');
-			var formatted = lines.map(function(line) {
+			var formatted = selectedText.split('\n').map(function(line) {
 				return line.charAt(0) === '>' ? line : '> ' + line;
 			}).join('\n');
-			if (typeof textarea.setRangeText === 'function') {
-				textarea.setRangeText(formatted, start, end, 'select');
-			} else {
-				textarea.value = value.substring(0, start) + formatted + value.substring(end);
-				textarea.selectionStart = start;
-				textarea.selectionEnd = start + formatted.length;
-			}
+			replaceTextareaRange(textarea, formatted, start, end, 'select');
 		} else {
 			var before = value.substring(0, start);
 			var addNewline = (before.length > 0 && before.charAt(before.length - 1) !== '\n') ? '\n' : '';
-			var insert = addNewline + '> ';
-			if (typeof textarea.setRangeText === 'function') {
-				textarea.setRangeText(insert, start, end, 'end');
-			} else {
-				textarea.value = value.substring(0, start) + insert + value.substring(end);
-				textarea.selectionStart = textarea.selectionEnd = start + insert.length;
-			}
+			replaceTextareaRange(textarea, addNewline + '> ', start, end, 'end');
 		}
+	} else if (selectedText.length > 0) {
+		replaceTextareaRange(textarea, prefix + selectedText + suffix, start, end, 'select');
 	} else {
-		if (selectedText.length > 0) {
-			var formatted = prefix + selectedText + suffix;
-			if (typeof textarea.setRangeText === 'function') {
-				textarea.setRangeText(formatted, start, end, 'select');
-			} else {
-				textarea.value = value.substring(0, start) + formatted + value.substring(end);
-				textarea.selectionStart = start;
-				textarea.selectionEnd = start + formatted.length;
-			}
-		} else {
-			var formatted = prefix + suffix;
-			if (typeof textarea.setRangeText === 'function') {
-				textarea.setRangeText(formatted, start, end, 'end');
-			} else {
-				textarea.value = value.substring(0, start) + formatted + value.substring(end);
-			}
-			var newCursor = start + prefix.length;
-			textarea.setSelectionRange(newCursor, newCursor);
-		}
+		replaceTextareaRange(textarea, prefix + suffix, start, end, 'end');
+		var newCursor = start + prefix.length;
+		textarea.setSelectionRange(newCursor, newCursor);
 	}
 
-	var evt = document.createEvent ? document.createEvent('HTMLEvents') : null;
-	if (evt) {
-		evt.initEvent('input', true, true);
-		textarea.dispatchEvent(evt);
-	}
+	textarea.dispatchEvent(new Event('input', { bubbles: true }));
 }
 
 function initStylingToolbar() {
@@ -736,19 +686,14 @@ function initCharCounters() {
 		ta.dataset.charCountInit = '1';
 
 		(function(textarea) {
-			function onInput() {
+			textarea.addEventListener('input', function() {
 				updateCharCounter(textarea);
-			}
-			textarea.addEventListener('input', onInput);
-			textarea.addEventListener('keyup', onInput);
-			textarea.addEventListener('change', onInput);
-			textarea.addEventListener('paste', function() {
-				setTimeout(onInput, 10);
 			});
 			updateCharCounter(textarea);
 		})(ta);
 	}
 }
+
 function formatFileSize(bytes) {
 	if (bytes === 0 || !bytes) return '0 B';
 	var k = 1024;
@@ -769,6 +714,11 @@ function updateFilePreview(container, file) {
 	var nameEl = container.querySelector('.upload-preview-filename');
 	var sizeEl = container.querySelector('.upload-preview-size');
 
+	if (container._objectUrl) {
+		try { URL.revokeObjectURL(container._objectUrl); } catch (e) {}
+		container._objectUrl = null;
+	}
+
 	if (!file) {
 		if (preview) preview.style.display = 'none';
 		if (img) img.src = '';
@@ -785,7 +735,8 @@ function updateFilePreview(container, file) {
 
 	if (file.type && file.type.indexOf('image/') === 0) {
 		if (window.URL && window.URL.createObjectURL) {
-			img.src = window.URL.createObjectURL(file);
+			container._objectUrl = window.URL.createObjectURL(file);
+			img.src = container._objectUrl;
 			img.style.display = 'block';
 		} else {
 			var reader = new FileReader();
@@ -814,14 +765,14 @@ function setFileInput(input, file) {
 	if (container) {
 		updateFilePreview(container, file);
 	}
-	var evt = document.createEvent ? document.createEvent('HTMLEvents') : null;
-	if (evt) {
-		evt.initEvent('change', true, true);
-		input.dispatchEvent(evt);
-	}
+	input.dispatchEvent(new Event('change', { bubbles: true }));
 }
 
 function clearFileInput(container) {
+	if (container._objectUrl) {
+		try { URL.revokeObjectURL(container._objectUrl); } catch (e) {}
+		container._objectUrl = null;
+	}
 	var input = container.querySelector('.upload-file-input');
 	if (input) {
 		input.value = '';
