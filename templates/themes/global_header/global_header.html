@@ -438,7 +438,22 @@ html.hide-thumbnails .video-container video {
         return years + ' years ago';
     };
 
-    window.updateRelativeTimes = function(rootEl) {
+    window.formatDeviceLocalTime = function(date) {
+        if (!date || isNaN(date.getTime())) return '';
+        var pad2 = function(n) {
+            return n < 10 ? '0' + n : String(n);
+        };
+        var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        return pad2(date.getMonth() + 1) + "/" +
+               pad2(date.getDate()) + "/" +
+               date.getFullYear().toString().substring(2) +
+               " (" + days[date.getDay()] + ") " +
+               pad2(date.getHours()) + ":" +
+               pad2(date.getMinutes()) + ":" +
+               pad2(date.getSeconds());
+    };
+
+    window.updateTimestamps = function(rootEl) {
         if (!rootEl) rootEl = document;
         if (rootEl.jquery) rootEl = rootEl[0];
         var times = [];
@@ -447,48 +462,45 @@ html.hide-thumbnails .video-container video {
         } else if (rootEl.querySelectorAll) {
             times = rootEl.querySelectorAll('time');
         }
+        var showRelative = (typeof window.getVichanOption === 'function') ? window.getVichanOption('relative_time', false) : false;
+
         for (var i = 0; i < times.length; i++) {
             var t = times[i];
-            var d = window.parsePostDate(t);
+            var d = t._postDate || window.parsePostDate(t);
             if (!d) continue;
+            t._postDate = d;
             if (!t.hasAttribute('data-original-text')) {
                 t.setAttribute('data-original-text', t.textContent);
             }
-            t.textContent = window.formatRelativeTime(d);
-        }
-    };
+            var targetText = showRelative ? window.formatRelativeTime(d) : window.formatDeviceLocalTime(d);
+            var targetTitle = showRelative ? window.formatDeviceLocalTime(d) : window.formatRelativeTime(d);
 
-    window.restoreOriginalTimes = function(rootEl) {
-        if (!rootEl) rootEl = document;
-        if (rootEl.jquery) rootEl = rootEl[0];
-        var times = [];
-        if (rootEl.tagName === 'TIME') {
-            times = [rootEl];
-        } else if (rootEl.querySelectorAll) {
-            times = rootEl.querySelectorAll('time[data-original-text]');
-        }
-        for (var i = 0; i < times.length; i++) {
-            times[i].textContent = times[i].getAttribute('data-original-text');
+            if (t.textContent !== targetText) {
+                t.textContent = targetText;
+            }
+            if (t.getAttribute('title') !== targetTitle) {
+                t.setAttribute('title', targetTitle);
+            }
         }
     };
+    window.updateRelativeTimes = window.updateTimestamps;
+    window.restoreOriginalTimes = window.updateTimestamps;
 
     window.applyRelativeTimeOption = function(enable) {
-        if (enable) {
-            window.updateRelativeTimes();
-        } else {
-            window.restoreOriginalTimes();
-        }
+        window.updateTimestamps();
     };
 
-    /* Apply early classes to avoid FOUC */
+    /* Apply early classes and update timestamps immediately to avoid FOUC */
     var root = document.documentElement;
     if (window.getVichanOption('hide_thumbnails', false)) root.classList.add('hide-thumbnails');
     if (window.getVichanOption('reveal_spoilers', false)) root.classList.add('reveal-spoilers');
     if (window.getVichanOption('smooth_scrolling', true)) root.classList.add('smooth-scrolling');
-    if (window.getVichanOption('relative_time', false)) {
-        if (document.readyState !== 'loading') {
-            window.updateRelativeTimes();
-        }
+    if (document.readyState !== 'loading') {
+        window.updateTimestamps();
+    } else {
+        document.addEventListener('DOMContentLoaded', function() {
+            window.updateTimestamps();
+        });
     }
 
     window.syncOptionsInputs = function() {
@@ -737,24 +749,20 @@ html.hide-thumbnails .video-container video {
         document.addEventListener('DOMContentLoaded', function() {
             ghSyncTheme();
             window.initOptionsModal();
-            if (window.getVichanOption('relative_time', false)) {
-                window.updateRelativeTimes();
-            }
+            window.updateTimestamps();
         });
     } else {
         ghSyncTheme();
         window.initOptionsModal();
-        if (window.getVichanOption('relative_time', false)) {
-            window.updateRelativeTimes();
-        }
+        window.updateTimestamps();
     }
     if (!window._vichanRelativeTimerInit) {
         window._vichanRelativeTimerInit = true;
         setInterval(function() {
             if (window.getVichanOption && window.getVichanOption('relative_time', false)) {
-                window.updateRelativeTimes();
+                window.updateTimestamps();
             }
-        }, 60000);
+        }, 30000);
     }
     window.addEventListener('storage', function(e) {
         if (e.key === 'stylesheet') ghSyncTheme();

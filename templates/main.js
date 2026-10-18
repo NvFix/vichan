@@ -1158,9 +1158,28 @@ function formatRelativeTime(date) {
 }
 window.formatRelativeTime = formatRelativeTime;
 
-function updateRelativeTimes(root) {
-	if (typeof window.updateRelativeTimes === 'function' && window.updateRelativeTimes !== updateRelativeTimes) {
-		return window.updateRelativeTimes(root);
+function formatDeviceLocalTime(date) {
+	if (typeof window.formatDeviceLocalTime === 'function' && window.formatDeviceLocalTime !== formatDeviceLocalTime) {
+		return window.formatDeviceLocalTime(date);
+	}
+	if (!date || isNaN(date.getTime())) return '';
+	var pad2 = function(n) {
+		return n < 10 ? '0' + n : String(n);
+	};
+	var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+	return pad2(date.getMonth() + 1) + "/" +
+	       pad2(date.getDate()) + "/" +
+	       date.getFullYear().toString().substring(2) +
+	       " (" + days[date.getDay()] + ") " +
+	       pad2(date.getHours()) + ":" +
+	       pad2(date.getMinutes()) + ":" +
+	       pad2(date.getSeconds());
+}
+window.formatDeviceLocalTime = formatDeviceLocalTime;
+
+function updateTimestamps(root) {
+	if (typeof window.updateTimestamps === 'function' && window.updateTimestamps !== updateTimestamps) {
+		return window.updateTimestamps(root);
 	}
 	if (!root) root = document;
 	if (root.jquery) root = root[0];
@@ -1170,46 +1189,32 @@ function updateRelativeTimes(root) {
 	} else if (root.querySelectorAll) {
 		times = root.querySelectorAll('time');
 	}
+	var showRelative = (typeof window.getVichanOption === 'function') ? window.getVichanOption('relative_time', false) : false;
 	for (var i = 0; i < times.length; i++) {
 		var t = times[i];
-		var d = parsePostDate(t);
+		var d = t._postDate || parsePostDate(t);
 		if (!d) continue;
+		t._postDate = d;
 		if (!t.hasAttribute('data-original-text')) {
 			t.setAttribute('data-original-text', t.textContent);
 		}
-		t.textContent = formatRelativeTime(d);
-	}
-}
-if (typeof window.updateRelativeTimes === 'undefined') {
-	window.updateRelativeTimes = updateRelativeTimes;
-}
+		var targetText = showRelative ? formatRelativeTime(d) : formatDeviceLocalTime(d);
+		var targetTitle = showRelative ? formatDeviceLocalTime(d) : formatRelativeTime(d);
 
-function restoreOriginalTimes(root) {
-	if (typeof window.restoreOriginalTimes === 'function' && window.restoreOriginalTimes !== restoreOriginalTimes) {
-		return window.restoreOriginalTimes(root);
-	}
-	if (!root) root = document;
-	if (root.jquery) root = root[0];
-	var times = [];
-	if (root.tagName === 'TIME') {
-		times = [root];
-	} else if (root.querySelectorAll) {
-		times = root.querySelectorAll('time[data-original-text]');
-	}
-	for (var i = 0; i < times.length; i++) {
-		times[i].textContent = times[i].getAttribute('data-original-text');
+		if (t.textContent !== targetText) {
+			t.textContent = targetText;
+		}
+		if (t.getAttribute('title') !== targetTitle) {
+			t.setAttribute('title', targetTitle);
+		}
 	}
 }
-if (typeof window.restoreOriginalTimes === 'undefined') {
-	window.restoreOriginalTimes = restoreOriginalTimes;
-}
+window.updateTimestamps = updateTimestamps;
+window.updateRelativeTimes = updateTimestamps;
+window.restoreOriginalTimes = updateTimestamps;
 
 window.applyRelativeTimeOption = function(enable) {
-	if (enable) {
-		updateRelativeTimes();
-	} else {
-		restoreOriginalTimes();
-	}
+	updateTimestamps();
 };
 
 function applyVichanOptions() {
@@ -1217,7 +1222,6 @@ function applyVichanOptions() {
 	var hideThumbs = window.getVichanOption('hide_thumbnails', false);
 	var revealSpoilers = window.getVichanOption('reveal_spoilers', false);
 	var smooth = window.getVichanOption('smooth_scrolling', true);
-	var relTime = window.getVichanOption('relative_time', false);
 	var loop = window.getVichanOption('loop_media', true);
 	var vol = window.getVichanOption('media_volume', 100);
 
@@ -1225,11 +1229,7 @@ function applyVichanOptions() {
 	root.classList.toggle('reveal-spoilers', revealSpoilers);
 	root.classList.toggle('smooth-scrolling', smooth);
 
-	if (relTime) {
-		updateRelativeTimes();
-	} else {
-		restoreOriginalTimes();
-	}
+	updateTimestamps();
 
 	var medias = document.querySelectorAll('video, audio');
 	for (var i = 0; i < medias.length; i++) {
@@ -1331,9 +1331,7 @@ function renderHoverPreview(link, targetId, htmlContent) {
 		preview.innerHTML = inner.innerHTML;
 	}
 
-	if (window.getVichanOption && window.getVichanOption('relative_time', false)) {
-		updateRelativeTimes(preview);
-	}
+	updateTimestamps(preview);
 
 	preview.addEventListener('mouseleave', function(e) {
 		if (!currentHoveredLink || (e.relatedTarget !== currentHoveredLink && !currentHoveredLink.contains(e.relatedTarget))) {
@@ -1447,9 +1445,7 @@ function initPostHover() {
 
 if (typeof $ !== 'undefined') {
 	$(document).on('new_post', function(e, post) {
-		if (window.getVichanOption && window.getVichanOption('relative_time', false)) {
-			updateRelativeTimes(post);
-		}
+		updateTimestamps(post);
 		var loop = window.getVichanOption ? window.getVichanOption('loop_media', true) : true;
 		var vol = (window.getVichanOption ? window.getVichanOption('media_volume', 100) : 100) / 100;
 		$(post).find('video, audio').each(function() {
@@ -1463,9 +1459,9 @@ if (!window._vichanRelativeTimerInit) {
 	window._vichanRelativeTimerInit = true;
 	setInterval(function() {
 		if (window.getVichanOption && window.getVichanOption('relative_time', false)) {
-			updateRelativeTimes();
+			updateTimestamps();
 		}
-	}, 60000);
+	}, 30000);
 }
 
 function init() {
