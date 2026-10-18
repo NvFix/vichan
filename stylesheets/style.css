@@ -2224,15 +2224,47 @@ html.smooth-scrolling {
 }
 
 /* Post Hover Floating Preview */
+div.post.reply.post-hover-preview,
 .post-hover-preview {
   position: absolute !important;
   z-index: 100000;
-  max-width: 620px;
+  width: auto !important;
+  max-width: 620px !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
   pointer-events: auto;
   margin: 0 !important;
   display: block !important;
 }
+
+/* Deadlinks (Quotes to deleted posts) */
+a.deadlink,
+s.deadlink {
+  text-decoration: line-through !important;
+  opacity: 0.8;
+}
+
+a.deadlink:hover {
+  text-decoration: line-through underline !important;
+}
+
+div.post.reply.post-deleted-preview,
+.post-deleted-preview {
+  display: inline-block !important;
+  width: max-content !important;
+  max-width: 260px !important;
+  padding: 6px 12px !important;
+  font-size: 10pt;
+}
+
+div.post.reply.post-deleted-preview div.body,
+.post-deleted-notice {
+  font-style: italic;
+  font-size: 10pt;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap;
+}
+
 
 
 

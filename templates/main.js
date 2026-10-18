@@ -1271,7 +1271,7 @@ function getCiteInfo(link) {
 	var onclick = link.getAttribute('onclick') || '';
 	var targetId = null;
 
-	var textMatch = text.match(/^>>(?:>\/([^\/]+)\/)?(\d+)$/);
+	var textMatch = text.match(/^>>(?:>\/([^\/]+)\/)?(\d+)/);
 	if (textMatch) {
 		targetId = textMatch[2];
 	} else {
@@ -1280,7 +1280,7 @@ function getCiteInfo(link) {
 			targetId = clickMatch[1];
 		} else {
 			var hrefMatch = href.match(/#(\d+)$/);
-			if (hrefMatch && text.indexOf('>>') === 0) {
+			if (hrefMatch && text.indexOf('>>') !== -1) {
 				targetId = hrefMatch[1];
 			}
 		}
@@ -1345,9 +1345,77 @@ function renderHoverPreview(link, targetId, htmlContent) {
 	positionHoverPreview(preview, link);
 }
 
+function renderDeletedHoverPreview(link, targetId) {
+	if (currentHoveredTargetId !== targetId) return;
+	removeHoverPreview();
+
+	var preview = document.createElement('div');
+	preview.id = 'post-hover-preview';
+	preview.className = 'post reply post-hover-preview post-deleted-preview';
+	preview.innerHTML = '<div class="body post-deleted-notice">' + _('Post was deleted.') + '</div>';
+
+	preview.addEventListener('mouseleave', function(e) {
+		if (!currentHoveredLink || (e.relatedTarget !== currentHoveredLink && !currentHoveredLink.contains(e.relatedTarget))) {
+			removeHoverPreview();
+			currentHoveredLink = null;
+			currentHoveredTargetId = null;
+		}
+	});
+
+	document.body.appendChild(preview);
+	positionHoverPreview(preview, link);
+}
+
+function makeDeadlink(link) {
+	if (!link) return;
+	if (!link.classList.contains('deadlink')) {
+		link.classList.add('deadlink');
+	}
+	if (!link.querySelector('s') && !link.closest('s')) {
+		link.innerHTML = '<s>' + link.innerHTML + '</s>';
+	}
+}
+window.makeDeadlink = makeDeadlink;
+
+function markDeadlinks(container) {
+	container = container || document;
+	var links = container.querySelectorAll('a');
+	var isThreadPage = (typeof active_page !== 'undefined' && active_page === 'thread') ||
+		window.location.pathname.indexOf('/res/') !== -1;
+
+	for (var i = 0; i < links.length; i++) {
+		var link = links[i];
+		var cite = getCiteInfo(link);
+		if (!cite) continue;
+
+		if (link.classList.contains('deadlink')) {
+			makeDeadlink(link);
+			continue;
+		}
+
+		if (isThreadPage) {
+			var isLocal = false;
+			if (!cite.url || cite.url === window.location.pathname ||
+				window.location.pathname.indexOf(cite.url) !== -1 ||
+				cite.url.indexOf(window.location.pathname) !== -1) {
+				isLocal = true;
+			}
+			if (isLocal) {
+				var target = document.getElementById('reply_' + cite.id) || document.getElementById('op_' + cite.id);
+				if (!target) {
+					makeDeadlink(link);
+				}
+			}
+		}
+	}
+}
+window.markDeadlinks = markDeadlinks;
+
 function initPostHover() {
 	if (window._vichanPostHoverInit) return;
 	window._vichanPostHoverInit = true;
+
+	markDeadlinks();
 
 	document.addEventListener('mouseover', function(e) {
 		var link = e.target.closest('a');
@@ -1356,9 +1424,34 @@ function initPostHover() {
 		var cite = getCiteInfo(link);
 		if (!cite) return;
 
+		if (link.classList.contains('deadlink') || link.querySelector('s')) {
+			makeDeadlink(link);
+			currentHoveredLink = link;
+			currentHoveredTargetId = cite.id;
+			renderDeletedHoverPreview(link, cite.id);
+			return;
+		}
+
 		var localPost = document.getElementById('reply_' + cite.id) || document.getElementById('op_' + cite.id);
 		if (localPost) {
 			localPost.classList.add('highlighted');
+			return;
+		}
+
+		var isThreadPage = (typeof active_page !== 'undefined' && active_page === 'thread') ||
+			window.location.pathname.indexOf('/res/') !== -1;
+		var isLocal = false;
+		if (!cite.url || cite.url === window.location.pathname ||
+			window.location.pathname.indexOf(cite.url) !== -1 ||
+			cite.url.indexOf(window.location.pathname) !== -1) {
+			isLocal = true;
+		}
+
+		if (isThreadPage && isLocal) {
+			makeDeadlink(link);
+			currentHoveredLink = link;
+			currentHoveredTargetId = cite.id;
+			renderDeletedHoverPreview(link, cite.id);
 			return;
 		}
 
@@ -1370,7 +1463,12 @@ function initPostHover() {
 		currentHoveredTargetId = cite.id;
 
 		if (window._vichanPostCache[cite.id]) {
-			renderHoverPreview(link, cite.id, window._vichanPostCache[cite.id]);
+			if (window._vichanPostCache[cite.id] === 'DELETED') {
+				makeDeadlink(link);
+				renderDeletedHoverPreview(link, cite.id);
+			} else {
+				renderHoverPreview(link, cite.id, window._vichanPostCache[cite.id]);
+			}
 			return;
 		}
 
@@ -1392,17 +1490,27 @@ function initPostHover() {
 				var parser = new DOMParser();
 				var doc = parser.parseFromString(html, 'text/html');
 				var posts = doc.querySelectorAll('.post');
+				var found = false;
 				for (var i = 0; i < posts.length; i++) {
 					var pid = posts[i].id.replace(/^(reply_|op_)/, '');
 					if (pid) {
 						window._vichanPostCache[pid] = posts[i].outerHTML;
+						if (pid === cite.id) found = true;
 					}
 				}
-				if (window._vichanPostCache[cite.id]) {
+				if (found && window._vichanPostCache[cite.id]) {
 					renderHoverPreview(link, cite.id, window._vichanPostCache[cite.id]);
+				} else {
+					window._vichanPostCache[cite.id] = 'DELETED';
+					makeDeadlink(link);
+					renderDeletedHoverPreview(link, cite.id);
 				}
 			})
-			.catch(function() {});
+			.catch(function() {
+				window._vichanPostCache[cite.id] = 'DELETED';
+				makeDeadlink(link);
+				renderDeletedHoverPreview(link, cite.id);
+			});
 	});
 
 	document.addEventListener('mouseout', function(e) {
@@ -1413,7 +1521,7 @@ function initPostHover() {
 		if (!cite) return;
 
 		var localPost = document.getElementById('reply_' + cite.id) || document.getElementById('op_' + cite.id);
-		if (localPost) {
+		if (localPost && !link.classList.contains('deadlink')) {
 			localPost.classList.remove('highlighted');
 			return;
 		}
@@ -1427,6 +1535,13 @@ function initPostHover() {
 		if (currentHoveredLink === link) {
 			currentHoveredLink = null;
 			currentHoveredTargetId = null;
+		}
+	});
+
+	document.addEventListener('click', function(e) {
+		var link = e.target.closest('a');
+		if (link && link.classList.contains('deadlink')) {
+			e.preventDefault();
 		}
 	});
 
@@ -1446,6 +1561,7 @@ function initPostHover() {
 if (typeof $ !== 'undefined') {
 	$(document).on('new_post', function(e, post) {
 		updateTimestamps(post);
+		markDeadlinks(post);
 		var loop = window.getVichanOption ? window.getVichanOption('loop_media', true) : true;
 		var vol = (window.getVichanOption ? window.getVichanOption('media_volume', 100) : 100) / 100;
 		$(post).find('video, audio').each(function() {

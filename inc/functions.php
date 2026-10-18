@@ -2030,6 +2030,14 @@ function markup(&$body, $track_cites = false, $op = false) {
 
 				if ($track_cites && $config['track_cites'])
 					$tracked_cites[] = array($board['uri'], $cite);
+			} else {
+				$replacement = '<a class="deadlink" onclick="highlightReply(\''.$cite.'\', event);" href="' .
+					$config['root'] . $board['dir'] . $config['dir']['res'] . '#' . $cite . '">' .
+					'<s>&gt;&gt;' . $cite . '</s>' .
+					'</a>';
+
+				$body = mb_substr_replace($body, $matches[1][0] . $replacement . $matches[3][0], $matches[0][1] + $skip_chars, mb_strlen($matches[0][0]));
+				$skip_chars += mb_strlen($matches[1][0] . $replacement . $matches[3][0]) - mb_strlen($matches[0][0]);
 			}
 		}
 	}
@@ -2128,6 +2136,16 @@ function markup(&$body, $track_cites = false, $op = false) {
 
 					if ($track_cites && $config['track_cites'])
 						$tracked_cites[] = array($_board, $cite);
+				} else {
+					$replacement = '<a class="deadlink" ' .
+						($_board == $board['uri'] ?
+							'onclick="highlightReply(\''.$cite.'\', event);" '
+						: '') . 'href="' . $config['root'] . $_board . '/' . $config['dir']['res'] . '#' . $cite . '">' .
+						'<s>&gt;&gt;&gt;/' . $_board . '/' . $cite . '</s>' .
+						'</a>';
+
+					$body = mb_substr_replace($body, $matches[1][0] . $replacement . $matches[4][0], $matches[0][1] + $skip_chars, mb_strlen($matches[0][0]));
+					$skip_chars += mb_strlen($matches[1][0] . $replacement . $matches[4][0]) - mb_strlen($matches[0][0]);
 				}
 			} elseif(isset($crossboard_indexes[$_board])) {
 				$replacement = '<a href="' . $crossboard_indexes[$_board] . '">' .
