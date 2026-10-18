@@ -54,13 +54,13 @@
 		<tr class="styling-row">
 			<td colspan="2">
 				<div class="styling-toolbar">
-					<div class="styling-toggle" role="button" tabindex="0" title="{% trans %}Toggle styling toolbar{% endtrans %}">▶ {% trans %}Styling{% endtrans %}</div>
+					<div class="styling-toggle" role="button" tabindex="0" onclick="if(window.toggleStylingMenu){window.toggleStylingMenu(this,event);}else{var m=this.parentNode.querySelector('.styling-menu');if(m){var h=(m.style.display==='none'||!m.classList.contains('open'));m.style.display=h?'flex':'none';m.classList.toggle('open',h);this.textContent=h?'▼ Styling':'▶ Styling';}}" title="{% trans %}Toggle styling toolbar{% endtrans %}">▶ {% trans %}Styling{% endtrans %}</div>
 					<div class="styling-menu" style="display: none;">
 						<div class="styling-group styling-group-basic">
 							<button type="button" class="styling-btn styling-btn-bold" data-style="bold" title="{% trans %}Bold ([b]text[/b]){% endtrans %}"><b>Bold</b></button>
 							<button type="button" class="styling-btn styling-btn-italics" data-style="italics" title="{% trans %}Italics ([i]text[/i]){% endtrans %}"><i>Italics</i></button>
 							<button type="button" class="styling-btn styling-btn-spoiler" data-style="spoiler" title="{% trans %}Spoiler ([spoiler]text[/spoiler]){% endtrans %}"><span class="spoiler-preview">Spoiler</span></button>
-							<button type="button" class="styling-btn styling-btn-ascii font-family-aa-2ch" data-style="ascii" title="{% trans %}ASCII / Kaomoji ([kao]text[/kao]){% endtrans %}">ASCII</button>
+							<button type="button" class="styling-btn styling-btn-ascii font-family-aa-2ch" data-style="ascii" onclick="if(!window.applyCommentStyling){var ta=this.closest?this.closest('form').querySelector('textarea[name=\'body\']'):document.getElementById('body');if(ta){var s=ta.selectionStart||0,e=ta.selectionEnd||0,v=ta.value;var sel=v.substring(s,e);var ins='[kao]'+sel+'[/kao]';ta.value=v.substring(0,s)+ins+v.substring(e);ta.focus();}}" title="{% trans %}ASCII / Kaomoji ([kao]text[/kao]){% endtrans %}">ASCII</button>
 						</div>
 						<div class="styling-group styling-group-sizes">
 							<button type="button" class="styling-btn styling-btn-size size-btn-1" data-style="size-1" title="{% trans %}Size 1 ([s1]text[/s1]){% endtrans %}"><span class="size-1">Size 1</span></button>
@@ -77,7 +77,7 @@
 		<tr class="kaomoji-row">
 			<td colspan="2">
 				<div class="kaomoji-toolbar">
-					<div class="kaomoji-toggle" role="button" tabindex="0" title="{% trans %}Toggle kaomoji toolbar{% endtrans %}">▶ {% trans %}Kaomoji{% endtrans %}</div>
+					<div class="kaomoji-toggle" role="button" tabindex="0" onclick="if(window.toggleKaomojiMenu){window.toggleKaomojiMenu(this,event);}else{var m=this.parentNode.querySelector('.kaomoji-menu');if(m){var h=(m.style.display==='none'||!m.classList.contains('open'));m.style.display=h?'flex':'none';m.classList.toggle('open',h);this.textContent=h?'▼ Kaomoji':'▶ Kaomoji';}}" title="{% trans %}Toggle kaomoji toolbar{% endtrans %}">▶ {% trans %}Kaomoji{% endtrans %}</div>
 					<div class="kaomoji-menu" style="display: none;">
 						<div class="kaomoji-group">
 							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="ヽ(´ー｀)ノ" title="ヽ(´ー｀)ノ">ヽ(´ー｀)ノ</button>
@@ -298,4 +298,10 @@
 
 <script type="text/javascript">{% verbatim %}
 	rememberStuff();
+	if (typeof window.initStylingToolbar === 'function') {
+		window.initStylingToolbar();
+	}
+	if (typeof window.initKaomojiToolbar === 'function') {
+		window.initKaomojiToolbar();
+	}
 {% endverbatim %}</script>

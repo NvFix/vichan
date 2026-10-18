@@ -1756,8 +1756,8 @@ form[name="post"] input[type="submit"]:hover,
 .styling-row td,
 .kaomoji-row td {
   padding: 1px 0 3px 0;
-  max-width: 0;
   width: 100%;
+  box-sizing: border-box;
 }
 
 /* Styling & Kaomoji Toolbars */
@@ -1799,6 +1799,11 @@ form[name="post"] input[type="submit"]:hover,
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+}
+
+.styling-menu.open,
+.kaomoji-menu.open {
+  display: flex !important;
 }
 
 .styling-group,

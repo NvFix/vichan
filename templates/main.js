@@ -487,6 +487,8 @@ function initPostFormModal() {
 		document.body.style.overflow = 'hidden';
 		var postForm = document.forms['post'];
 		if (postForm) {
+			if (typeof initStylingToolbar === 'function') initStylingToolbar();
+			if (typeof initKaomojiToolbar === 'function') initKaomojiToolbar();
 			if (typeof initCharCounters === 'function') initCharCounters();
 			if (typeof initFileUpload === 'function') initFileUpload();
 			if (postForm.elements['body'] && typeof updateCharCounter === 'function') {
@@ -627,6 +629,58 @@ function applyCommentStyling(type, textarea) {
 	textarea.dispatchEvent(new Event('input', { bubbles: true }));
 }
 
+window.applyCommentStyling = applyCommentStyling;
+
+function toggleStylingMenu(toggle, e) {
+	if (e) {
+		if (e._stylingHandled) return;
+		e._stylingHandled = true;
+		if (e.preventDefault) e.preventDefault();
+	}
+	if (!toggle) return;
+	var toolbar = toggle.closest ? toggle.closest('.styling-toolbar') : toggle.parentElement;
+	if (!toolbar) return;
+	var menu = toolbar.querySelector('.styling-menu');
+	if (!menu) return;
+
+	var isHidden = (menu.style.display === 'none' || !menu.classList.contains('open'));
+	if (isHidden) {
+		menu.style.display = 'flex';
+		menu.classList.add('open');
+		toggle.textContent = '▼ Styling';
+	} else {
+		menu.style.display = 'none';
+		menu.classList.remove('open');
+		toggle.textContent = '▶ Styling';
+	}
+}
+window.toggleStylingMenu = toggleStylingMenu;
+
+function toggleKaomojiMenu(toggle, e) {
+	if (e) {
+		if (e._kaomojiHandled) return;
+		e._kaomojiHandled = true;
+		if (e.preventDefault) e.preventDefault();
+	}
+	if (!toggle) return;
+	var toolbar = toggle.closest ? toggle.closest('.kaomoji-toolbar') : toggle.parentElement;
+	if (!toolbar) return;
+	var menu = toolbar.querySelector('.kaomoji-menu');
+	if (!menu) return;
+
+	var isHidden = (menu.style.display === 'none' || !menu.classList.contains('open'));
+	if (isHidden) {
+		menu.style.display = 'flex';
+		menu.classList.add('open');
+		toggle.textContent = '▼ Kaomoji';
+	} else {
+		menu.style.display = 'none';
+		menu.classList.remove('open');
+		toggle.textContent = '▶ Kaomoji';
+	}
+}
+window.toggleKaomojiMenu = toggleKaomojiMenu;
+
 function initStylingToolbar() {
 	var toolbars = document.querySelectorAll('.styling-toolbar');
 	for (var t = 0; t < toolbars.length; t++) {
@@ -636,42 +690,37 @@ function initStylingToolbar() {
 
 		(function(tb) {
 			var toggle = tb.querySelector('.styling-toggle');
-			var menu = tb.querySelector('.styling-menu');
-			if (!toggle || !menu) return;
-
-			function toggleMenu(e) {
-				if (e && e.preventDefault) e.preventDefault();
-				var isHidden = (menu.style.display === 'none' || window.getComputedStyle(menu).display === 'none');
-				if (isHidden) {
-					menu.style.display = 'flex';
-					toggle.textContent = '▼ Styling';
-				} else {
-					menu.style.display = 'none';
-					toggle.textContent = '▶ Styling';
-				}
+			if (toggle) {
+				toggle.addEventListener('click', function(e) {
+					toggleStylingMenu(toggle, e);
+				});
+				toggle.addEventListener('keydown', function(e) {
+					if (e.key === 'Enter' || e.key === ' ') {
+						toggleStylingMenu(toggle, e);
+					}
+				});
 			}
 
-			toggle.addEventListener('click', toggleMenu);
-			toggle.addEventListener('keydown', function(e) {
-				if (e.key === 'Enter' || e.key === ' ') {
-					toggleMenu(e);
-				}
-			});
-
-			menu.addEventListener('click', function(e) {
-				var btn = e.target.closest ? e.target.closest('.styling-btn') : null;
-				if (!btn) return;
-				e.preventDefault();
-				var style = btn.getAttribute('data-style');
-				if (style) {
-					var form = tb.closest ? tb.closest('form') : null;
-					var textarea = form ? form.querySelector('textarea[name="body"]') : document.getElementById('body');
-					applyCommentStyling(style, textarea);
-				}
-			});
+			var menu = tb.querySelector('.styling-menu');
+			if (menu) {
+				menu.addEventListener('click', function(e) {
+					var btn = e.target.closest ? e.target.closest('.styling-btn') : null;
+					if (!btn) return;
+					if (e._stylingBtnHandled) return;
+					e._stylingBtnHandled = true;
+					e.preventDefault();
+					var style = btn.getAttribute('data-style');
+					if (style) {
+						var form = tb.closest ? tb.closest('form') : null;
+						var textarea = form ? form.querySelector('textarea[name="body"]') : document.getElementById('body');
+						applyCommentStyling(style, textarea);
+					}
+				});
+			}
 		})(toolbar);
 	}
 }
+window.initStylingToolbar = initStylingToolbar;
 
 function insertKaomoji(kaomoji, textarea) {
 	if (!textarea) textarea = document.getElementById('body');
@@ -696,43 +745,85 @@ function initKaomojiToolbar() {
 
 		(function(tb) {
 			var toggle = tb.querySelector('.kaomoji-toggle');
-			var menu = tb.querySelector('.kaomoji-menu');
-			if (!toggle || !menu) return;
-
-			function toggleMenu(e) {
-				if (e && e.preventDefault) e.preventDefault();
-				var isHidden = (menu.style.display === 'none' || window.getComputedStyle(menu).display === 'none');
-				if (isHidden) {
-					menu.style.display = 'flex';
-					toggle.textContent = '▼ Kaomoji';
-				} else {
-					menu.style.display = 'none';
-					toggle.textContent = '▶ Kaomoji';
-				}
+			if (toggle) {
+				toggle.addEventListener('click', function(e) {
+					toggleKaomojiMenu(toggle, e);
+				});
+				toggle.addEventListener('keydown', function(e) {
+					if (e.key === 'Enter' || e.key === ' ') {
+						toggleKaomojiMenu(toggle, e);
+					}
+				});
 			}
 
-			toggle.addEventListener('click', toggleMenu);
-			toggle.addEventListener('keydown', function(e) {
-				if (e.key === 'Enter' || e.key === ' ') {
-					toggleMenu(e);
-				}
-			});
-
-			menu.addEventListener('click', function(e) {
-				var btn = e.target.closest ? e.target.closest('.kaomoji-btn') : null;
-				if (!btn) return;
-				e.preventDefault();
-				var text = btn.getAttribute('data-kaomoji') || btn.textContent;
-				if (text) {
-					var form = tb.closest ? tb.closest('form') : null;
-					var textarea = form ? form.querySelector('textarea[name="body"]') : document.getElementById('body');
-					insertKaomoji(text, textarea);
-				}
-			});
+			var menu = tb.querySelector('.kaomoji-menu');
+			if (menu) {
+				menu.addEventListener('click', function(e) {
+					var btn = e.target.closest ? e.target.closest('.kaomoji-btn') : null;
+					if (!btn) return;
+					if (e._kaomojiBtnHandled) return;
+					e._kaomojiBtnHandled = true;
+					e.preventDefault();
+					var text = btn.getAttribute('data-kaomoji') || btn.textContent;
+					if (text) {
+						var form = tb.closest ? tb.closest('form') : null;
+						var textarea = form ? form.querySelector('textarea[name="body"]') : document.getElementById('body');
+						insertKaomoji(text, textarea);
+					}
+				});
+			}
 		})(toolbar);
 	}
 }
 window.initKaomojiToolbar = initKaomojiToolbar;
+
+if (!window._vichanToolbarDelegationInit) {
+	window._vichanToolbarDelegationInit = true;
+	document.addEventListener('click', function(e) {
+		var target = e.target;
+		if (!target) return;
+
+		var kaomojiToggle = target.closest ? target.closest('.kaomoji-toggle') : null;
+		if (kaomojiToggle) {
+			toggleKaomojiMenu(kaomojiToggle, e);
+			return;
+		}
+
+		var stylingToggle = target.closest ? target.closest('.styling-toggle') : null;
+		if (stylingToggle) {
+			toggleStylingMenu(stylingToggle, e);
+			return;
+		}
+
+		var kaomojiBtn = target.closest ? target.closest('.kaomoji-btn') : null;
+		if (kaomojiBtn) {
+			if (e._kaomojiBtnHandled) return;
+			e._kaomojiBtnHandled = true;
+			e.preventDefault();
+			var text = kaomojiBtn.getAttribute('data-kaomoji') || kaomojiBtn.textContent;
+			if (text) {
+				var form = kaomojiBtn.closest ? kaomojiBtn.closest('form') : null;
+				var textarea = form ? form.querySelector('textarea[name="body"]') : document.getElementById('body');
+				insertKaomoji(text, textarea);
+			}
+			return;
+		}
+
+		var stylingBtn = target.closest ? target.closest('.styling-btn') : null;
+		if (stylingBtn) {
+			if (e._stylingBtnHandled) return;
+			e._stylingBtnHandled = true;
+			e.preventDefault();
+			var style = stylingBtn.getAttribute('data-style');
+			if (style) {
+				var form = stylingBtn.closest ? stylingBtn.closest('form') : null;
+				var textarea = form ? form.querySelector('textarea[name="body"]') : document.getElementById('body');
+				applyCommentStyling(style, textarea);
+			}
+			return;
+		}
+	});
+}
 function updateCharCounter(textarea) {
 	if (!textarea) return;
 	var form = textarea.closest('form') || document;
