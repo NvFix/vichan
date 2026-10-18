@@ -597,7 +597,7 @@ function applyCommentStyling(type, textarea) {
 	var value = textarea.value;
 	var selectedText = value.substring(start, end);
 
-	var prefix = '', suffix = '', isGreentext = false;
+	var prefix = '', suffix = '';
 
 	if (type === 'bold') {
 		prefix = '[b]'; suffix = '[/b]';
@@ -605,8 +605,6 @@ function applyCommentStyling(type, textarea) {
 		prefix = '[i]'; suffix = '[/i]';
 	} else if (type === 'spoiler') {
 		prefix = '[spoiler]'; suffix = '[/spoiler]';
-	} else if (type === 'greentext') {
-		isGreentext = true;
 	} else if (/^size-[1-6]$/.test(type)) {
 		var s = type.charAt(5);
 		prefix = '[s' + s + ']'; suffix = '[/s' + s + ']';
@@ -618,18 +616,7 @@ function applyCommentStyling(type, textarea) {
 
 	textarea.focus();
 
-	if (isGreentext) {
-		if (selectedText.length > 0) {
-			var formatted = selectedText.split('\n').map(function(line) {
-				return line.charAt(0) === '>' ? line : '> ' + line;
-			}).join('\n');
-			replaceTextareaRange(textarea, formatted, start, end, 'select');
-		} else {
-			var before = value.substring(0, start);
-			var addNewline = (before.length > 0 && before.charAt(before.length - 1) !== '\n') ? '\n' : '';
-			replaceTextareaRange(textarea, addNewline + '> ', start, end, 'end');
-		}
-	} else if (selectedText.length > 0) {
+	if (selectedText.length > 0) {
 		replaceTextareaRange(textarea, prefix + selectedText + suffix, start, end, 'select');
 	} else {
 		replaceTextareaRange(textarea, prefix + suffix, start, end, 'end');
