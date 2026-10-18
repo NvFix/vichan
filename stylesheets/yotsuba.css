@@ -188,22 +188,26 @@ form[name="post"] input[type="submit"]:hover,
 	color: #800000;
 }
 
-/* Styling toolbar */
-.styling-toggle {
+/* Styling & Kaomoji toolbars */
+.styling-toggle,
+.kaomoji-toggle {
 	color: #800000;
 }
 
-.styling-toggle:hover {
+.styling-toggle:hover,
+.kaomoji-toggle:hover {
 	color: #d00;
 }
 
-.styling-btn {
+.styling-btn,
+.kaomoji-btn {
 	background: #ffffff;
 	border: 1px solid #800;
 	color: #800000;
 }
 
-.styling-btn:hover {
+.styling-btn:hover,
+.kaomoji-btn:hover {
 	background: #f0e0d6;
 	border-color: #800;
 }
@@ -269,6 +273,13 @@ form[name="post"] input[type="submit"]:hover,
 
 .options-section {
 	border-top-color: rgba(128, 0, 0, 0.2);
+}
+
+.theme-catalog div.thread::-webkit-scrollbar-thumb {
+	background: rgba(128, 0, 0, 0.35);
+}
+.theme-catalog div.thread:hover::-webkit-scrollbar-thumb {
+	background: rgba(128, 0, 0, 0.65);
 }
 
 

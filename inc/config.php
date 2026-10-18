@@ -729,6 +729,8 @@
 		[ "/\[b\](.*?)\[\/b\]/is", "<strong>\$1</strong>" ],
 		[ "/\[i\](.*?)\[\/i\]/is", "<em>\$1</em>" ],
 		[ "/\[spoiler\](.*?)\[\/spoiler\]/is", "<span class=\"spoiler\">\$1</span>" ],
+		[ "/\[kao\](.*?)\[\/kao\]/is", "<span class=\"kao font-family-aa-2ch\">\$1</span>" ],
+		[ "/\[ascii\](.*?)\[\/ascii\]/is", "<span class=\"kao font-family-aa-2ch\">\$1</span>" ],
 		// 6 sizing options: [s1]..[s6] (and legacy [size=1]..[size=6])
 		[ "/\[s([1-6])\](.*?)\[\/s\\1\]/is", "<span class=\"size-\$1\">\$2</span>" ],
 		[ "/\[size=([1-6])\](.*?)\[\/size\]/is", "<span class=\"size-\$1\">\$2</span>" ],

@@ -610,6 +610,8 @@ function applyCommentStyling(type, textarea) {
 	} else if (/^size-[1-6]$/.test(type)) {
 		var s = type.charAt(5);
 		prefix = '[s' + s + ']'; suffix = '[/s' + s + ']';
+	} else if (type === 'ascii' || type === 'kao') {
+		prefix = '[kao]'; suffix = '[/kao]';
 	} else {
 		return;
 	}
@@ -669,23 +671,81 @@ function initStylingToolbar() {
 				}
 			});
 
-			var buttons = menu.querySelectorAll('.styling-btn');
-			for (var i = 0; i < buttons.length; i++) {
-				(function(btn) {
-					btn.addEventListener('click', function(e) {
-						e.preventDefault();
-						var style = btn.getAttribute('data-style');
-						if (style) {
-							var form = tb.closest('form');
-							var textarea = form ? form.querySelector('textarea[name="body"]') : document.getElementById('body');
-							applyCommentStyling(style, textarea);
-						}
-					});
-				})(buttons[i]);
-			}
+			menu.addEventListener('click', function(e) {
+				var btn = e.target.closest ? e.target.closest('.styling-btn') : null;
+				if (!btn) return;
+				e.preventDefault();
+				var style = btn.getAttribute('data-style');
+				if (style) {
+					var form = tb.closest ? tb.closest('form') : null;
+					var textarea = form ? form.querySelector('textarea[name="body"]') : document.getElementById('body');
+					applyCommentStyling(style, textarea);
+				}
+			});
 		})(toolbar);
 	}
 }
+
+function insertKaomoji(kaomoji, textarea) {
+	if (!textarea) textarea = document.getElementById('body');
+	if (!textarea) return;
+
+	var wrapped = '[kao]' + kaomoji + '[/kao]';
+	var start = (typeof textarea.selectionStart === 'number') ? textarea.selectionStart : textarea.value.length;
+	var end = (typeof textarea.selectionEnd === 'number') ? textarea.selectionEnd : textarea.value.length;
+
+	textarea.focus();
+	replaceTextareaRange(textarea, wrapped, start, end, 'end');
+	textarea.dispatchEvent(new Event('input', { bubbles: true }));
+}
+window.insertKaomoji = insertKaomoji;
+
+function initKaomojiToolbar() {
+	var toolbars = document.querySelectorAll('.kaomoji-toolbar');
+	for (var t = 0; t < toolbars.length; t++) {
+		var toolbar = toolbars[t];
+		if (toolbar.dataset.kaomojiInit === '1') continue;
+		toolbar.dataset.kaomojiInit = '1';
+
+		(function(tb) {
+			var toggle = tb.querySelector('.kaomoji-toggle');
+			var menu = tb.querySelector('.kaomoji-menu');
+			if (!toggle || !menu) return;
+
+			function toggleMenu(e) {
+				if (e && e.preventDefault) e.preventDefault();
+				var isHidden = (menu.style.display === 'none' || window.getComputedStyle(menu).display === 'none');
+				if (isHidden) {
+					menu.style.display = 'flex';
+					toggle.textContent = '▼ Kaomoji';
+				} else {
+					menu.style.display = 'none';
+					toggle.textContent = '▶ Kaomoji';
+				}
+			}
+
+			toggle.addEventListener('click', toggleMenu);
+			toggle.addEventListener('keydown', function(e) {
+				if (e.key === 'Enter' || e.key === ' ') {
+					toggleMenu(e);
+				}
+			});
+
+			menu.addEventListener('click', function(e) {
+				var btn = e.target.closest ? e.target.closest('.kaomoji-btn') : null;
+				if (!btn) return;
+				e.preventDefault();
+				var text = btn.getAttribute('data-kaomoji') || btn.textContent;
+				if (text) {
+					var form = tb.closest ? tb.closest('form') : null;
+					var textarea = form ? form.querySelector('textarea[name="body"]') : document.getElementById('body');
+					insertKaomoji(text, textarea);
+				}
+			});
+		})(toolbar);
+	}
+}
+window.initKaomojiToolbar = initKaomojiToolbar;
 function updateCharCounter(textarea) {
 	if (!textarea) return;
 	var form = textarea.closest('form') || document;
@@ -1335,6 +1395,7 @@ function init() {
 	initPostFormModal();
 	initReplyScrollButton();
 	initStylingToolbar();
+	initKaomojiToolbar();
 	initCharCounters();
 	initFileUpload();
 	applyVichanOptions();

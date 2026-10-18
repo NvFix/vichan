@@ -193,15 +193,19 @@ form[name="post"] input[type="submit"]:active,
 	background: linear-gradient(180deg, #2b114f 0%, #1c0a34 100%);
 }
 
-/* Styling toolbar */
-.styling-toggle { color: #9766c8; }
-.styling-toggle:hover { color: #b585ea; }
-.styling-btn {
+/* Styling & Kaomoji toolbars */
+.styling-toggle,
+.kaomoji-toggle { color: #9766c8; }
+.styling-toggle:hover,
+.kaomoji-toggle:hover { color: #b585ea; }
+.styling-btn,
+.kaomoji-btn {
 	background: #241142;
 	border: 1px solid #3a166b;
 	color: #d4d3e1;
 }
-.styling-btn:hover {
+.styling-btn:hover,
+.kaomoji-btn:hover {
 	background: #341561;
 	border-color: #5a2ea3;
 	color: #ffffff;
@@ -239,6 +243,12 @@ form[name="post"] input[type="submit"]:active,
 .theme-catalog div.thread:hover {
 	background: #271545;
 	border-color: #552794;
+}
+.theme-catalog div.thread::-webkit-scrollbar-thumb {
+	background: rgba(151, 102, 200, 0.4);
+}
+.theme-catalog div.thread:hover::-webkit-scrollbar-thumb {
+	background: rgba(151, 102, 200, 0.7);
 }
 
 /* Footer & unimportant text */

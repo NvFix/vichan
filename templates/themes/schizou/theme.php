@@ -110,10 +110,12 @@
 				while ($post = $res->fetch(PDO::FETCH_ASSOC)) {
 					openBoard($post['board']);
 					$post['link'] = $config['root'] . $board['dir'] . $config['dir']['res'] . link_for($post) . '#' . $post['id'];
-					$clean_body = trim(strip_tags($post['body']));
+					$body_spaced = preg_replace('/<br\s*\/?>/i', ' ', $post['body']);
+					$body_spaced = preg_replace('/<\/?(?:p|div|li|blockquote|h[1-6])[^>]*>/i', ' ', $body_spaced);
+					$clean_body = trim(preg_replace('/\s+/u', ' ', strip_tags($body_spaced)));
 					if ($clean_body !== '') {
 						$post['snippet'] = pm_snippet($clean_body, 60);
-						$post['snippet_full'] = htmlspecialchars($clean_body);
+						$post['snippet_full'] = htmlspecialchars($clean_body, ENT_QUOTES, 'UTF-8');
 					} else {
 						$post['snippet'] = '<em>' . _('(no comment)') . '</em>';
 						$post['snippet_full'] = '(no comment)';
@@ -136,19 +138,22 @@
 				while ($thread = $res->fetch(PDO::FETCH_ASSOC)) {
 					openBoard($thread['board']);
 					$thread['link'] = $config['root'] . $board['dir'] . $config['dir']['res'] . link_for($thread);
-					$clean_body = trim(strip_tags($thread['body']));
-					$clean_subject = !empty($thread['subject']) ? trim($thread['subject']) : '';
+					$body_spaced = preg_replace('/<br\s*\/?>/i', ' ', $thread['body']);
+					$body_spaced = preg_replace('/<\/?(?:p|div|li|blockquote|h[1-6])[^>]*>/i', ' ', $body_spaced);
+					$clean_body = trim(preg_replace('/\s+/u', ' ', strip_tags($body_spaced)));
+					$subject_spaced = !empty($thread['subject']) ? preg_replace('/<br\s*\/?>/i', ' ', $thread['subject']) : '';
+					$clean_subject = !empty($subject_spaced) ? trim(preg_replace('/\s+/u', ' ', strip_tags($subject_spaced))) : '';
 
 					if ($clean_subject !== '' && $clean_body !== '') {
 						$combined = $clean_subject . ' - ' . $clean_body;
 						$thread['title'] = pm_snippet($combined, 70);
-						$thread['title_full'] = htmlspecialchars($combined);
+						$thread['title_full'] = htmlspecialchars($combined, ENT_QUOTES, 'UTF-8');
 					} elseif ($clean_subject !== '') {
 						$thread['title'] = pm_snippet($clean_subject, 70);
-						$thread['title_full'] = htmlspecialchars($clean_subject);
+						$thread['title_full'] = htmlspecialchars($clean_subject, ENT_QUOTES, 'UTF-8');
 					} elseif ($clean_body !== '') {
 						$thread['title'] = pm_snippet($clean_body, 70);
-						$thread['title_full'] = htmlspecialchars($clean_body);
+						$thread['title_full'] = htmlspecialchars($clean_body, ENT_QUOTES, 'UTF-8');
 					} else {
 						$thread['title'] = 'Thread #' . $thread['id'];
 						$thread['title_full'] = 'Thread #' . $thread['id'];

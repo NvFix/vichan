@@ -61,6 +61,7 @@
 							<button type="button" class="styling-btn styling-btn-italics" data-style="italics" title="{% trans %}Italics ([i]text[/i]){% endtrans %}"><i>Italics</i></button>
 							<button type="button" class="styling-btn styling-btn-spoiler" data-style="spoiler" title="{% trans %}Spoiler ([spoiler]text[/spoiler]){% endtrans %}"><span class="spoiler-preview">Spoiler</span></button>
 							<button type="button" class="styling-btn styling-btn-quote" data-style="greentext" title="{% trans %}Greentext (>text){% endtrans %}"><span class="quote-preview">&gt;Greentext</span></button>
+							<button type="button" class="styling-btn styling-btn-ascii font-family-aa-2ch" data-style="ascii" title="{% trans %}ASCII / Kaomoji ([kao]text[/kao]){% endtrans %}">ASCII</button>
 						</div>
 						<div class="styling-group styling-group-sizes">
 							<button type="button" class="styling-btn styling-btn-size size-btn-1" data-style="size-1" title="{% trans %}Size 1 ([s1]text[/s1]){% endtrans %}"><span class="size-1">Size 1</span></button>
@@ -69,6 +70,52 @@
 							<button type="button" class="styling-btn styling-btn-size size-btn-4" data-style="size-4" title="{% trans %}Size 4 ([s4]text[/s4]){% endtrans %}"><span class="size-4">Size 4</span></button>
 							<button type="button" class="styling-btn styling-btn-size size-btn-5" data-style="size-5" title="{% trans %}Size 5 ([s5]text[/s5]){% endtrans %}"><span class="size-5">Size 5</span></button>
 							<button type="button" class="styling-btn styling-btn-size size-btn-6" data-style="size-6" title="{% trans %}Size 6 ([s6]text[/s6]){% endtrans %}"><span class="size-6">Size 6</span></button>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr class="kaomoji-row">
+			<td colspan="2">
+				<div class="kaomoji-toolbar">
+					<div class="kaomoji-toggle" role="button" tabindex="0" title="{% trans %}Toggle kaomoji toolbar{% endtrans %}">▶ {% trans %}Kaomoji{% endtrans %}</div>
+					<div class="kaomoji-menu" style="display: none;">
+						<div class="kaomoji-group">
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="ヽ(´ー｀)ノ" title="ヽ(´ー｀)ノ">ヽ(´ー｀)ノ</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(;´Д`)" title="(;´Д`)">(;´Д`)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="ヽ(´∇`)ノ" title="ヽ(´∇`)ノ">ヽ(´∇`)ノ</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(´人｀)" title="(´人｀)">(´人｀)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(＾Д^)" title="(＾Д^)">(＾Д^)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(´ー`)" title="(´ー`)">(´ー`)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="（ ´,_ゝ`）" title="（ ´,_ゝ`）">（ ´,_ゝ`）</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(´～`)" title="(´～`)">(´～`)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(;ﾟДﾟ)" title="(;ﾟДﾟ)">(;ﾟДﾟ)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(;ﾟ∀ﾟ)┐" title="(;ﾟ∀ﾟ)┐">(;ﾟ∀ﾟ)┐</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(ﾟ～ﾟ)┌" title="(ﾟ～ﾟ)┌">(ﾟ～ﾟ)┌</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="ヽ(`Д´)ノ" title="ヽ(`Д´)ノ">ヽ(`Д´)ノ</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="( ´ω`)" title="( ´ω`)">( ´ω`)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(ﾟー｀)" title="(ﾟー｀)">(ﾟー｀)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(・∀・)" title="(・∀・)">(・∀・)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="（⌒∇⌒ゞ）" title="（⌒∇⌒ゞ）">（⌒∇⌒ゞ）</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(ﾟ血ﾟ#)" title="(ﾟ血ﾟ#)">(ﾟ血ﾟ#)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(ﾟｰﾟ)" title="(ﾟｰﾟ)">(ﾟｰﾟ)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(´￢`)" title="(´￢`)">(´￢`)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(´π｀)" title="(´π｀)">(´π｀)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="ヽ(ﾟρﾟ)ノ" title="ヽ(ﾟρﾟ)ノ">ヽ(ﾟρﾟ)ノ</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="Σ(;ﾟДﾟ)" title="Σ(;ﾟДﾟ)">Σ(;ﾟДﾟ)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="Σ(ﾟдﾟ|||)" title="Σ(ﾟдﾟ|||)">Σ(ﾟдﾟ|||)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="ｷﾀ━━━(・∀・)━━━!!" title="ｷﾀ━━━(・∀・)━━━!!">ｷﾀ━━━(・∀・)━━━!!</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(*ﾟ∀ﾟ)" title="(*ﾟ∀ﾟ)">(*ﾟ∀ﾟ)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(￣ー￣)" title="(￣ー￣)">(￣ー￣)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="＼(＾o＾)／" title="＼(＾o＾)／">＼(＾o＾)／</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(´･ω･`)" title="(´･ω･`)">(´･ω･`)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(σ･∀･)σ" title="(σ･∀･)σ">(σ･∀･)σ</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(*^ーﾟ)b" title="(*^ーﾟ)b">(*^ーﾟ)b</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(-＿-)" title="(-＿-)">(-＿-)</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(=ﾟωﾟ)ﾉ" title="(=ﾟωﾟ)ﾉ">(=ﾟωﾟ)ﾉ</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="（・Ａ・）" title="（・Ａ・）">（・Ａ・）</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="（　´∀｀）つ" title="（　´∀｀）つ">（　´∀｀）つ</button>
+							<button type="button" class="kaomoji-btn font-family-aa-2ch" data-kaomoji="(＠^▽^)/" title="(＠^▽^)/">(＠^▽^)/</button>
 						</div>
 					</div>
 				</div>
