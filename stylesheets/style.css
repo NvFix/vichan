@@ -2286,12 +2286,20 @@ div.post.reply.post-deleted-preview div.body,
 }
 
 /* Inline Media Players (Video & Audio) */
-.inline-video-container,
-.inline-audio-container {
+.inline-video-container {
   display: inline-block;
   vertical-align: top;
   margin: 4px 0 8px 0;
   max-width: 100%;
+}
+
+.inline-audio-container {
+  display: block;
+  vertical-align: top;
+  margin: 6px 0 10px 0;
+  width: 480px;
+  max-width: 100%;
+  clear: both;
 }
 
 .media-collapse-bar {
@@ -2329,5 +2337,5 @@ div.post.reply.post-deleted-preview div.body,
 .inline-audio-container audio {
   display: block;
   width: 100%;
-  max-width: 450px;
+  max-width: 100%;
 }

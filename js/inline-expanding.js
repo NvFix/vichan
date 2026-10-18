@@ -149,6 +149,11 @@ $(document).ready(function(){
 					$(this).data('mediaExpanded', 'true');
 					if (curThumb) curThumb.style.display = 'none';
 
+					if (this.parentNode && ~this.parentNode.className.indexOf('multifile')) {
+						$(this).data('origParentWidth', this.parentNode.style.width);
+						this.parentNode.removeAttribute('style');
+					}
+
 					var url = getMediaUrl(this);
 					var pathname = this.pathname || url;
 					var isVideo = /\.(webm|mp4|mkv)(?:$|[?#])/i.test(url) || /\.(webm|mp4|mkv)(?:$|[?#])/i.test(pathname);
@@ -159,9 +164,16 @@ $(document).ready(function(){
 
 					var container = document.createElement('div');
 					container.className = isVideo ? 'inline-video-container' : 'inline-audio-container';
-					container.style.display = 'inline-block';
-					container.style.verticalAlign = 'top';
-					container.style.margin = '4px 0';
+					if (isVideo) {
+						container.style.display = 'inline-block';
+						container.style.verticalAlign = 'top';
+						container.style.margin = '4px 0';
+					} else {
+						container.style.display = 'block';
+						container.style.width = '480px';
+						container.style.maxWidth = '100%';
+						container.style.margin = '6px 0 10px 0';
+					}
 
 					var collapseBar = document.createElement('div');
 					collapseBar.className = 'media-collapse-bar';
@@ -201,7 +213,6 @@ $(document).ready(function(){
 						media.volume = vol;
 						media.style.display = 'block';
 						media.style.width = '100%';
-						media.style.maxWidth = '450px';
 					}
 
 					// Loop seamlessly on ended event
@@ -223,6 +234,10 @@ $(document).ready(function(){
 						} catch (err) {}
 						container.remove();
 						if (curThumb) curThumb.style.display = '';
+						if (self.parentNode && ~self.parentNode.className.indexOf('multifile') && $(self).data('origParentWidth')) {
+							self.parentNode.style.width = $(self).data('origParentWidth');
+							$(self).removeData('origParentWidth');
+						}
 						$(self).removeData('mediaExpanded');
 					};
 
