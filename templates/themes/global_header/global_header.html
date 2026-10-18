@@ -108,6 +108,193 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
         gap: 4px;
     }
 }
+/* Options Modal Overlay & Styles (Self-contained for all pages) */
+#options-modal-overlay.post-form-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.65) !important;
+    z-index: 1000000 !important;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+    padding: 24px 12px;
+    box-sizing: border-box;
+}
+#options-modal-overlay.post-form-overlay.visible {
+    display: flex !important;
+}
+#options-modal-overlay .options-modal {
+    margin: auto;
+    background-color: #f4dded;
+    color: #281b38;
+    border: 1px solid #7c66bb;
+    border-radius: 4px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    max-width: 380px;
+    width: 95vw;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+    font-family: arial, helvetica, sans-serif;
+}
+[data-theme="Deluded Nightly"] #options-modal-overlay .options-modal {
+    background-color: #160c27;
+    color: #989bbc;
+    border-color: #3a166b;
+}
+[data-theme="Yotsuba"] #options-modal-overlay .options-modal {
+    background-color: #ffe;
+    color: #800000;
+    border-color: #800000;
+}
+#options-modal-overlay .post-form-header {
+    padding: 8px 12px;
+    background: #e8ddfa;
+    border-bottom: 1px solid #c9b0e8;
+    text-align: center;
+    position: relative;
+}
+[data-theme="Deluded Nightly"] #options-modal-overlay .post-form-header {
+    background: #241142;
+    border-bottom-color: #3a166b;
+}
+[data-theme="Yotsuba"] #options-modal-overlay .post-form-header {
+    background: #ea8;
+    border-bottom-color: #800;
+}
+#options-modal-overlay .post-form-title {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #54338c;
+    letter-spacing: -0.5px;
+}
+[data-theme="Deluded Nightly"] #options-modal-overlay .post-form-title {
+    color: #d4d3e1;
+}
+[data-theme="Yotsuba"] #options-modal-overlay .post-form-title {
+    color: #800000;
+}
+#options-modal-overlay .options-close-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    color: inherit;
+    opacity: 0.65;
+    padding: 0 4px;
+}
+#options-modal-overlay .options-close-btn:hover {
+    opacity: 1;
+}
+#options-modal-overlay .options-modal-body {
+    padding: 12px 16px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+#options-modal-overlay .options-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(124, 102, 187, 0.25);
+}
+[data-theme="Deluded Nightly"] #options-modal-overlay .options-section {
+    border-top-color: rgba(90, 46, 163, 0.4);
+}
+[data-theme="Yotsuba"] #options-modal-overlay .options-section {
+    border-top-color: rgba(128, 0, 0, 0.2);
+}
+#options-modal-overlay .options-section:first-child {
+    padding-top: 0;
+    border-top: none;
+}
+#options-modal-overlay .options-toggles {
+    gap: 8px;
+}
+#options-modal-overlay .options-toggle-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 13px;
+    margin: 0;
+}
+#options-modal-overlay .options-toggle-item input[type="checkbox"] {
+    cursor: pointer;
+    margin: 0;
+}
+#options-modal-overlay .options-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    font-weight: 600;
+}
+#options-modal-overlay .options-val-badge {
+    font-size: 11.5px;
+    font-weight: bold;
+    opacity: 0.85;
+}
+#options-modal-overlay .options-slider {
+    width: 100%;
+    cursor: pointer;
+    margin: 2px 0;
+}
+#options-modal-overlay .options-theme-section label,
+#options-modal-overlay .options-field-row label {
+    font-size: 12.5px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+#options-modal-overlay .options-select,
+#options-modal-overlay .options-input {
+    width: 100%;
+    padding: 5px 8px;
+    font-size: 12.5px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    color: #281b38;
+    border: 1px solid #a9a9a9;
+    border-radius: 2px;
+}
+[data-theme="Deluded Nightly"] #options-modal-overlay .options-select,
+[data-theme="Deluded Nightly"] #options-modal-overlay .options-input {
+    background-color: #0f071b;
+    color: #d4d3e1;
+    border-color: #3a166b;
+}
+#options-modal-overlay .options-fields-section {
+    gap: 10px;
+}
+#options-modal-overlay .options-field-row {
+    display: flex;
+    flex-direction: column;
+}
+html.hide-thumbnails .post-image,
+html.hide-thumbnails video.post-image,
+html.hide-thumbnails img.post-image {
+    opacity: 0;
+    cursor: pointer;
+}
+html.hide-thumbnails .full-image,
+html.hide-thumbnails video.full-image,
+html.hide-thumbnails .video-container,
+html.hide-thumbnails .video-container video {
+    opacity: 1 !important;
+}
 {{ custom_css|raw }}
 </style>
 <header id="global-header" class="global-header">
@@ -121,12 +308,241 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
     </div>
     <div class="global-header-right">
         {% if show_theme_changer %}
-            <span class="gh-theme-changer">[ {% for name, file in stylesheets %}<a href="javascript:void(0)" class="gh-theme-link" data-theme="{{ name }}" onclick="changeStyle('{{ name|e('js') }}'); return false;">{{ name }}</a>{% if not loop.last %} / {% endif %}{% endfor %} ]</span>
+            <span class="gh-options">[ <a href="javascript:void(0)" id="header-options-btn" class="gh-options-link" onclick="window.openOptionsModal(event); return false;">Options</a> ]</span>
         {% endif %}
     </div>
 </header>
+<div id="options-modal-overlay" class="post-form-overlay" style="display:none;" onclick="if(event.target===this){window.closeOptionsModal(event);}">
+    <div class="post-form-modal options-modal">
+        <div class="post-form-header">
+            <span class="post-form-title">Options</span>
+            <button type="button" class="options-close-btn" id="options-close-btn" aria-label="Close" onclick="window.closeOptionsModal(event); return false;">&times;</button>
+        </div>
+        <div class="post-form-body options-modal-body">
+            <div class="options-section options-toggles">
+                <label class="options-toggle-item">
+                    <input type="checkbox" id="opt-relative-time">
+                    <span>Show relative time</span>
+                </label>
+                <label class="options-toggle-item">
+                    <input type="checkbox" id="opt-hide-thumbnails">
+                    <span>Hide thumbnails</span>
+                </label>
+                <label class="options-toggle-item">
+                    <input type="checkbox" id="opt-loop-media" checked>
+                    <span>Loop video/audio</span>
+                </label>
+                <label class="options-toggle-item">
+                    <input type="checkbox" id="opt-reveal-spoilers">
+                    <span>Always reveal text spoilers</span>
+                </label>
+                <label class="options-toggle-item">
+                    <input type="checkbox" id="opt-smooth-scrolling" checked>
+                    <span>Smooth scrolling</span>
+                </label>
+                <label class="options-toggle-item">
+                    <input type="checkbox" id="opt-post-hover" checked>
+                    <span>Post review on hover</span>
+                </label>
+            </div>
+
+            <div class="options-section options-volume-section">
+                <div class="options-label-row">
+                    <label for="opt-media-volume">Media Volume</label>
+                    <span id="opt-volume-display" class="options-val-badge">100%</span>
+                </div>
+                <input type="range" id="opt-media-volume" min="0" max="100" value="100" class="options-slider">
+            </div>
+
+            <div class="options-section options-theme-section">
+                <label for="opt-theme-select">Theme</label>
+                <select id="opt-theme-select" class="options-select">
+                    {% for name, file in stylesheets %}
+                        <option value="{{ name }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="options-section options-fields-section">
+                <div class="options-field-row">
+                    <label for="opt-default-name">Default Name</label>
+                    <input type="text" id="opt-default-name" placeholder="Anonymous" class="options-input">
+                </div>
+                <div class="options-field-row">
+                    <label for="opt-default-password">Default Password</label>
+                    <input type="password" id="opt-default-password" placeholder="Password" class="options-input" autocomplete="off">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
 (function() {
+    window.getVichanOption = function(key, defaultVal) {
+        try {
+            var val = localStorage.getItem('vichan_opt_' + key);
+            if (val === null) return defaultVal;
+            if (typeof defaultVal === 'boolean') return val === '1' || val === 'true';
+            if (typeof defaultVal === 'number') return parseInt(val, 10);
+            return val;
+        } catch (e) {
+            return defaultVal;
+        }
+    };
+
+    window.setVichanOption = function(key, val) {
+        try {
+            if (typeof val === 'boolean') val = val ? '1' : '0';
+            localStorage.setItem('vichan_opt_' + key, String(val));
+        } catch (e) {}
+    };
+
+    window.parsePostDate = function(t) {
+        var sec = t.getAttribute('data-time');
+        if (sec) {
+            var s = parseInt(sec, 10);
+            if (!isNaN(s) && s > 0) return new Date(s * 1000);
+        }
+        var dt = t.getAttribute('datetime');
+        if (!dt) return null;
+        if (/T\d{2}:\d{2}:\d{2}0$/.test(dt)) {
+            dt = dt.replace(/(\d{2}:\d{2}:\d{2})0$/, '$1Z');
+        }
+        var d = new Date(dt);
+        if (!isNaN(d.getTime())) return d;
+        if (dt.indexOf('Z') === -1 && dt.indexOf('+') === -1) {
+            d = new Date(dt + 'Z');
+            if (!isNaN(d.getTime())) return d;
+        }
+        return null;
+    };
+
+    window.formatRelativeTime = function(date) {
+        var now = Date.now();
+        var diffSec = Math.max(0, Math.floor((now - date.getTime()) / 1000));
+        if (diffSec < 60) return 'just now';
+        var mins = Math.floor(diffSec / 60);
+        if (mins === 1) return '1 minute ago';
+        if (mins < 60) return mins + ' minutes ago';
+        var hours = Math.floor(mins / 60);
+        if (hours === 1) return '1 hour ago';
+        if (hours < 24) return hours + ' hours ago';
+        var days = Math.floor(hours / 24);
+        if (days === 1) return '1 day ago';
+        if (days < 30) return days + ' days ago';
+        var months = Math.floor(days / 30);
+        if (months === 1) return '1 month ago';
+        if (months < 12) return months + ' months ago';
+        var years = Math.floor(days / 365);
+        if (years === 1) return '1 year ago';
+        return years + ' years ago';
+    };
+
+    window.updateRelativeTimes = function(rootEl) {
+        if (!rootEl) rootEl = document;
+        if (rootEl.jquery) rootEl = rootEl[0];
+        var times = [];
+        if (rootEl.tagName === 'TIME') {
+            times = [rootEl];
+        } else if (rootEl.querySelectorAll) {
+            times = rootEl.querySelectorAll('time');
+        }
+        for (var i = 0; i < times.length; i++) {
+            var t = times[i];
+            var d = window.parsePostDate(t);
+            if (!d) continue;
+            if (!t.hasAttribute('data-original-text')) {
+                t.setAttribute('data-original-text', t.textContent);
+            }
+            t.textContent = window.formatRelativeTime(d);
+        }
+    };
+
+    window.restoreOriginalTimes = function(rootEl) {
+        if (!rootEl) rootEl = document;
+        if (rootEl.jquery) rootEl = rootEl[0];
+        var times = [];
+        if (rootEl.tagName === 'TIME') {
+            times = [rootEl];
+        } else if (rootEl.querySelectorAll) {
+            times = rootEl.querySelectorAll('time[data-original-text]');
+        }
+        for (var i = 0; i < times.length; i++) {
+            times[i].textContent = times[i].getAttribute('data-original-text');
+        }
+    };
+
+    window.applyRelativeTimeOption = function(enable) {
+        if (enable) {
+            window.updateRelativeTimes();
+        } else {
+            window.restoreOriginalTimes();
+        }
+    };
+
+    /* Apply early classes to avoid FOUC */
+    var root = document.documentElement;
+    if (window.getVichanOption('hide_thumbnails', false)) root.classList.add('hide-thumbnails');
+    if (window.getVichanOption('reveal_spoilers', false)) root.classList.add('reveal-spoilers');
+    if (window.getVichanOption('smooth_scrolling', true)) root.classList.add('smooth-scrolling');
+    if (window.getVichanOption('relative_time', false)) {
+        if (document.readyState !== 'loading') {
+            window.updateRelativeTimes();
+        }
+    }
+
+    window.syncOptionsInputs = function() {
+        var chkRelativeTime = document.getElementById('opt-relative-time');
+        var chkHideThumbs = document.getElementById('opt-hide-thumbnails');
+        var chkLoopMedia = document.getElementById('opt-loop-media');
+        var chkRevealSpoilers = document.getElementById('opt-reveal-spoilers');
+        var chkSmoothScroll = document.getElementById('opt-smooth-scrolling');
+        var chkPostHover = document.getElementById('opt-post-hover');
+        var rngVolume = document.getElementById('opt-media-volume');
+        var lblVolume = document.getElementById('opt-volume-display');
+        var inpName = document.getElementById('opt-default-name');
+        var inpPassword = document.getElementById('opt-default-password');
+
+        if (chkRelativeTime) chkRelativeTime.checked = window.getVichanOption('relative_time', false);
+        if (chkHideThumbs) chkHideThumbs.checked = window.getVichanOption('hide_thumbnails', false);
+        if (chkLoopMedia) chkLoopMedia.checked = window.getVichanOption('loop_media', true);
+        if (chkRevealSpoilers) chkRevealSpoilers.checked = window.getVichanOption('reveal_spoilers', false);
+        if (chkSmoothScroll) chkSmoothScroll.checked = window.getVichanOption('smooth_scrolling', true);
+        if (chkPostHover) chkPostHover.checked = window.getVichanOption('post_hover', true);
+
+        var vol = window.getVichanOption('media_volume', 100);
+        if (rngVolume) rngVolume.value = vol;
+        if (lblVolume) lblVolume.textContent = vol + '%';
+
+        ghSyncTheme();
+
+        try {
+            if (inpName) inpName.value = localStorage.getItem('name') || localStorage.name || '';
+            if (inpPassword) inpPassword.value = localStorage.getItem('password') || localStorage.password || '';
+        } catch (e) {}
+    };
+
+    window.openOptionsModal = function(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        var overlay = document.getElementById('options-modal-overlay');
+        if (!overlay) return false;
+        try { window.syncOptionsInputs(); } catch (err) {}
+        overlay.classList.add('visible');
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        return false;
+    };
+
+    window.closeOptionsModal = function(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        var overlay = document.getElementById('options-modal-overlay');
+        if (!overlay) return false;
+        overlay.classList.remove('visible');
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+        return false;
+    };
+
     function getThemeCookie() {
         try {
             var m = document.cookie.match('(^|;) ?stylesheet=([^;]*)(;|$)');
@@ -136,6 +552,7 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
         } catch (e) {}
         return null;
     }
+
     function ghSyncTheme() {
         var current = null;
         try {
@@ -161,13 +578,183 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
             }
         }
 
+        var selTheme = document.getElementById('opt-theme-select');
+        if (selTheme) {
+            if (window.styles && selTheme.options.length === 0) {
+                for (var sName in window.styles) {
+                    var opt = document.createElement('option');
+                    opt.value = sName;
+                    opt.textContent = sName;
+                    selTheme.appendChild(opt);
+                }
+            }
+            for (var j = 0; j < selTheme.options.length; j++) {
+                if (selTheme.options[j] && selTheme.options[j].value && selTheme.options[j].value.toLowerCase() === matched.toLowerCase()) {
+                    selTheme.selectedIndex = j;
+                    break;
+                }
+            }
+        }
+
         document.documentElement.setAttribute('data-theme', matched);
         if (document.body) document.body.setAttribute('data-theme', matched);
     }
+
+    window.initOptionsModal = function() {
+        var overlay = document.getElementById('options-modal-overlay');
+        if (!overlay || overlay.dataset.modalInit === '1') return;
+        overlay.dataset.modalInit = '1';
+
+        var btn = document.getElementById('header-options-btn');
+        var closeBtn = document.getElementById('options-close-btn');
+
+        var chkRelativeTime = document.getElementById('opt-relative-time');
+        var chkHideThumbs = document.getElementById('opt-hide-thumbnails');
+        var chkLoopMedia = document.getElementById('opt-loop-media');
+        var chkRevealSpoilers = document.getElementById('opt-reveal-spoilers');
+        var chkSmoothScroll = document.getElementById('opt-smooth-scrolling');
+        var chkPostHover = document.getElementById('opt-post-hover');
+        var rngVolume = document.getElementById('opt-media-volume');
+        var lblVolume = document.getElementById('opt-volume-display');
+        var selTheme = document.getElementById('opt-theme-select');
+        var inpName = document.getElementById('opt-default-name');
+        var inpPassword = document.getElementById('opt-default-password');
+
+        if (btn) {
+            btn.addEventListener('click', window.openOptionsModal);
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener('click', window.closeOptionsModal);
+        }
+
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                window.closeOptionsModal(e);
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                if (overlay.classList.contains('visible') || overlay.style.display === 'flex') {
+                    window.closeOptionsModal(e);
+                }
+            }
+        });
+
+        if (chkRelativeTime) {
+            chkRelativeTime.addEventListener('change', function() {
+                window.setVichanOption('relative_time', this.checked);
+                if (typeof window.applyRelativeTimeOption === 'function') {
+                    window.applyRelativeTimeOption(this.checked);
+                }
+            });
+        }
+
+        if (chkHideThumbs) {
+            chkHideThumbs.addEventListener('change', function() {
+                window.setVichanOption('hide_thumbnails', this.checked);
+                document.documentElement.classList.toggle('hide-thumbnails', this.checked);
+            });
+        }
+
+        if (chkLoopMedia) {
+            chkLoopMedia.addEventListener('change', function() {
+                window.setVichanOption('loop_media', this.checked);
+                var loop = this.checked;
+                var medias = document.querySelectorAll('video, audio');
+                for (var i = 0; i < medias.length; i++) medias[i].loop = loop;
+            });
+        }
+
+        if (chkRevealSpoilers) {
+            chkRevealSpoilers.addEventListener('change', function() {
+                window.setVichanOption('reveal_spoilers', this.checked);
+                document.documentElement.classList.toggle('reveal-spoilers', this.checked);
+            });
+        }
+
+        if (chkSmoothScroll) {
+            chkSmoothScroll.addEventListener('change', function() {
+                window.setVichanOption('smooth_scrolling', this.checked);
+                document.documentElement.classList.toggle('smooth-scrolling', this.checked);
+            });
+        }
+
+        if (chkPostHover) {
+            chkPostHover.addEventListener('change', function() {
+                window.setVichanOption('post_hover', this.checked);
+                if (!this.checked && typeof window.removeHoverPreview === 'function') {
+                    window.removeHoverPreview();
+                }
+            });
+        }
+
+        if (rngVolume) {
+            rngVolume.addEventListener('input', function() {
+                var val = parseInt(this.value, 10);
+                if (lblVolume) lblVolume.textContent = val + '%';
+                window.setVichanOption('media_volume', val);
+                var medias = document.querySelectorAll('video, audio');
+                for (var i = 0; i < medias.length; i++) medias[i].volume = val / 100;
+            });
+        }
+
+        if (selTheme) {
+            selTheme.addEventListener('change', function() {
+                if (typeof window.changeStyle === 'function') {
+                    window.changeStyle(this.value);
+                }
+            });
+        }
+
+        if (inpName) {
+            inpName.addEventListener('input', function() {
+                try {
+                    localStorage.name = this.value;
+                    localStorage.setItem('name', this.value);
+                } catch (e) {}
+                var postName = document.querySelector('form[name="post"] input[name="name"]');
+                if (postName) postName.value = this.value;
+            });
+        }
+
+        if (inpPassword) {
+            inpPassword.addEventListener('input', function() {
+                try {
+                    localStorage.password = this.value;
+                    localStorage.setItem('password', this.value);
+                } catch (e) {}
+                var postPass = document.querySelector('form[name="post"] input[name="password"]');
+                if (postPass) postPass.value = this.value;
+                var delPass = document.querySelector('form[name="postcontrols"] input[name="password"]') || document.querySelector('#delete-fields input[name="password"]');
+                if (delPass) delPass.value = this.value;
+            });
+        }
+    };
+
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', ghSyncTheme);
+        document.addEventListener('DOMContentLoaded', function() {
+            ghSyncTheme();
+            window.initOptionsModal();
+            if (window.getVichanOption('relative_time', false)) {
+                window.updateRelativeTimes();
+            }
+        });
     } else {
         ghSyncTheme();
+        window.initOptionsModal();
+        if (window.getVichanOption('relative_time', false)) {
+            window.updateRelativeTimes();
+        }
+    }
+    if (!window._vichanRelativeTimerInit) {
+        window._vichanRelativeTimerInit = true;
+        setInterval(function() {
+            if (window.getVichanOption && window.getVichanOption('relative_time', false)) {
+                window.updateRelativeTimes();
+            }
+        }, 60000);
     }
     window.addEventListener('storage', function(e) {
         if (e.key === 'stylesheet') ghSyncTheme();

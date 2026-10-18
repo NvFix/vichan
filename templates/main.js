@@ -550,7 +550,8 @@ function scrollToReplyForm(e) {
 	if (e && e.preventDefault) e.preventDefault();
 	var postForm = document.forms['post'] || document.querySelector('form[name="post"]');
 	if (postForm) {
-		postForm.scrollIntoView({ behavior: 'smooth' });
+		var smooth = (typeof getVichanOption === 'function') ? getVichanOption('smooth_scrolling', true) : true;
+		postForm.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
 		var comment = postForm.elements['body'] || postForm.elements['name'];
 		if (comment) {
 			try {
@@ -948,6 +949,387 @@ window.initFileUpload = initFileUpload;
 window.setFileInput = setFileInput;
 window.clearFileInput = clearFileInput;
 
+if (typeof window.getVichanOption === 'undefined') {
+	window.getVichanOption = function(key, defaultVal) {
+		try {
+			var val = localStorage.getItem('vichan_opt_' + key);
+			if (val === null) return defaultVal;
+			if (typeof defaultVal === 'boolean') return val === '1' || val === 'true';
+			if (typeof defaultVal === 'number') return parseInt(val, 10);
+			return val;
+		} catch (e) {
+			return defaultVal;
+		}
+	};
+}
+if (typeof window.setVichanOption === 'undefined') {
+	window.setVichanOption = function(key, val) {
+		try {
+			if (typeof val === 'boolean') val = val ? '1' : '0';
+			localStorage.setItem('vichan_opt_' + key, String(val));
+		} catch (e) {}
+	};
+}
+
+function parsePostDate(t) {
+	if (typeof window.parsePostDate === 'function' && window.parsePostDate !== parsePostDate) {
+		return window.parsePostDate(t);
+	}
+	var sec = t.getAttribute('data-time');
+	if (sec) {
+		var s = parseInt(sec, 10);
+		if (!isNaN(s) && s > 0) return new Date(s * 1000);
+	}
+	var dt = t.getAttribute('datetime');
+	if (!dt) return null;
+	if (/T\d{2}:\d{2}:\d{2}0$/.test(dt)) {
+		dt = dt.replace(/(\d{2}:\d{2}:\d{2})0$/, '$1Z');
+	}
+	var d = new Date(dt);
+	if (!isNaN(d.getTime())) return d;
+	if (dt.indexOf('Z') === -1 && dt.indexOf('+') === -1) {
+		d = new Date(dt + 'Z');
+		if (!isNaN(d.getTime())) return d;
+	}
+	return null;
+}
+window.parsePostDate = parsePostDate;
+
+function formatRelativeTime(date) {
+	if (typeof window.formatRelativeTime === 'function' && window.formatRelativeTime !== formatRelativeTime) {
+		return window.formatRelativeTime(date);
+	}
+	var now = Date.now();
+	var diffSec = Math.max(0, Math.floor((now - date.getTime()) / 1000));
+	if (diffSec < 60) return 'just now';
+	var mins = Math.floor(diffSec / 60);
+	if (mins === 1) return '1 minute ago';
+	if (mins < 60) return mins + ' minutes ago';
+	var hours = Math.floor(mins / 60);
+	if (hours === 1) return '1 hour ago';
+	if (hours < 24) return hours + ' hours ago';
+	var days = Math.floor(hours / 24);
+	if (days === 1) return '1 day ago';
+	if (days < 30) return days + ' days ago';
+	var months = Math.floor(days / 30);
+	if (months === 1) return '1 month ago';
+	if (months < 12) return months + ' months ago';
+	var years = Math.floor(days / 365);
+	if (years === 1) return '1 year ago';
+	return years + ' years ago';
+}
+window.formatRelativeTime = formatRelativeTime;
+
+function updateRelativeTimes(root) {
+	if (typeof window.updateRelativeTimes === 'function' && window.updateRelativeTimes !== updateRelativeTimes) {
+		return window.updateRelativeTimes(root);
+	}
+	if (!root) root = document;
+	if (root.jquery) root = root[0];
+	var times = [];
+	if (root.tagName === 'TIME') {
+		times = [root];
+	} else if (root.querySelectorAll) {
+		times = root.querySelectorAll('time');
+	}
+	for (var i = 0; i < times.length; i++) {
+		var t = times[i];
+		var d = parsePostDate(t);
+		if (!d) continue;
+		if (!t.hasAttribute('data-original-text')) {
+			t.setAttribute('data-original-text', t.textContent);
+		}
+		t.textContent = formatRelativeTime(d);
+	}
+}
+if (typeof window.updateRelativeTimes === 'undefined') {
+	window.updateRelativeTimes = updateRelativeTimes;
+}
+
+function restoreOriginalTimes(root) {
+	if (typeof window.restoreOriginalTimes === 'function' && window.restoreOriginalTimes !== restoreOriginalTimes) {
+		return window.restoreOriginalTimes(root);
+	}
+	if (!root) root = document;
+	if (root.jquery) root = root[0];
+	var times = [];
+	if (root.tagName === 'TIME') {
+		times = [root];
+	} else if (root.querySelectorAll) {
+		times = root.querySelectorAll('time[data-original-text]');
+	}
+	for (var i = 0; i < times.length; i++) {
+		times[i].textContent = times[i].getAttribute('data-original-text');
+	}
+}
+if (typeof window.restoreOriginalTimes === 'undefined') {
+	window.restoreOriginalTimes = restoreOriginalTimes;
+}
+
+window.applyRelativeTimeOption = function(enable) {
+	if (enable) {
+		updateRelativeTimes();
+	} else {
+		restoreOriginalTimes();
+	}
+};
+
+function applyVichanOptions() {
+	var root = document.documentElement;
+	var hideThumbs = window.getVichanOption('hide_thumbnails', false);
+	var revealSpoilers = window.getVichanOption('reveal_spoilers', false);
+	var smooth = window.getVichanOption('smooth_scrolling', true);
+	var relTime = window.getVichanOption('relative_time', false);
+	var loop = window.getVichanOption('loop_media', true);
+	var vol = window.getVichanOption('media_volume', 100);
+
+	root.classList.toggle('hide-thumbnails', hideThumbs);
+	root.classList.toggle('reveal-spoilers', revealSpoilers);
+	root.classList.toggle('smooth-scrolling', smooth);
+
+	if (relTime) {
+		updateRelativeTimes();
+	} else {
+		restoreOriginalTimes();
+	}
+
+	var medias = document.querySelectorAll('video, audio');
+	for (var i = 0; i < medias.length; i++) {
+		medias[i].loop = loop;
+		medias[i].volume = vol / 100;
+	}
+}
+
+if (!window._vichanMediaListenerInit) {
+	window._vichanMediaListenerInit = true;
+	document.addEventListener('play', function(e) {
+		if (e.target && (e.target.tagName === 'VIDEO' || e.target.tagName === 'AUDIO')) {
+			e.target.loop = window.getVichanOption('loop_media', true);
+			e.target.volume = window.getVichanOption('media_volume', 100) / 100;
+		}
+	}, true);
+	document.addEventListener('loadedmetadata', function(e) {
+		if (e.target && (e.target.tagName === 'VIDEO' || e.target.tagName === 'AUDIO')) {
+			e.target.loop = window.getVichanOption('loop_media', true);
+			e.target.volume = window.getVichanOption('media_volume', 100) / 100;
+		}
+	}, true);
+}
+
+window._vichanPostCache = window._vichanPostCache || {};
+var currentHoveredLink = null;
+var currentHoveredTargetId = null;
+
+function removeHoverPreview() {
+	var existing = document.getElementById('post-hover-preview');
+	if (existing) existing.remove();
+}
+window.removeHoverPreview = removeHoverPreview;
+
+function getCiteInfo(link) {
+	if (!link || link.classList.contains('post_no')) return null;
+	var text = (link.textContent || '').trim();
+	var href = link.getAttribute('href') || '';
+	var onclick = link.getAttribute('onclick') || '';
+	var targetId = null;
+
+	var textMatch = text.match(/^>>(?:>\/([^\/]+)\/)?(\d+)$/);
+	if (textMatch) {
+		targetId = textMatch[2];
+	} else {
+		var clickMatch = onclick.match(/highlightReply\(['"]?(\d+)['"]?/);
+		if (clickMatch) {
+			targetId = clickMatch[1];
+		} else {
+			var hrefMatch = href.match(/#(\d+)$/);
+			if (hrefMatch && text.indexOf('>>') === 0) {
+				targetId = hrefMatch[1];
+			}
+		}
+	}
+
+	if (!targetId) return null;
+	return {
+		id: targetId,
+		url: href.split('#')[0]
+	};
+}
+
+function positionHoverPreview(preview, link) {
+	var rect = link.getBoundingClientRect();
+	var scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+	var scrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+	var previewWidth = preview.offsetWidth;
+	var previewHeight = preview.offsetHeight;
+
+	var left = rect.left + scrollX;
+	var maxLeft = window.innerWidth + scrollX - previewWidth - 16;
+	if (left > maxLeft) left = maxLeft;
+	if (left < scrollX + 8) left = scrollX + 8;
+
+	var top;
+	if (rect.top - previewHeight - 8 > 0) {
+		top = rect.top + scrollY - previewHeight - 8;
+	} else {
+		top = rect.bottom + scrollY + 8;
+	}
+
+	preview.style.left = Math.round(left) + 'px';
+	preview.style.top = Math.round(top) + 'px';
+}
+
+function renderHoverPreview(link, targetId, htmlContent) {
+	if (currentHoveredTargetId !== targetId) return;
+	removeHoverPreview();
+
+	var preview = document.createElement('div');
+	preview.id = 'post-hover-preview';
+	preview.className = 'post reply post-hover-preview';
+	preview.innerHTML = htmlContent;
+
+	var inner = preview.querySelector('.post');
+	if (inner) {
+		preview.innerHTML = inner.innerHTML;
+	}
+
+	if (window.getVichanOption && window.getVichanOption('relative_time', false)) {
+		updateRelativeTimes(preview);
+	}
+
+	preview.addEventListener('mouseleave', function(e) {
+		if (!currentHoveredLink || (e.relatedTarget !== currentHoveredLink && !currentHoveredLink.contains(e.relatedTarget))) {
+			removeHoverPreview();
+			currentHoveredLink = null;
+			currentHoveredTargetId = null;
+		}
+	});
+
+	document.body.appendChild(preview);
+	positionHoverPreview(preview, link);
+}
+
+function initPostHover() {
+	if (window._vichanPostHoverInit) return;
+	window._vichanPostHoverInit = true;
+
+	document.addEventListener('mouseover', function(e) {
+		var link = e.target.closest('a');
+		if (!link) return;
+
+		var cite = getCiteInfo(link);
+		if (!cite) return;
+
+		var localPost = document.getElementById('reply_' + cite.id) || document.getElementById('op_' + cite.id);
+		if (localPost) {
+			localPost.classList.add('highlighted');
+			return;
+		}
+
+		if (!window.getVichanOption('post_hover', true)) {
+			return;
+		}
+
+		currentHoveredLink = link;
+		currentHoveredTargetId = cite.id;
+
+		if (window._vichanPostCache[cite.id]) {
+			renderHoverPreview(link, cite.id, window._vichanPostCache[cite.id]);
+			return;
+		}
+
+		var fetchUrl = cite.url;
+		if (!fetchUrl) {
+			var threadEl = link.closest('.thread');
+			var threadLink = threadEl ? threadEl.querySelector('a[href*="/res/"]') : null;
+			if (threadLink) fetchUrl = threadLink.getAttribute('href');
+		}
+
+		if (!fetchUrl) return;
+
+		fetch(fetchUrl)
+			.then(function(res) {
+				if (!res.ok) throw new Error('Fetch failed');
+				return res.text();
+			})
+			.then(function(html) {
+				var parser = new DOMParser();
+				var doc = parser.parseFromString(html, 'text/html');
+				var posts = doc.querySelectorAll('.post');
+				for (var i = 0; i < posts.length; i++) {
+					var pid = posts[i].id.replace(/^(reply_|op_)/, '');
+					if (pid) {
+						window._vichanPostCache[pid] = posts[i].outerHTML;
+					}
+				}
+				if (window._vichanPostCache[cite.id]) {
+					renderHoverPreview(link, cite.id, window._vichanPostCache[cite.id]);
+				}
+			})
+			.catch(function() {});
+	});
+
+	document.addEventListener('mouseout', function(e) {
+		var link = e.target.closest('a');
+		if (!link) return;
+
+		var cite = getCiteInfo(link);
+		if (!cite) return;
+
+		var localPost = document.getElementById('reply_' + cite.id) || document.getElementById('op_' + cite.id);
+		if (localPost) {
+			localPost.classList.remove('highlighted');
+			return;
+		}
+
+		var preview = document.getElementById('post-hover-preview');
+		if (preview && e.relatedTarget && (e.relatedTarget === preview || preview.contains(e.relatedTarget))) {
+			return;
+		}
+
+		removeHoverPreview();
+		if (currentHoveredLink === link) {
+			currentHoveredLink = null;
+			currentHoveredTargetId = null;
+		}
+	});
+
+	document.addEventListener('keydown', function(e) {
+		if (e.key === 'Escape' || e.keyCode === 27) {
+			removeHoverPreview();
+		}
+	});
+
+	window.addEventListener('scroll', function() {
+		if (document.getElementById('post-hover-preview')) {
+			removeHoverPreview();
+		}
+	}, { passive: true });
+}
+
+if (typeof $ !== 'undefined') {
+	$(document).on('new_post', function(e, post) {
+		if (window.getVichanOption && window.getVichanOption('relative_time', false)) {
+			updateRelativeTimes(post);
+		}
+		var loop = window.getVichanOption ? window.getVichanOption('loop_media', true) : true;
+		var vol = (window.getVichanOption ? window.getVichanOption('media_volume', 100) : 100) / 100;
+		$(post).find('video, audio').each(function() {
+			this.loop = loop;
+			this.volume = vol;
+		});
+	});
+}
+
+if (!window._vichanRelativeTimerInit) {
+	window._vichanRelativeTimerInit = true;
+	setInterval(function() {
+		if (window.getVichanOption && window.getVichanOption('relative_time', false)) {
+			updateRelativeTimes();
+		}
+	}, 60000);
+}
+
 function init() {
 	initStyleChooser();
 	initPostFormModal();
@@ -955,6 +1337,11 @@ function init() {
 	initStylingToolbar();
 	initCharCounters();
 	initFileUpload();
+	applyVichanOptions();
+	initPostHover();
+	if (typeof window.initOptionsModal === 'function') {
+		window.initOptionsModal();
+	}
 
 	{% endverbatim %}
 	{% if config.allow_delete %}

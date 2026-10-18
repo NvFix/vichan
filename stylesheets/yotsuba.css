@@ -267,5 +267,10 @@ form[name="post"] input[type="submit"]:hover,
 	color: #800000;
 }
 
+.options-section {
+	border-top-color: rgba(128, 0, 0, 0.2);
+}
+
+
 
 

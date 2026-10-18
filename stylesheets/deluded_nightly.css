@@ -122,22 +122,41 @@ input[type="password"],
 input[type="search"],
 input[type="email"],
 select,
-textarea {
+textarea,
+.post-form-modal input[type="text"],
+.post-form-modal input[type="password"],
+.post-form-modal input[type="search"],
+.post-form-modal input[type="email"],
+.post-form-modal select,
+.post-form-modal textarea {
 	background-color: #160b29;
 	color: #d4d3e1;
 	border: 1px solid #3a166b;
 	color-scheme: dark;
 }
+
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="search"]:focus,
 input[type="email"]:focus,
 select:focus,
-textarea:focus {
+textarea:focus,
+.post-form-modal input[type="text"]:focus,
+.post-form-modal input[type="password"]:focus,
+.post-form-modal input[type="search"]:focus,
+.post-form-modal input[type="email"]:focus,
+.post-form-modal select:focus,
+.post-form-modal textarea:focus {
 	border-color: #7c4bb3;
 	outline: none;
 }
-input::placeholder, textarea::placeholder { color: #73748e; }
+
+input::placeholder,
+textarea::placeholder,
+.post-form-modal input::placeholder,
+.post-form-modal textarea::placeholder {
+	color: #73748e;
+}
 
 form[name="post"] input[type="submit"],
 .post-form-modal input[type="submit"],
@@ -226,3 +245,4 @@ form[name="post"] input[type="submit"]:active,
 .footer, p.unimportant, .unimportant { color: #73748e; }
 .footer a, p.unimportant a, .unimportant a { color: #9766c8; }
 .footer a:hover, p.unimportant a:hover, .unimportant a:hover { color: #b585ea; }
+.options-section { border-top-color: rgba(90, 46, 163, 0.4); }

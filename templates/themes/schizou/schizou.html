@@ -37,7 +37,7 @@
                                     <td class="news-title">
                                         <a href="{{ config.root }}news.html#{{ entry.id }}" title="{{ entry.subject|e }}">{% if entry.subject %}{{ entry.subject }}{% else %}<em>Untitled</em>{% endif %}</a>
                                     </td>
-                                    <td class="news-date">{{ entry.date_formatted }}</td>
+                                    <td class="news-date"><time datetime="{{ entry.time|date('c') }}" data-time="{{ entry.time }}">{{ entry.date_formatted }}</time></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -72,7 +72,7 @@
                                                 {{ post.snippet|raw }}
                                             </a>
                                         </td>
-                                        <td class="item-date">{{ post.date_formatted }}</td>
+                                        <td class="item-date"><time datetime="{{ post.time|date('c') }}" data-time="{{ post.time }}">{{ post.date_formatted }}</time></td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -99,7 +99,7 @@
                                                 {{ thread.title|raw }}
                                             </a>
                                         </td>
-                                        <td class="item-date">{{ thread.date_formatted }}</td>
+                                        <td class="item-date"><time datetime="{{ thread.time|date('c') }}" data-time="{{ thread.time }}">{{ thread.date_formatted }}</time></td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
