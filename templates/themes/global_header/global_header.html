@@ -285,7 +285,9 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
 }
 html.hide-thumbnails .post-image,
 html.hide-thumbnails video.post-image,
-html.hide-thumbnails img.post-image {
+html.hide-thumbnails img.post-image,
+html.hide-thumbnails canvas.post-image,
+html.hide-thumbnails .gif-frozen-canvas {
     opacity: 0;
     cursor: pointer;
 }
@@ -327,6 +329,10 @@ html.hide-thumbnails .video-container video {
                 <label class="options-toggle-item">
                     <input type="checkbox" id="opt-hide-thumbnails">
                     <span>Hide thumbnails</span>
+                </label>
+                <label class="options-toggle-item">
+                    <input type="checkbox" id="opt-animate-gif" checked>
+                    <span>Animate GIF thumbnails</span>
                 </label>
                 <label class="options-toggle-item">
                     <input type="checkbox" id="opt-loop-media" checked>
@@ -490,22 +496,144 @@ html.hide-thumbnails .video-container video {
         window.updateTimestamps();
     };
 
+    window.unanimate_gif = function(img) {
+        if (!img) return;
+        if (img.closest && img.closest('.thread-hidden')) return;
+
+        var parent = img.parentNode;
+        if (!parent) return;
+
+        if (parent.querySelector('.gif-frozen-canvas')) return;
+
+        var canvas = document.createElement('canvas');
+        canvas.className = (img.className || '') + ' gif-frozen-canvas';
+        if (img.id) canvas.dataset.forImgId = img.id;
+
+        if (img.style.cssText) {
+            canvas.style.cssText = img.style.cssText;
+        }
+        canvas.style.cursor = 'pointer';
+
+        var draw = function() {
+            if (img.dataset.gifFrozen !== '1') return;
+            var w = img.naturalWidth || img.width || parseInt(img.style.width, 10) || 200;
+            var h = img.naturalHeight || img.height || parseInt(img.style.height, 10) || 200;
+            canvas.width = w;
+            canvas.height = h;
+            if (!canvas.style.width && w) canvas.style.width = w + 'px';
+            if (!canvas.style.height && h) canvas.style.height = h + 'px';
+            try {
+                var ctx = canvas.getContext('2d');
+                if (ctx) {
+                    ctx.drawImage(img, 0, 0, w, h);
+                }
+            } catch (e) {}
+            img.style.display = 'none';
+            img.style.position = '';
+            img.style.opacity = '';
+            img.style.pointerEvents = '';
+        };
+
+        img.dataset.gifFrozen = '1';
+        parent.insertBefore(canvas, img);
+
+        if (img.complete && img.naturalWidth > 0) {
+            draw();
+        } else {
+            img.style.position = 'absolute';
+            img.style.opacity = '0';
+            img.style.pointerEvents = 'none';
+            var onImgLoad = function() {
+                img.removeEventListener('load', onImgLoad);
+                draw();
+            };
+            img.addEventListener('load', onImgLoad);
+            img.addEventListener('error', function onImgErr() {
+                img.removeEventListener('error', onImgErr);
+                canvas.remove();
+                delete img.dataset.gifFrozen;
+                img.style.display = '';
+                img.style.position = '';
+                img.style.opacity = '';
+                img.style.pointerEvents = '';
+            });
+        }
+    };
+
+    window.reanimate_gifs = function() {
+        var frozenCanvases = document.querySelectorAll('canvas.gif-frozen-canvas');
+        for (var i = 0; i < frozenCanvases.length; i++) {
+            frozenCanvases[i].remove();
+        }
+        var frozenImgs = document.querySelectorAll('[data-gif-frozen="1"]');
+        for (var j = 0; j < frozenImgs.length; j++) {
+            var img = frozenImgs[j];
+            delete img.dataset.gifFrozen;
+            img.style.display = '';
+            img.style.position = '';
+            img.style.opacity = '';
+            img.style.pointerEvents = '';
+        }
+    };
+
+    window.freeze_gifs = function(rootEl) {
+        if (!rootEl) rootEl = document;
+        if (rootEl.jquery) rootEl = rootEl[0];
+        var imgs = rootEl.querySelectorAll ? rootEl.querySelectorAll('img.post-image, img.thread-image, img.thumb-cell') : [];
+        for (var i = 0; i < imgs.length; i++) {
+            var img = imgs[i];
+            if (img.src && /\.gif(?:$|[?#])/i.test(img.src) && !img.classList.contains('site-logo')) {
+                window.unanimate_gif(img);
+            }
+        }
+    };
+
+    window.applyAnimateGifOption = function(enable) {
+        try {
+            localStorage.no_animated_gif = enable ? 'false' : 'true';
+        } catch (e) {}
+        if (enable) {
+            window.reanimate_gifs();
+        } else {
+            window.freeze_gifs();
+        }
+    };
+
     /* Apply early classes and update timestamps immediately to avoid FOUC */
     var root = document.documentElement;
     if (window.getVichanOption('hide_thumbnails', false)) root.classList.add('hide-thumbnails');
     if (window.getVichanOption('reveal_spoilers', false)) root.classList.add('reveal-spoilers');
     if (window.getVichanOption('smooth_scrolling', true)) root.classList.add('smooth-scrolling');
-    if (document.readyState !== 'loading') {
+
+    var animateGif = window.getVichanOption('animate_gif', true);
+    try {
+        localStorage.no_animated_gif = animateGif ? 'false' : 'true';
+    } catch (e) {}
+
+    var onDomReady = function() {
         window.updateTimestamps();
+        if (!window.getVichanOption('animate_gif', true)) {
+            window.freeze_gifs();
+        }
+        if (typeof $ !== 'undefined') {
+            $(document).on('new_post', function(e, post) {
+                if (!window.getVichanOption('animate_gif', true)) {
+                    window.freeze_gifs(post);
+                }
+            });
+        }
+    };
+
+    if (document.readyState !== 'loading') {
+        onDomReady();
     } else {
-        document.addEventListener('DOMContentLoaded', function() {
-            window.updateTimestamps();
-        });
+        document.addEventListener('DOMContentLoaded', onDomReady);
     }
 
     window.syncOptionsInputs = function() {
         var chkRelativeTime = document.getElementById('opt-relative-time');
         var chkHideThumbs = document.getElementById('opt-hide-thumbnails');
+        var chkAnimateGif = document.getElementById('opt-animate-gif');
         var chkLoopMedia = document.getElementById('opt-loop-media');
         var chkRevealSpoilers = document.getElementById('opt-reveal-spoilers');
         var chkSmoothScroll = document.getElementById('opt-smooth-scrolling');
@@ -517,6 +645,7 @@ html.hide-thumbnails .video-container video {
 
         if (chkRelativeTime) chkRelativeTime.checked = window.getVichanOption('relative_time', false);
         if (chkHideThumbs) chkHideThumbs.checked = window.getVichanOption('hide_thumbnails', false);
+        if (chkAnimateGif) chkAnimateGif.checked = window.getVichanOption('animate_gif', true);
         if (chkLoopMedia) chkLoopMedia.checked = window.getVichanOption('loop_media', true);
         if (chkRevealSpoilers) chkRevealSpoilers.checked = window.getVichanOption('reveal_spoilers', false);
         if (chkSmoothScroll) chkSmoothScroll.checked = window.getVichanOption('smooth_scrolling', true);
@@ -622,6 +751,7 @@ html.hide-thumbnails .video-container video {
 
         var chkRelativeTime = document.getElementById('opt-relative-time');
         var chkHideThumbs = document.getElementById('opt-hide-thumbnails');
+        var chkAnimateGif = document.getElementById('opt-animate-gif');
         var chkLoopMedia = document.getElementById('opt-loop-media');
         var chkRevealSpoilers = document.getElementById('opt-reveal-spoilers');
         var chkSmoothScroll = document.getElementById('opt-smooth-scrolling');
@@ -670,14 +800,30 @@ html.hide-thumbnails .video-container video {
             });
         }
 
+        if (chkAnimateGif) {
+            chkAnimateGif.addEventListener('change', function() {
+                window.setVichanOption('animate_gif', this.checked);
+                if (typeof window.applyAnimateGifOption === 'function') {
+                    window.applyAnimateGifOption(this.checked);
+                }
+            });
+        }
+
         if (chkLoopMedia) {
             chkLoopMedia.addEventListener('change', function() {
                 window.setVichanOption('loop_media', this.checked);
                 var loop = this.checked;
                 var medias = document.querySelectorAll('video, audio');
-                for (var i = 0; i < medias.length; i++) medias[i].loop = loop;
+                for (var i = 0; i < medias.length; i++) {
+                    medias[i].loop = loop;
+                    if (loop && medias[i].ended) {
+                        medias[i].currentTime = 0;
+                        medias[i].play().catch(function() {});
+                    }
+                }
             });
         }
+
 
         if (chkRevealSpoilers) {
             chkRevealSpoilers.addEventListener('change', function() {

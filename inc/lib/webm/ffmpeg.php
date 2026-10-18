@@ -5,59 +5,116 @@
 */
 function get_webm_info($filename) {
   global $board, $config;
-  $filename = escapeshellarg($filename);
-  $ffprobe = $config['webm']['ffprobe_path'];
+  $filename_arg = escapeshellarg($filename);
+  $ffprobe = escapeshellcmd($config['webm']['ffprobe_path']);
   $ffprobe_out = array();
   $webminfo = array();
-  exec("$ffprobe -v quiet -print_format json -show_format -show_streams $filename", $ffprobe_out);
+  exec("$ffprobe -v quiet -print_format json -show_format -show_streams $filename_arg", $ffprobe_out);
   $ffprobe_out = json_decode(implode("\n", $ffprobe_out), 1);
   $webminfo['error'] = is_valid_webm($ffprobe_out);
-  if(empty($webminfo['error'])) {
-    $webminfo['width'] = $ffprobe_out['streams'][0]['width'];
-    $webminfo['height'] = $ffprobe_out['streams'][0]['height'];
-    $webminfo['duration'] = $ffprobe_out['format']['duration'];
+  if (empty($webminfo['error'])) {
+    $video_stream = null;
+    if (isset($ffprobe_out['streams'])) {
+      foreach ($ffprobe_out['streams'] as $stream) {
+        if (isset($stream['codec_type']) && $stream['codec_type'] === 'video') {
+          $video_stream = $stream;
+          break;
+        }
+      }
+    }
+    if ($video_stream === null && isset($ffprobe_out['streams'][0])) {
+      $video_stream = $ffprobe_out['streams'][0];
+    }
+    $webminfo['width'] = isset($video_stream['width']) ? $video_stream['width'] : 0;
+    $webminfo['height'] = isset($video_stream['height']) ? $video_stream['height'] : 0;
+    $webminfo['duration'] = isset($ffprobe_out['format']['duration']) ? floatval($ffprobe_out['format']['duration']) : 0;
   }
   return $webminfo;
 }
+
 function is_valid_webm($ffprobe_out) {
   global $board, $config;
-  if (empty($ffprobe_out))
+  if (empty($ffprobe_out) || !isset($ffprobe_out['format']) || !isset($ffprobe_out['format']['format_name']))
     return array('code' => 1, 'msg' => $config['error']['genwebmerror']);
-  $extension = pathinfo($ffprobe_out['format']['filename'], PATHINFO_EXTENSION);
+  $extension = strtolower(pathinfo($ffprobe_out['format']['filename'], PATHINFO_EXTENSION));
+  $format_name = strtolower($ffprobe_out['format']['format_name']);
+
   if ($extension === 'webm') {
-    if ($ffprobe_out['format']['format_name'] != 'matroska,webm')
+    if (strpos($format_name, 'webm') === false && strpos($format_name, 'matroska') === false)
+      return array('code' => 2, 'msg' => $config['error']['invalidwebm']);
+  } elseif ($extension === 'mkv') {
+    if (strpos($format_name, 'matroska') === false)
       return array('code' => 2, 'msg' => $config['error']['invalidwebm']);
   } elseif ($extension === 'mp4') {
-    if ($ffprobe_out['streams'][0]['codec_name'] != 'h264' && $ffprobe_out['streams'][1]['codec_name'] != 'aac')
+    if (strpos($format_name, 'mp4') === false && strpos($format_name, 'mov') === false)
       return array('code' => 2, 'msg' => $config['error']['invalidwebm']);
   } else {
     return array('code' => 1, 'msg' => $config['error']['genwebmerror']);  
   }
-  if ((count($ffprobe_out['streams']) > 1) && (!$config['webm']['allow_audio']))
-    return array('code' => 3, 'msg' => $config['error']['webmhasaudio']);
-  if (empty($ffprobe_out['streams'][0]['width']) || (empty($ffprobe_out['streams'][0]['height'])))
+
+  $has_video = false;
+  $audio_count = 0;
+  $width = 0;
+  $height = 0;
+  if (isset($ffprobe_out['streams'])) {
+    foreach ($ffprobe_out['streams'] as $stream) {
+      if (isset($stream['codec_type']) && $stream['codec_type'] === 'video') {
+        $has_video = true;
+        $width = isset($stream['width']) ? $stream['width'] : 0;
+        $height = isset($stream['height']) ? $stream['height'] : 0;
+        break;
+      }
+    }
+    foreach ($ffprobe_out['streams'] as $stream) {
+      if (isset($stream['codec_type']) && $stream['codec_type'] === 'audio') {
+        $audio_count++;
+      }
+    }
+  }
+
+  if (!$has_video || $width <= 0 || $height <= 0)
     return array('code' => 2, 'msg' => $config['error']['invalidwebm']);
-  if ($ffprobe_out['format']['duration'] > $config['webm']['max_length'])
+
+  if ($audio_count > 0 && !$config['webm']['allow_audio'])
+    return array('code' => 3, 'msg' => $config['error']['webmhasaudio']);
+
+  if (!empty($config['webm']['max_length']) && isset($ffprobe_out['format']['duration']) && $ffprobe_out['format']['duration'] > $config['webm']['max_length'])
     return array('code' => 4, 'msg' => sprintf($config['error']['webmtoolong'], $config['webm']['max_length']));
 }
+
 function make_webm_thumbnail($filename, $thumbnail, $width, $height, $duration) {
   global $board, $config;
-  $filename = escapeshellarg($filename);
-  $thumbnailfc = escapeshellarg($thumbnail); // Should be safe by default but you
-                                           // can never be too safe.
-  $width = escapeshellarg($width);
-  $height = escapeshellarg($height); // Same as above.
-  $ffmpeg = $config['webm']['ffmpeg_path'];
+  $filename_arg = escapeshellarg($filename);
+  $thumbnailfc = escapeshellarg($thumbnail);
+  $width = intval($width);
+  $height = intval($height);
+  $ffmpeg = escapeshellcmd($config['webm']['ffmpeg_path']);
+
+  // Locate the overlay image
+  $watermark_path = file_exists('static/video.png') ? 'static/video.png' : dirname(__FILE__, 4) . '/static/video.png';
+  $watermark_arg = escapeshellarg($watermark_path);
+
+  // Overlay size: max 141x141, scaled down proportionally if thumbnail is smaller
+  $overlay_size = min(141, $width, $height);
+  $filter = sprintf(
+    "[1:v]scale=%d:%d[ovr];[0:v]scale=%d:%d[bg];[bg][ovr]overlay=(W-w)/2:(H-h)/2",
+    $overlay_size, $overlay_size, $width, $height
+  );
+
   $ret = 0;
   $ffmpeg_out = array();
-  exec("$ffmpeg -strict -2 -ss " . floor($duration / 2) . " -i $filename -v quiet -an -vframes 1 -f mjpeg -vf scale=$width:$height $thumbnailfc 2>&1", $ffmpeg_out, $ret);
-  // Work around for https://trac.ffmpeg.org/ticket/4362
-  if (filesize($thumbnail) === 0) {
-    // try again with first frame
-    exec("$ffmpeg -y -strict -2 -ss 0 -i $filename -v quiet -an -vframes 1 -f mjpeg -vf scale=$width:$height $thumbnailfc 2>&1", $ffmpeg_out, $ret);
+  // Extract first frame (-ss 0) and overlay static/video.png centered
+  $cmd = "$ffmpeg -y -ss 0 -i $filename_arg -i $watermark_arg -filter_complex " . escapeshellarg($filter) . " -v quiet -an -vframes 1 -update 1 -f mjpeg $thumbnailfc 2>&1";
+  exec($cmd, $ffmpeg_out, $ret);
+  clearstatcache();
+
+  if (!file_exists($thumbnail) || filesize($thumbnail) === 0) {
+    // Fallback without watermark in case of unexpected filter issue
+    $ret = 0;
+    $cmd = "$ffmpeg -y -ss 0 -i $filename_arg -v quiet -an -vframes 1 -update 1 -vf " . escapeshellarg("scale=$width:$height") . " -f mjpeg $thumbnailfc 2>&1";
+    exec($cmd, $ffmpeg_out, $ret);
     clearstatcache();
-    // failed if no thumbnail size even if ret code 0, ffmpeg is buggy
-    if (filesize($thumbnail) === 0) {
+    if (!file_exists($thumbnail) || filesize($thumbnail) === 0) {
       $ret = 1;
     }
   }

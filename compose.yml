@@ -9,6 +9,7 @@ services:
       - ./local-instances/${INSTANCE:-0}/www:/var/www/html
       - ./templates/themes:/code/templates/themes
       - ./stylesheets:/code/stylesheets
+      - ./js:/code/js
       - ./docker/nginx/vichan.conf:/etc/nginx/conf.d/default.conf
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./docker/nginx/proxy.conf:/etc/nginx/conf.d/proxy.conf
@@ -33,6 +34,7 @@ services:
       - ./templates:/code/templates
       - ./inc:/code/inc
       - ./stylesheets:/code/stylesheets
+      - ./js:/code/js
       - ./post.php:/code/post.php
       - ./player.php:/code/player.php
       - ./docker/php/www.conf:/usr/local/etc/php-fpm.d/www.conf

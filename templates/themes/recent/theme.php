@@ -71,10 +71,17 @@
 				if (!$files || empty($files[0])) continue;
 				if ($files[0]->file == 'deleted' || $files[0]->thumb == 'file') continue;
 
+				// Only image formats allowed (including gif)
+				$ext = strtolower(isset($files[0]->extension) ? $files[0]->extension : pathinfo($files[0]->file, PATHINFO_EXTENSION));
+				if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'], true)) {
+					continue;
+				}
+
 				// Spoilers must not appear in recent images
 				if ($files[0]->thumb == 'spoiler' || !empty($files[0]->spoiler) || stripos($files[0]->thumb, 'spoiler') !== false) {
 					continue;
 				}
+
 
 				// board settings won't be available in the template file, so generate links now
 				$post['link'] = $config['root'] . $board['dir'] . $config['dir']['res']

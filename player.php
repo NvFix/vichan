@@ -5,7 +5,7 @@ $t = @(string)$_GET['t'];
 $loop = !empty($_GET['loop']);
 
 // Validate video URL to prevent XSS (disallow javascript:, data:, etc.)
-if (!preg_match('/^(?:https?:\/\/[^\s"\'<>]+|\/[^\s"\'<>]|[a-zA-Z0-9_\-\.\/]+)\.(?:webm|mp4|ogv|ogg)$/i', $v)) {
+if (!preg_match('/^(?:https?:\/\/[a-zA-Z0-9_\-\.\/]+|\/[a-zA-Z0-9_\-\.\/]+|[a-zA-Z0-9_\-\.\/]+)\.(?:webm|mp4|mkv|ogv|ogg)$/i', $v)) {
 	$v = '';
 }
 

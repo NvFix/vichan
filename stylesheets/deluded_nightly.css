@@ -227,6 +227,9 @@ form[name="post"] input[type="submit"]:active,
 	background-color: rgba(58, 22, 107, 0.45);
 }
 .upload-dropzone-text { color: #9766c8; }
+.upload-dropzone-limit { color: #73748e; }
+.upload-dropzone:hover .upload-dropzone-limit,
+.upload-dropzone.dragover .upload-dropzone-limit { color: #9766c8; }
 .upload-preview-thumb-wrap { border-color: #3a166b; background: #160b29; }
 .upload-preview-remove { background: #5a2ea3; border-color: #ffffff; }
 .upload-preview-remove:hover { background: #733dc9; }

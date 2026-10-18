@@ -1963,10 +1963,11 @@ span.kao,
 }
 
 .upload-dropzone {
+  position: relative;
   border: 2px dashed #7c66bb;
   border-radius: 4px;
   background-color: rgba(124, 102, 187, 0.08);
-  padding: 12px 14px;
+  padding: 12px 14px 16px 14px;
   text-align: center;
   cursor: pointer;
   user-select: none;
@@ -1987,6 +1988,25 @@ span.kao,
   color: #54338c;
   font-family: inherit;
   pointer-events: none;
+}
+
+.upload-dropzone-limit {
+  position: absolute;
+  bottom: 4px;
+  right: 8px;
+  font-size: 7.5pt;
+  line-height: 1;
+  color: #7c66bb;
+  opacity: 0.8;
+  pointer-events: none;
+  font-family: inherit;
+  user-select: none;
+}
+
+.upload-dropzone:hover .upload-dropzone-limit,
+.upload-dropzone.dragover .upload-dropzone-limit {
+  opacity: 1;
+  color: #54338c;
 }
 
 .upload-preview {
@@ -2265,6 +2285,49 @@ div.post.reply.post-deleted-preview div.body,
   white-space: nowrap;
 }
 
+/* Inline Media Players (Video & Audio) */
+.inline-video-container,
+.inline-audio-container {
+  display: inline-block;
+  vertical-align: top;
+  margin: 4px 0 8px 0;
+  max-width: 100%;
+}
 
+.media-collapse-bar {
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
+.video-collapse-btn,
+.audio-collapse-btn,
+.media-collapse-btn {
+  font-size: 85%;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+}
 
+.video-collapse-btn:hover,
+.audio-collapse-btn:hover,
+.media-collapse-btn:hover {
+  text-decoration: underline;
+}
+
+.inline-video-container video {
+  display: block;
+  max-width: 100%;
+  max-height: 85vh;
+  border-radius: 2px;
+}
+
+.inline-audio-container audio {
+  display: block;
+  width: 100%;
+  max-width: 450px;
+}

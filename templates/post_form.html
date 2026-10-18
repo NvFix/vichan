@@ -210,8 +210,9 @@
 							{% trans %}Drag files here to upload or{% endtrans %}<br>
 							{% trans %}click here to select them, or paste an image{% endtrans %}
 						</div>
+						<div class="upload-dropzone-limit">Max: {{ (config.max_filesize|default(10485760) / 1024)|round }} KB</div>
 					</div>
-					<input type="file" name="file" class="upload-file-input" style="display: none;" accept="image/*,video/*">
+					<input type="file" name="file" class="upload-file-input" style="display: none;" accept="image/*,video/*,audio/*,.pdf,.txt,.mkv,.webm,.mp4,.mp3,.ogg,.webp,.jpg,.jpeg,.png,.gif,.bmp">
 					<div class="upload-preview" style="display: none;">
 						<div class="upload-preview-card">
 							<div class="upload-preview-thumb-wrap">

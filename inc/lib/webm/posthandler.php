@@ -3,7 +3,7 @@
 // Portions of this file are derived from Tinyboard code.
 function postHandler($post) {
     global $board, $config;
-    if ($post->has_file) foreach ($post->files as &$file) if ($file->extension == 'webm' || $file->extension == 'mp4') {
+    if ($post->has_file) foreach ($post->files as &$file) if ($file->extension == 'webm' || $file->extension == 'mp4' || $file->extension == 'mkv') {
       if ($config['webm']['use_ffmpeg']) {
         require_once dirname(__FILE__) . '/ffmpeg.php';
         $webminfo = get_webm_info($file->file_path);

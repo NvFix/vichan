@@ -197,6 +197,16 @@
 
 						if ($file_name === 'deleted' || $thumb === 'file' || empty($thumb)) continue;
 
+						// Only image formats allowed (including gif)
+						$ext = strtolower(is_array($file) ? ($file['extension'] ?? '') : ($file->extension ?? ''));
+						if (empty($ext) && !empty($file_name)) {
+							$ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+						}
+						$allowed_image_exts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'];
+						if (!in_array($ext, $allowed_image_exts, true)) {
+							continue;
+						}
+
 						// Spoilers must strictly NOT appear on the homepage's latest images
 						if ($is_spoiler || $thumb === 'spoiler' || $thumb_path === 'spoiler' ||
 							stripos($thumb, 'spoiler') !== false || stripos($thumb_path, 'spoiler') !== false) {

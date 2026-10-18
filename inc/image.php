@@ -319,14 +319,20 @@ class ImageConvert extends ImageBase {
 		$config['thumb_keep_animation_frames'] = (int)$config['thumb_keep_animation_frames'];
 
 		if ($this->format == 'gif' && ($config['thumb_ext'] == 'gif' || $config['thumb_ext'] == '') && $config['thumb_keep_animation_frames'] > 1) {
+			$gifsicle_success = false;
 			if ($this->gifsicle) {
-				if (($error = shell_exec("gifsicle -w --unoptimize -O2 --resize {$this->width}x{$this->height} < " .
+				shell_exec("gifsicle -w --unoptimize -O2 --resize {$this->width}x{$this->height} < " .
 						escapeshellarg($this->src . '') . " \"#0-{$config['thumb_keep_animation_frames']}\" -o " .
-						escapeshellarg($this->temp))) || !file_exists($this->temp)) {
-					$this->destroy();
-					error(_('Failed to resize image!'), null, $error);
+						escapeshellarg($this->temp) . " 2>/dev/null");
+				if (file_exists($this->temp) && filesize($this->temp) > 0) {
+					$gifsicle_success = true;
+					if ($size = $this->get_size($this->temp)) {
+						$this->width = $size[0];
+						$this->height = $size[1];
+					}
 				}
-			} else {
+			}
+			if (!$gifsicle_success) {
 				$convert_args = &$config['convert_args'];
 
 				if (($error = shell_exec_error(($this->gm ? 'gm convert ' : 'magick ') .
@@ -336,7 +342,7 @@ class ImageConvert extends ImageBase {
 						escapeshellarg($this->src),
 						$this->width,
 						$this->height,
-						escapeshellarg($this->temp)))) || !file_exists($this->temp)) {
+						escapeshellarg($this->temp)))) || !file_exists($this->temp) || filesize($this->temp) === 0) {
 					$this->destroy();
 					error(_('Failed to resize image!'), null, $error);
 				}

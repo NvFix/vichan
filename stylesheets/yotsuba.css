@@ -245,6 +245,16 @@ form[name="post"] input[type="submit"]:hover,
 	color: #800000;
 }
 
+.upload-dropzone-limit {
+	color: #800000;
+	opacity: 0.75;
+}
+
+.upload-dropzone:hover .upload-dropzone-limit,
+.upload-dropzone.dragover .upload-dropzone-limit {
+	opacity: 1;
+}
+
 .upload-preview-thumb-wrap {
 	border-color: #800000;
 	background: #ffffff;

@@ -921,8 +921,12 @@ function updateFilePreview(container, file) {
 			};
 			reader.readAsDataURL(file);
 		}
+	} else if (file.name && file.name.match(/\.(webm|mp4|mkv|mp3|ogg)$/i)) {
+		img.src = (window.configRoot || '/') + 'static/video.png';
+		img.style.display = 'block';
 	} else {
-		img.style.display = 'none';
+		img.src = (window.configRoot || '/') + 'static/file.png';
+		img.style.display = 'block';
 	}
 
 	if (preview) preview.style.display = 'block';
