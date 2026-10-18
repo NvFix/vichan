@@ -123,6 +123,8 @@ input[type="text"],input[type="password"],textarea {
   text-transform: none;
   word-spacing: normal;
   max-width: 100%;
+  unicode-bidi: plaintext;
+  text-align: left;
 }
 
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
@@ -273,11 +275,13 @@ input.delete {
 .intro span.subject {
   color: #54338c;
   font-weight: bold;
+  unicode-bidi: plaintext;
 }
 
 .intro span.name {
   color: #117743;
   font-weight: bold;
+  unicode-bidi: plaintext;
 }
 
 .intro span.capcode,p.intro a.capcode,p.intro a.nametag {
@@ -354,6 +358,8 @@ div.body {
   overflow-wrap: anywhere;
   word-break: break-all;
   white-space: pre-wrap;
+  unicode-bidi: plaintext;
+  text-align: left;
 }
 
 div.post.reply {
