@@ -276,11 +276,15 @@ var resourceVersion = document.currentScript.getAttribute('data-resource-version
 		}
 	}
 	if (matchedStyle) {
+		selectedstyle = matchedStyle;
 		document.documentElement.setAttribute('data-theme', matchedStyle);
 		if (document.body) {
 			document.body.setAttribute('data-theme', matchedStyle);
 		}
-		changeStyle(matchedStyle);
+		var currentSheet = document.getElementById('stylesheet');
+		if (!currentSheet || (styles[matchedStyle] && currentSheet.href.indexOf(styles[matchedStyle]) === -1)) {
+			changeStyle(matchedStyle);
+		}
 	}
 	{% endverbatim %}
 {% endif %}

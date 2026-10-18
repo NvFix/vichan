@@ -195,39 +195,26 @@ html, body, body.theme-schizou, .desktop-style body, html.desktop-style body {
             document.cookie = cookieStr;
         } catch (e) {}
 
-        var allStyles = (typeof styles !== 'undefined') ? styles : (window.styles || null);
-        var targetHref = (allStyles && allStyles[styleName]) ? allStyles[styleName] : null;
-        if (!targetHref && allStyles) {
-            var lower = styleName.toLowerCase();
-            for (var k in allStyles) {
-                if (k.toLowerCase() === lower) {
-                    targetHref = allStyles[k];
-                    break;
-                }
-            }
-        }
-
-        var sheet = document.getElementById('stylesheet');
-        if (sheet && targetHref) {
-            var preload = document.createElement('link');
-            preload.rel = 'stylesheet';
-            preload.type = 'text/css';
-            preload.href = targetHref;
-            preload.onload = function() {
-                sheet.href = targetHref;
-                if (preload.parentNode) preload.parentNode.removeChild(preload);
-            };
-            preload.onerror = function() {
-                sheet.href = targetHref;
-                if (preload.parentNode) preload.parentNode.removeChild(preload);
-            };
-            document.head.appendChild(preload);
-        }
-
         if (typeof origChangeStyle === 'function') {
             try {
                 origChangeStyle(styleName);
             } catch (e) {}
+        } else {
+            var allStyles = (typeof styles !== 'undefined') ? styles : (window.styles || null);
+            var targetHref = (allStyles && allStyles[styleName]) ? allStyles[styleName] : null;
+            if (!targetHref && allStyles) {
+                var lower = styleName.toLowerCase();
+                for (var k in allStyles) {
+                    if (k.toLowerCase() === lower) {
+                        targetHref = allStyles[k];
+                        break;
+                    }
+                }
+            }
+            var sheet = document.getElementById('stylesheet');
+            if (sheet && targetHref) {
+                sheet.href = targetHref;
+            }
         }
         ghSyncTheme();
     };

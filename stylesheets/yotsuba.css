@@ -125,9 +125,9 @@ table.modlog tr th {
 }
 
 .post-form-modal form table tr th {
-	background-color: #ea8 !important;
-	color: #800 !important;
-	border: 1px solid #800 !important;
+	background-color: #ea8;
+	color: #800;
+	border: 1px solid #800;
 }
 
 .post-form-modal input[type="text"],
@@ -209,12 +209,63 @@ form[name="post"] input[type="submit"]:hover,
 }
 
 .styling-btn-spoiler {
-	background: #000000 !important;
-	border-color: #800 !important;
+	background: #000000;
+	border-color: #800;
 }
 
 .post-option-label {
 	color: #800000;
 }
+
+.char-counter {
+	color: #a05a46;
+}
+
+.char-counter.char-counter-limit {
+	color: #d00000;
+}
+
+/* Upload dropzone & preview */
+.upload-dropzone {
+	border-color: #800000;
+	background-color: rgba(128, 0, 0, 0.05);
+}
+
+.upload-dropzone:hover,
+.upload-dropzone.dragover {
+	border-color: #600000;
+	background-color: rgba(128, 0, 0, 0.12);
+}
+
+.upload-dropzone-text {
+	color: #800000;
+}
+
+.upload-preview-thumb-wrap {
+	border-color: #800000;
+	background: #ffffff;
+}
+
+.upload-preview-remove {
+	background: #800000;
+	border-color: #ffffff;
+}
+
+.upload-preview-remove:hover {
+	background: #d00000;
+}
+
+.upload-preview-info {
+	color: #800000;
+}
+
+.upload-preview-size {
+	color: #a05a46;
+}
+
+.upload-preview-spoiler {
+	color: #800000;
+}
+
 
 
