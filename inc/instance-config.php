@@ -29,8 +29,8 @@
 	// Enable spoiler images
 	$config['spoiler_images'] = true;
 
-	// Resource cache buster version
-	$config['resource_version'] = 40;
+	// Resource cache buster version ('auto' derives from asset modification time)
+	$config['resource_version'] = 'auto';
 
 	// Database stuff
 	$config['db']['type']		= 'mysql';

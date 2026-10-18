@@ -154,6 +154,18 @@ function loadConfig() {
 			$config['default_stylesheet'] = ['Deluded Lightly', 'deluded_lightly.css'];
 		}
 
+		// Auto-derive resource_version from asset modification time if set to 'auto' or empty
+		if (empty($config['resource_version']) || $config['resource_version'] === 'auto') {
+			$asset_files = array('templates/main.js', 'stylesheets/style.css', 'inc/config.php');
+			$max_mtime = 0;
+			foreach ($asset_files as $af) {
+				if (file_exists($af)) {
+					$max_mtime = max($max_mtime, @filemtime($af));
+				}
+			}
+			$config['resource_version'] = $max_mtime > 0 ? (string)$max_mtime : '1';
+		}
+
 		if (isset($board['dir']) && file_exists($board['dir'] . '/config.php')) {
 			require $board['dir'] . '/config.php';
 		}

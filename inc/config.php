@@ -1144,8 +1144,9 @@
 	$config['minify_js'] = false;
 
 	// Version number for main.js (or $config['url_javascript']).
-	// You can use this to bypass the user's browsers and CDN caches.
-	$config['resource_version'] = 40;
+	// Use 'auto' to automatically compute cache-buster from asset modification time,
+	// or specify a custom integer to lock/override.
+	$config['resource_version'] = 'auto';
 
 	// Dispatch thumbnail loading and image configuration with JavaScript. It will need a certain javascript
 	// code to work.
