@@ -56,7 +56,8 @@
 					continue;
 				$query .= sprintf("SELECT *, '%s' AS `board` FROM ``posts_%s`` WHERE `files` IS NOT NULL UNION ALL ", $_board['uri'], $_board['uri']);
 			}
-			$query = preg_replace('/UNION ALL $/', 'ORDER BY `time` DESC LIMIT ' . (int)$settings['limit_images'], $query);
+			$fetch_limit = max(100, (int)$settings['limit_images'] * 4);
+			$query = preg_replace('/UNION ALL $/', 'ORDER BY `time` DESC LIMIT ' . (int)$fetch_limit, $query);
 			
 			if ($query == '') {
 				error(_("Can't build the Index theme, because there are no boards to be fetched."));
@@ -69,28 +70,29 @@
 
 				if (isset($post['files']))
 					$files = json_decode($post['files']);
+				else
+					continue;
 
-                if ($files[0]->file == 'deleted' || $files[0]->thumb == 'file') continue;
-				
+				if (!$files || empty($files[0])) continue;
+				if ($files[0]->file == 'deleted' || $files[0]->thumb == 'file') continue;
+
+				// Spoilers must not appear in recent images
+				if ($files[0]->thumb == 'spoiler' || !empty($files[0]->spoiler) || stripos($files[0]->thumb, 'spoiler') !== false) {
+					continue;
+				}
+
 				// board settings won't be available in the template file, so generate links now
 				$post['link'] = $config['root'] . $board['dir'] . $config['dir']['res']
 				  . link_for($post) . '#' . $post['id'];
 
-				if ($files) {
-					if ($files[0]->thumb == 'spoiler') {
-						$tn_size = @getimagesize($config['spoiler_image']);
-						$post['src'] = $config['spoiler_image'];
-						$post['thumbwidth'] = $tn_size[0];
-						$post['thumbheight'] = $tn_size[1];
-					}
-					else {
-						$post['src'] = $config['uri_thumb'] . $files[0]->thumb;
-						$post['thumbwidth'] = $files[0]->thumbwidth;
-						$post['thumbheight'] = $files[0]->thumbheight;
-					}
-				}
+				$post['src'] = $config['uri_thumb'] . $files[0]->thumb;
+				$post['thumbwidth'] = $files[0]->thumbwidth;
+				$post['thumbheight'] = $files[0]->thumbheight;
 				
 				$recent_images[] = $post;
+				if (count($recent_images) >= (int)$settings['limit_images']) {
+					break;
+				}
 			}
 			
 			

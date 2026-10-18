@@ -351,24 +351,27 @@ div.post div.body,
 div.body {
   font-size: 12pt;
   line-height: 1.35;
-  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: break-all;
   white-space: pre-wrap;
 }
 
 div.post.reply {
-  margin: 0.2em 4px;
+  margin: 2px 4px;
   padding: 0.2em 0.3em 0.5em 0.6em;
   border-width: 1px;
   border-style: none solid solid none;
   background-color: #f4dded;
   border-color: #c9b0e8;
-  display: inline-block;
+  display: table;
   max-width: 94%!important;
 }
 
-div.post.reply::after,
-div.post.op::after,
-div.post::after {
+div.post.reply + br {
+  display: none;
+}
+
+div.post.reply::after {
   content: "";
   display: table;
   clear: both;

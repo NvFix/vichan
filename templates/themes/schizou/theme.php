@@ -23,29 +23,31 @@
 			$this->excluded = !empty($settings['exclude']) ? explode(' ', $settings['exclude']) : [];
 
 			// Ensure CSS and logo assets are copied to webroot
+			$copy_asset = function($src, $dst) use ($action) {
+				if (file_exists($src) && (!file_exists($dst) || filemtime($src) > filemtime($dst) || $action == 'all')) {
+					if (file_exists($dst) && !is_writable($dst)) {
+						@unlink($dst);
+					}
+					@copy($src, $dst);
+					@chmod($dst, 0666);
+				}
+			};
+
 			$src_css = 'templates/themes/schizou/' . (!empty($settings['basecss']) ? $settings['basecss'] : 'schizou.css');
 			$dst_css = $config['dir']['home'] . (!empty($settings['css']) ? $settings['css'] : 'schizou.css');
-			if (file_exists($src_css) && (!file_exists($dst_css) || filemtime($src_css) > filemtime($dst_css) || $action == 'all')) {
-				copy($src_css, $dst_css);
-			}
+			$copy_asset($src_css, $dst_css);
 
 			$src_logo = 'templates/themes/schizou/schizou_logo.png';
 			$dst_logo = $config['dir']['home'] . 'schizou_logo.png';
-			if (file_exists($src_logo) && (!file_exists($dst_logo) || filemtime($src_logo) > filemtime($dst_logo) || $action == 'all')) {
-				copy($src_logo, $dst_logo);
-			}
+			$copy_asset($src_logo, $dst_logo);
 
 			$src_favicon = 'templates/themes/schizou/SchizoFavicon.png';
 			$dst_favicon = $config['dir']['home'] . 'favicon.png';
-			if (file_exists($src_favicon) && (!file_exists($dst_favicon) || filemtime($src_favicon) > filemtime($dst_favicon) || $action == 'all')) {
-				copy($src_favicon, $dst_favicon);
-			}
+			$copy_asset($src_favicon, $dst_favicon);
 
 			$src_ico = 'templates/themes/schizou/favicon.ico';
 			$dst_ico = $config['dir']['home'] . 'favicon.ico';
-			if (file_exists($src_ico) && (!file_exists($dst_ico) || filemtime($src_ico) > filemtime($dst_ico) || $action == 'all')) {
-				copy($src_ico, $dst_ico);
-			}
+			$copy_asset($src_ico, $dst_ico);
 
 			$target_html = $config['dir']['home'] . (!empty($settings['html']) ? $settings['html'] : 'index.html');
 
@@ -171,30 +173,46 @@
 				foreach ($active_boards as $b) {
 					$parts[] = sprintf("SELECT `id`, `thread`, `subject`, `time`, `files`, '%s' AS `board` FROM ``posts_%s`` WHERE `files` IS NOT NULL AND `num_files` > 0", $b['uri'], $b['uri']);
 				}
-				$fetch_limit = max(100, $limit_images * 4);
+				$fetch_limit = max(200, $limit_images * 8);
 				$sql = implode(' UNION ALL ', $parts) . " ORDER BY `time` DESC LIMIT " . (int)$fetch_limit;
 				$res = query($sql) or error(db_error());
 				while ($post = $res->fetch(PDO::FETCH_ASSOC)) {
 					if (empty($post['files'])) continue;
 					$files = json_decode($post['files']);
-					if (!$files || empty($files[0])) continue;
-					$file = $files[0];
-					if ($file->file == 'deleted' || $file->thumb == 'file') continue;
-					
-					// Spoilers must NOT show up here
-					if ((isset($file->thumb) && $file->thumb == 'spoiler') || (isset($file->spoiler) && $file->spoiler)) {
-						continue;
+					if (!$files) continue;
+					if (is_object($files)) {
+						$files = [$files];
 					}
+					if (!is_array($files)) continue;
 
 					openBoard($post['board']);
-					$post['link'] = $config['root'] . $board['dir'] . $config['dir']['res'] . link_for($post) . '#' . $post['id'];
-					$post['src'] = $config['uri_thumb'] . $file->thumb;
-					$post['thumbwidth'] = $file->thumbwidth ?? 100;
-					$post['thumbheight'] = $file->thumbheight ?? 100;
-					$recent_images[] = $post;
 
-					if (count($recent_images) >= $limit_images) {
-						break;
+					foreach ($files as $file) {
+						if (empty($file)) continue;
+
+						$thumb = is_array($file) ? ($file['thumb'] ?? '') : ($file->thumb ?? '');
+						$file_name = is_array($file) ? ($file['file'] ?? '') : ($file->file ?? '');
+						$is_spoiler = is_array($file) ? (!empty($file['spoiler'])) : (!empty($file->spoiler));
+						$thumb_path = is_array($file) ? ($file['thumb_path'] ?? '') : ($file->thumb_path ?? '');
+
+						if ($file_name === 'deleted' || $thumb === 'file' || empty($thumb)) continue;
+
+						// Spoilers must strictly NOT appear on the homepage's latest images
+						if ($is_spoiler || $thumb === 'spoiler' || $thumb_path === 'spoiler' ||
+							stripos($thumb, 'spoiler') !== false || stripos($thumb_path, 'spoiler') !== false) {
+							continue;
+						}
+
+						$img_entry = $post;
+						$img_entry['link'] = $config['root'] . $board['dir'] . $config['dir']['res'] . link_for($post) . '#' . $post['id'];
+						$img_entry['src'] = $config['uri_thumb'] . $thumb;
+						$img_entry['thumbwidth'] = is_array($file) ? ($file['thumbwidth'] ?? 100) : ($file->thumbwidth ?? 100);
+						$img_entry['thumbheight'] = is_array($file) ? ($file['thumbheight'] ?? 100) : ($file->thumbheight ?? 100);
+						$recent_images[] = $img_entry;
+
+						if (count($recent_images) >= $limit_images) {
+							break 2;
+						}
 					}
 				}
 			}

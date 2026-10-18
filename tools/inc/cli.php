@@ -17,6 +17,8 @@ register_shutdown_function(function() {
 	if (function_exists('posix_getuid') && posix_getuid() === 0) {
 		@exec('chown -R www-data:www-data /var/cache/template-cache /var/tmp/vichan /var/cache/gen-cache /var/www/templates/cache 2>/dev/null');
 		@exec('chmod -R 777 /var/cache/template-cache /var/tmp/vichan /var/cache/gen-cache 2>/dev/null');
+		@exec('chown www-data:www-data /var/www/main.js /var/www/*.html /var/www/*.css /var/www/*.json /var/www/favicon.* /var/www/schizou_logo.png 2>/dev/null');
+		@exec('chmod 666 /var/www/main.js /var/www/*.html /var/www/*.css /var/www/*.json /var/www/favicon.* /var/www/schizou_logo.png 2>/dev/null');
 	}
 });
 

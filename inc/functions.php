@@ -564,7 +564,16 @@ function file_write($path, $data, $simple = false, $skip_purge = false) {
 		}
 	}
 
-	if (!$fp = fopen($path, $simple ? 'w' : 'c'))
+	if (file_exists($path) && !is_writable($path)) {
+		@unlink($path);
+	}
+
+	if (!$fp = @fopen($path, $simple ? 'w' : 'c')) {
+		@unlink($path);
+		$fp = @fopen($path, $simple ? 'w' : 'c');
+	}
+
+	if (!$fp)
 		error('Unable to open file for writing: ' . $path);
 
 	// File locking
@@ -588,6 +597,8 @@ function file_write($path, $data, $simple = false, $skip_purge = false) {
 	if (!fclose($fp))
 		error('Unable to close file: ' . $path);
 
+	@chmod($path, 0666);
+
 	/**
 	 * Create gzipped file.
 	 *
@@ -600,10 +611,12 @@ function file_write($path, $data, $simple = false, $skip_purge = false) {
 		$gzpath = "$path.gz";
 
 		if ($bytes & ~0x3ff) {  // if ($bytes >= 1024)
+			if (file_exists($gzpath) && !is_writable($gzpath)) {
+				@unlink($gzpath);
+			}
 			if (file_put_contents($gzpath, gzencode($data), $simple ? 0 : LOCK_EX) === false)
 				error("Unable to write to file: $gzpath");
-			//if (!touch($gzpath, filemtime($path), fileatime($path)))
-			//	error("Unable to touch file: $gzpath");
+			@chmod($gzpath, 0666);
 		}
 		else {
 			@unlink($gzpath);
