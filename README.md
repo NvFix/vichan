@@ -1,4 +1,4 @@
-Vichan has reached its end of life. many of us have lost interest in the project, and the current direction of the internet has not been good for imageboards, whether its ID verification laws, big social media companies killing competition, or Google being hostile towards smaller sites. There are other imageboard engines out there but even if you use them, these are still issues you will need to think about if you start an imageboard or UGC website. You can still install or fork vichan, but do so at your own risk.
+Fork of vichan for my imageboard maintained by me. Commit history is a mess, you probably don't want to be using this.
 
 **In Memory of Fredrick Brennan (1994-2026).**
 
