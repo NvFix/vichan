@@ -786,14 +786,14 @@
 	$config['thumb_op_height'] = 255;
 
 	// Thumbnail extension ("png" recommended). Leave this empty if you want the extension to be inherited
-	// from the uploaded file.
-	$config['thumb_ext'] = 'png';
+	// from the uploaded file (required for animated GIF thumbnails).
+	$config['thumb_ext'] = '';
 
 	// Maximum amount of animated GIF frames to resize (more frames can mean more processing power). A value
 	// of "1" means thumbnails will not be animated. Requires $config['thumb_ext'] to be 'gif' (or blank) and
 	//  $config['thumb_method'] to be 'imagick', 'convert', or 'convert+gifsicle'. This value is not
 	// respected by 'convert'; will just resize all frames if this is > 1.
-	$config['thumb_keep_animation_frames'] = 1;
+	$config['thumb_keep_animation_frames'] = 100;
 
 	/*
 	 * Thumbnailing method:
@@ -815,7 +815,7 @@
 	 *					   instead of `convert` for resizing GIFs. It's faster and resulting animated
 	 *					   thumbnails have less artifacts than if resized with ImageMagick.
 	 */
-	$config['thumb_method'] = 'gd';
+	$config['thumb_method'] = 'convert+gifsicle';
 	// $config['thumb_method'] = 'convert';
 
 	// Command-line options passed to ImageMagick when using `convert` for thumbnailing. Don't touch the
@@ -860,8 +860,15 @@
 	$config['allowed_ext_op'] = false;
 
 	// Allowed additional file extensions (not images; downloadable files).
-	// $config['allowed_ext_files'][] = 'txt';
-	// $config['allowed_ext_files'][] = 'zip';
+	$config['allowed_ext_files'] = [
+		'mp3',
+		'mkv',
+		'mp4',
+		'ogg',
+		'webm',
+		'pdf',
+		'txt'
+	];
 
 	// An alternative function for generating image filenames, instead of the default UNIX timestamp.
 	// $config['filename_func'] = function($post) {
@@ -871,9 +878,14 @@
 	// Thumbnail to use for the non-image file uploads.
 	$config['file_icons'] = [
 		'default' => 'file.png',
-		'zip' => 'zip.png',
-		'webm' => 'video.png',
-		'mp4' => 'video.png'
+		'zip'     => 'zip.png',
+		'webm'    => 'video.png',
+		'mp4'     => 'video.png',
+		'mkv'     => 'video.png',
+		'mp3'     => 'video.png',
+		'ogg'     => 'video.png',
+		'pdf'     => 'file.png',
+		'txt'     => 'file.png'
 	];
 	// Example: Custom thumbnail for certain file extension.
 	// $config['file_icons']['extension'] = 'some_file.png';
@@ -905,10 +917,10 @@
 	// Display the file's original filename.
 	$config['show_filename'] = true;
 
-	// WebM Settings
+	// WebM / Video Settings
 	$config['webm'] = [
-		'use_ffmpeg' => false,
-		'allow_audio' => false,
+		'use_ffmpeg' => true,
+		'allow_audio' => true,
 		'max_length' => 120,
 		'ffmpeg_path' => 'ffmpeg',
 		'ffprobe_path' => 'ffprobe'

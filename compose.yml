@@ -34,6 +34,7 @@ services:
       - ./local-instances/${INSTANCE:-0}/www:/var/www
       - ./static/banners:/var/www/static/banners
       - ./templates:/code/templates
+      - ./tools:/code/tools
       - ./inc:/code/inc
       - ./stylesheets:/code/stylesheets
       - ./js:/code/js

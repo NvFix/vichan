@@ -154,6 +154,37 @@ function loadConfig() {
 			$config['default_stylesheet'] = ['Deluded Lightly', 'deluded_lightly.css'];
 		}
 
+		// Ensure animated GIF thumbnails and extended media formats are active even if an older instance-config.php or secrets.php is present
+		if (isset($config['thumb_ext']) && $config['thumb_ext'] === 'png') {
+			$config['thumb_ext'] = '';
+		}
+		if (empty($config['thumb_keep_animation_frames']) || (int)$config['thumb_keep_animation_frames'] <= 1) {
+			$config['thumb_keep_animation_frames'] = 100;
+		}
+		if (empty($config['thumb_method']) || $config['thumb_method'] === 'gd') {
+			$config['thumb_method'] = 'convert+gifsicle';
+		}
+		if (empty($config['allowed_ext_files'])) {
+			$config['allowed_ext_files'] = ['mp3', 'mkv', 'mp4', 'ogg', 'webm', 'pdf', 'txt'];
+		} else {
+			foreach (['mp3', 'mkv', 'mp4', 'ogg', 'webm', 'pdf', 'txt'] as $ext) {
+				if (!in_array($ext, $config['allowed_ext_files'])) {
+					$config['allowed_ext_files'][] = $ext;
+				}
+			}
+		}
+		if (!isset($config['webm']['use_ffmpeg']) || !$config['webm']['use_ffmpeg']) {
+			$config['webm']['use_ffmpeg'] = true;
+		}
+		if (!isset($config['webm']['allow_audio']) || !$config['webm']['allow_audio']) {
+			$config['webm']['allow_audio'] = true;
+		}
+		if (empty($config['file_icons']['mp3']))  $config['file_icons']['mp3']  = 'video.png';
+		if (empty($config['file_icons']['mkv']))  $config['file_icons']['mkv']  = 'video.png';
+		if (empty($config['file_icons']['ogg']))  $config['file_icons']['ogg']  = 'video.png';
+		if (empty($config['file_icons']['pdf']))  $config['file_icons']['pdf']  = 'file.png';
+		if (empty($config['file_icons']['txt']))  $config['file_icons']['txt']  = 'file.png';
+
 		// Auto-derive resource_version from asset modification time if set to 'auto' or empty
 		if (empty($config['resource_version']) || $config['resource_version'] === 'auto') {
 			$asset_files = array('templates/main.js', 'stylesheets/style.css', 'inc/config.php');
