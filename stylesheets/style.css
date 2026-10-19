@@ -355,8 +355,9 @@ div.post div.body,
 div.body {
   font-size: 12pt;
   line-height: 1.35;
-  overflow-wrap: anywhere;
-  word-break: break-all;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
   white-space: pre-wrap;
   unicode-bidi: plaintext;
   text-align: left;
@@ -641,10 +642,15 @@ div.pages.top {
   }
 
   div.post.reply div.body {
+    clear: both !important;
+    display: block !important;
+    width: 100% !important;
     margin-left: 0 !important;
     margin-top: 0.4em !important;
     padding-right: 0 !important;
     padding-bottom: 0.2em !important;
+    overflow-wrap: break-word;
+    word-break: normal;
   }
 
   .intro {
