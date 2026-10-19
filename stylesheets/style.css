@@ -416,6 +416,7 @@ div.post.reply::after {
   }
 
   div.post.reply .file:not(.multifile) a:has(.post-image),
+  div.post.reply .file:not(.multifile) a:has(.full-image),
   div.post.reply .file:not(.multifile) > a {
     grid-column: 1 !important;
     display: block !important;
@@ -444,9 +445,21 @@ div.post.reply::after {
 
   div.post.reply .post-image {
     float: none !important;
-    display: block !important;
     margin: 0 !important;
     padding: 0 !important;
+  }
+
+  div.post.reply .post-image[style*="display: none"],
+  div.post.reply .post-image.hidden,
+  div.post.reply a:has(.full-image) .post-image {
+    display: none !important;
+  }
+
+  div.post.reply .full-image {
+    display: block !important;
+    max-width: 100% !important;
+    max-height: 85vh !important;
+    object-fit: contain !important;
   }
 
   div.post.reply div.body {
@@ -460,17 +473,17 @@ div.post.reply::after {
     white-space: pre-wrap;
   }
 
-  /* Posts without files: body spans full width */
-  div.post.reply:not(:has(.files)) div.body,
-  div.post.reply:not(:has(.file)) div.body {
+  /* Posts without files: body spans full width and starts where poster name starts */
+  div.post.reply:not(:has(.file)):not(:has(.video-container)):not(:has(iframe)):not(:has(video)) div.body {
     grid-column: 1 / -1 !important;
+    margin-left: 19px !important;
+    margin-top: 0.4em !important;
   }
 
-  /* Expanded full-images or inline players: switch to block */
-  div.post.reply:has(.full-image),
-  div.post.reply:has(.inline-video-container),
-  div.post.reply:has(.inline-audio-container) {
-    display: block !important;
+  /* Inline players: place in column 1 */
+  div.post.reply .inline-video-container,
+  div.post.reply .inline-audio-container {
+    grid-column: 1 !important;
   }
 }
 
@@ -741,6 +754,12 @@ div.pages.top {
     padding-bottom: 0.2em !important;
     overflow-wrap: break-word;
     word-break: normal;
+  }
+
+  /* Posts without files on mobile: indent body to start where poster name starts */
+  div.post.reply:not(:has(.file)):not(:has(.video-container)):not(:has(iframe)):not(:has(video)) div.body {
+    width: auto !important;
+    margin-left: 19px !important;
   }
 
   .intro {
