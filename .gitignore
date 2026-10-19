@@ -52,3 +52,6 @@ favicon.ico
 
 /vendor/
 /agents.md
+compose.override.yml
+docker-compose.override.yml
+docker/nginx/custom.conf
