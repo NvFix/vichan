@@ -39,8 +39,12 @@ ln -nfs \
     /code/LICENSE.* \
     /code/install.sql \
     /var/www/
-# Static files accessible from the webserver must be copied.
-cp -ur /code/static /var/www/
+# Static files accessible from the webserver must be copied (skip banners to avoid overwriting user banners).
+mkdir -p /var/www/static
+for item in /code/static/*; do
+    [ "$(basename "$item")" = "banners" ] && continue
+    cp -ur "$item" /var/www/static/
+done
 cp -ur /code/stylesheets /var/www/
 
 # Ensure correct permissions are set, since this might be bind mount.

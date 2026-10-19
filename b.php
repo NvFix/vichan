@@ -5,6 +5,14 @@ $files = array_values(array_filter($files, function($file) {
 	return !str_starts_with($file, '.') && is_file('static/banners/' . $file);
 }));
 
+// Exclude default placeholder banner if custom banners exist
+$custom_files = array_values(array_filter($files, function($file) {
+	return $file !== 'defaultbanner.png';
+}));
+if (!empty($custom_files)) {
+	$files = $custom_files;
+}
+
 if (empty($files)) {
 	header('HTTP/1.0 404 Not Found');
 	exit;
