@@ -384,6 +384,96 @@ div.post.reply::after {
   clear: both;
 }
 
+/* Desktop Reply Layout: Text stays beside images and never drops under */
+@media screen and (min-width: 801px) {
+  div.post.reply {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr);
+    width: fit-content !important;
+    max-width: 94% !important;
+    row-gap: 4px;
+    column-gap: 15px;
+  }
+
+  div.post.reply::after {
+    display: none !important;
+  }
+
+  div.post.reply > .intro {
+    grid-column: 1 / -1 !important;
+    margin: 0 !important;
+  }
+
+  /* Single-file posts: unwrap .files so .fileinfo is full-width row above thumbnail and body */
+  div.post.reply > .files:not(.multifile),
+  div.post.reply > .files:not(.multifile) .file {
+    display: contents !important;
+  }
+
+  div.post.reply .fileinfo {
+    grid-column: 1 / -1 !important;
+    margin: 2px 0 4px 0 !important;
+  }
+
+  div.post.reply .file:not(.multifile) a:has(.post-image),
+  div.post.reply .file:not(.multifile) > a {
+    grid-column: 1 !important;
+    display: block !important;
+  }
+
+  /* Multifile posts: keep .files as a flex row in column 1 */
+  div.post.reply > .files.multifile {
+    grid-column: 1 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  div.post.reply > .files.multifile .file {
+    float: none !important;
+    display: inline-block !important;
+    margin: 0 !important;
+  }
+
+  div.post.reply > .files.multifile .fileinfo {
+    grid-column: auto !important;
+  }
+
+  div.post.reply .post-image {
+    float: none !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  div.post.reply div.body {
+    grid-column: 2 !important;
+    margin: 0 !important;
+    padding: 0 4px 0 0 !important;
+    align-self: start !important;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: normal;
+    white-space: pre-wrap;
+  }
+
+  /* Posts without files: body spans full width */
+  div.post.reply:not(:has(.files)) div.body,
+  div.post.reply:not(:has(.file)) div.body {
+    grid-column: 1 / -1 !important;
+  }
+
+  /* Expanded full-images or inline players: switch to block */
+  div.post.reply:has(.full-image),
+  div.post.reply:has(.inline-video-container),
+  div.post.reply:has(.inline-audio-container) {
+    display: block !important;
+  }
+}
+
 span.trip {
   color: #228854;
 }
