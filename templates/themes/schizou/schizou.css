@@ -426,33 +426,22 @@ body.theme-schizou {
     font-size: 14.5px;
 }
 
-.site-footer {
+footer {
     margin-top: auto;
-    width: 100%;
-    border-top: 1px solid #7c66bb;
-    padding: 22px 16px 28px;
-    box-sizing: border-box;
-    text-align: center;
-    font-size: 13px;
-    color: #5c4778;
-    line-height: 1.65;
+    padding-bottom: 20px;
 }
 
-.site-footer .footer-inner {
-    max-width: 920px;
-    margin: 0 auto;
+.unimportant,
+.unimportant * {
+    font-size: 10px;
 }
 
-.site-footer p {
-    margin: 7px 0;
-}
-
-.site-footer a {
+footer a {
     color: #6841a8;
     text-decoration: underline;
 }
 
-.site-footer a:hover {
+footer a:hover {
     color: #8f61c0;
 }
 
@@ -533,16 +522,17 @@ body.theme-schizou[data-theme="Deluded Nightly"] {
     background: rgba(30, 16, 53, 0.85);
 }
 
-[data-theme="Deluded Nightly"] .site-footer {
-    border-top: 1px solid #2b114f;
+[data-theme="Deluded Nightly"] footer,
+[data-theme="Deluded Nightly"] footer .unimportant,
+[data-theme="Deluded Nightly"] footer .unimportant * {
     color: #73748e;
 }
 
-[data-theme="Deluded Nightly"] .site-footer a {
+[data-theme="Deluded Nightly"] footer a {
     color: #9766c8;
 }
 
-[data-theme="Deluded Nightly"] .site-footer a:hover {
+[data-theme="Deluded Nightly"] footer a:hover {
     color: #b585ea;
 }
 
@@ -630,16 +620,17 @@ body.theme-schizou[data-theme="Yotsuba"] {
     background: rgba(20, 35, 55, 0.75);
 }
 
-[data-theme="Yotsuba"] .site-footer {
-    border-top: 1px solid #d9bfb7;
+[data-theme="Yotsuba"] footer,
+[data-theme="Yotsuba"] footer .unimportant,
+[data-theme="Yotsuba"] footer .unimportant * {
     color: #800000;
 }
 
-[data-theme="Yotsuba"] .site-footer a {
+[data-theme="Yotsuba"] footer a {
     color: #0000ff;
 }
 
-[data-theme="Yotsuba"] .site-footer a:hover {
+[data-theme="Yotsuba"] footer a:hover {
     color: #d00000;
 }
 

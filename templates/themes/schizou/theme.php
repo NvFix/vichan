@@ -64,6 +64,10 @@
 				$twig->enableAutoReload();
 			}
 
+			if (!empty($settings['detail_body'])) {
+				$settings['detail_body'] = $this->sanitize_detail_body($settings['detail_body']);
+			}
+
 			$all_boards = listBoards();
 			$active_boards = [];
 			foreach ($all_boards as $b) {
@@ -342,5 +346,33 @@
 				'snippet' => '<em>' . $snippet . '</em>',
 				'full' => htmlspecialchars($full_plain, ENT_QUOTES, 'UTF-8')
 			];
+		}
+
+		private function sanitize_detail_body(string $html): string {
+			if (trim($html) === '') {
+				return $html;
+			}
+			// Fix unclosed attribute quotes right before '>' e.g. <a href="... >
+			$html = preg_replace('/(\b[a-zA-Z0-9_-]+)=([\'"])([^\'">\s]+)>/', '$1=$2$3$2>', $html);
+			// Fix unclosed attribute quotes before next attribute e.g. <a href="... target="..." >
+			$html = preg_replace('/(\b[a-zA-Z0-9_-]+)=([\'"])([^\'">\s]+)\s+([a-zA-Z0-9_-]+=)/', '$1=$2$3$2 $4=', $html);
+
+			// Balance any unclosed HTML tags so layout never breaks
+			if (class_exists('DOMDocument')) {
+				$doc = new DOMDocument();
+				libxml_use_internal_errors(true);
+				$doc->loadHTML('<?xml encoding="utf-8" ?><div id="__wrap__">' . $html . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+				libxml_clear_errors();
+				$node = $doc->getElementById('__wrap__');
+				if ($node) {
+					$inner = '';
+					foreach ($node->childNodes as $child) {
+						$inner .= $doc->saveHTML($child);
+					}
+					return $inner;
+				}
+			}
+
+			return $html;
 		}
 	}
