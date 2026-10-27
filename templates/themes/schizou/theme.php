@@ -99,7 +99,9 @@
 			$news = [];
 			while ($item = $news_query->fetch(PDO::FETCH_ASSOC)) {
 				$item['date_formatted'] = date('d/m/Y, g:i:s a', $item['time']);
-				$item['snippet'] = pm_snippet(strip_tags($item['body']), 65);
+				$formatted = $this->format_snippet($item['body'], '', 100, '');
+				$item['snippet'] = $formatted['snippet'];
+				$item['snippet_full'] = $formatted['full'];
 				$news[] = $item;
 			}
 
@@ -283,7 +285,7 @@
 			]);
 		}
 
-		private function format_snippet(string $body, string $subject = '', int $limit = 60): array {
+		private function format_snippet(string $body, string $subject = '', int $limit = 60, string $fallback = '<em>(no comment)</em>'): array {
 			$prefix = '';
 			if ($subject !== '') {
 				$clean_sub = trim(preg_replace('/\s+/u', ' ', strip_tags($subject)));
@@ -315,8 +317,8 @@
 			$clean = trim(preg_replace('/\s+/u', ' ', strip_tags($text)));
 			if ($prefix === '' && $clean === '') {
 				return [
-					'snippet' => '<em>' . _('(no comment)') . '</em>',
-					'full' => '(no comment)'
+					'snippet' => $fallback,
+					'full' => strip_tags($fallback)
 				];
 			}
 

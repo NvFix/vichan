@@ -112,6 +112,7 @@ body.theme-schizou {
 }
 
 .news-title {
+    width: 25%;
     font-weight: bold;
     font-size: 14.5px;
     font-family: arial, helvetica, sans-serif;
@@ -136,6 +137,37 @@ body.theme-schizou {
 
 .news-title a:hover {
     color: #8f61c0;
+}
+
+.news-snippet {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-family: arial, helvetica, sans-serif;
+    color: #281b38;
+    padding: 0 10px;
+}
+
+.news-snippet a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #281b38;
+    text-decoration: none;
+    transition: color 0.15s ease;
+    font-family: arial, helvetica, sans-serif;
+}
+
+.news-snippet a:hover {
+    color: #6841a8;
+    text-decoration: underline;
+}
+
+.news-snippet em {
+    font-style: normal;
+    font-family: inherit;
 }
 
 .news-date {
@@ -183,6 +215,12 @@ body.theme-schizou {
     .news-title {
         font-size: 13.5px;
         padding-right: 6px;
+        width: 28%;
+    }
+
+    .news-snippet {
+        font-size: 13px;
+        padding: 0 6px;
     }
 
     .news-date {
@@ -293,7 +331,10 @@ body.theme-schizou {
 .item-text .font-family-aa-2ch,
 .news-title .kao,
 .news-title span.kao,
-.news-title .font-family-aa-2ch {
+.news-title .font-family-aa-2ch,
+.news-snippet .kao,
+.news-snippet span.kao,
+.news-snippet .font-family-aa-2ch {
     font-family: "MS PGothic", "Mona", "Monapo", "IPAMonaPGothic", "IPAPGothic", "saitamaar_light", "submona", sans-serif !important;
 }
 
@@ -509,6 +550,15 @@ body.theme-schizou[data-theme="Deluded Nightly"] {
     color: #9766c8;
 }
 
+[data-theme="Deluded Nightly"] .news-snippet,
+[data-theme="Deluded Nightly"] .news-snippet a {
+    color: #989bbc;
+}
+
+[data-theme="Deluded Nightly"] .news-snippet a:hover {
+    color: #b585ea;
+}
+
 [data-theme="Deluded Nightly"] .images-grid .image-link {
     border-color: #3a166b;
     background: #160b29;
@@ -596,6 +646,15 @@ body.theme-schizou[data-theme="Yotsuba"] {
 
 [data-theme="Yotsuba"] .item-badge a {
     color: #800000;
+}
+
+[data-theme="Yotsuba"] .news-snippet,
+[data-theme="Yotsuba"] .news-snippet a {
+    color: #800000;
+}
+
+[data-theme="Yotsuba"] .news-snippet a:hover {
+    color: #d00000;
 }
 
 [data-theme="Yotsuba"] .images-grid .image-link {
