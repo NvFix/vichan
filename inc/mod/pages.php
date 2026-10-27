@@ -2102,6 +2102,8 @@ function mod_user_new(Context $ctx) {
 	if (isset($_POST['username'], $_POST['password'], $_POST['type'])) {
 		if ($_POST['username'] == '')
 			error(sprintf($config['error']['required'], 'username'));
+		if (!preg_match('/^[a-zA-Z0-9_\-\.]{1,50}$/u', $_POST['username']))
+			error(sprintf($config['error']['invalidfield'], 'username'));
 		if ($_POST['password'] == '')
 			error(sprintf($config['error']['required'], 'password'));
 
@@ -2755,7 +2757,8 @@ function mod_config(Context $ctx, $board_config = false) {
 		}
 
 		if (!empty($config_append)) {
-			$config_append = "\n// Changes made via web editor by \"" . $mod['username'] . "\" @ " . date('r') . ":\n" . $config_append . "\n";
+			$clean_username = preg_replace('/[^a-zA-Z0-9_\-\. ]/u', '', $mod['username']);
+			$config_append = "\n// Changes made via web editor by \"" . $clean_username . "\" @ " . date('r') . ":\n" . $config_append . "\n";
 			if (!is_file($config_file))
 				$config_append = "<?php\n\n$config_append";
 			if (!@file_put_contents($config_file, $config_append, FILE_APPEND)) {

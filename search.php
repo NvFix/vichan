@@ -50,10 +50,12 @@
 		
 		_syslog(LOG_NOTICE, 'Searched /' . $_GET['board'] . '/ for "' . $phrase . '"');
 
-		// Cleanup search queries table
-		$query = prepare("DELETE FROM ``search_queries`` WHERE `time` <= :time");
-		$query->bindValue(':time', time() - ($queries_per_minutes_all[1] * 60));
-                $query->execute() or error(db_error($query));
+		// Cleanup search queries table probabilistically to reduce lock contention
+		if (mt_rand(1, 50) === 1) {
+			$query = prepare("DELETE FROM ``search_queries`` WHERE `time` <= :time");
+			$query->bindValue(':time', time() - ($queries_per_minutes_all[1] * 60));
+			$query->execute() or error(db_error($query));
+		}
 		
 		openBoard($_GET['board']);
 		

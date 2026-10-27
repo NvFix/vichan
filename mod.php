@@ -121,7 +121,12 @@ $pages = [
 if (!$mod) {
 	$pages = [ '!^(.+)?$!' => 'login' ];
 } elseif (isset($_GET['status'], $_GET['r'])) {
-	header('Location: ' . $_GET['r'], true, (int)$_GET['status']);
+	$redirect = $_GET['r'];
+	if (preg_match('!^/[^/\\]!u', $redirect) || preg_match('!^\?[a-zA-Z0-9_\-=/&]*$!u', $redirect)) {
+		header('Location: ' . $redirect, true, (int)$_GET['status']);
+	} else {
+		header('Location: ?/', true, 302);
+	}
 	exit;
 }
 
@@ -132,7 +137,7 @@ if (isset($config['mod']['custom_pages'])) {
 $new_pages = [];
 foreach ($pages as $key => $callback) {
 	if (is_string($callback) && preg_match('/^secure /', $callback)) {
-		$key .= '(/(?P<token>[a-f0-9]{8}))?';
+		$key .= '(/(?P<token>[a-f0-9]{8,64}))?';
 	}
 	$key = str_replace('\%b', '?P<board>' . sprintf(substr($config['board_path'], 0, -1), $config['board_regex']), $key);
 	$new_pages[(!empty($key) and $key[0] == '!') ? $key : '!^' . $key . '(?:&[^&=]+=[^&]*)*$!u'] = $callback;
@@ -167,8 +172,8 @@ foreach ($pages as $uri => $handler) {
 				}
 
 				// CSRF-protected page; validate security token
-				$actual_query = preg_replace('!/([a-f0-9]{8})$!', '', $query);
-				if ($token != make_secure_link_token(substr($actual_query, 1))) {
+				$actual_query = preg_replace('!/([a-f0-9]{8,64})$!', '', $query);
+				if (!hash_equals((string)make_secure_link_token(substr($actual_query, 1)), (string)$token)) {
 					error($config['error']['csrf']);
 				}
 			}

@@ -84,6 +84,23 @@ function download_file_from_url(HttpDriver $http, $file_url, $request_timeout, $
 		throw new InvalidArgumentException($error_array['invalidimg']);
 	}
 
+	$parsed = parse_url($file_url);
+	if (!$parsed || empty($parsed['host'])) {
+		throw new InvalidArgumentException($error_array['invalidimg']);
+	}
+
+	$ips = @dns_get_record($parsed['host'], DNS_A + (defined('DNS_AAAA') ? DNS_AAAA : 0));
+	if (empty($ips)) {
+		throw new InvalidArgumentException($error_array['invalidimg']);
+	}
+
+	foreach ($ips as $record) {
+		$target_ip = isset($record['ip']) ? $record['ip'] : (isset($record['ipv6']) ? $record['ipv6'] : null);
+		if ($target_ip && !filter_var($target_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+			throw new InvalidArgumentException($error_array['invalidimg']);
+		}
+	}
+
 	$param_idx = mb_strpos($file_url, '?');
 	if ($param_idx !== false) {
 		$url_without_params = mb_substr($file_url, 0, $param_idx);
@@ -98,9 +115,11 @@ function download_file_from_url(HttpDriver $http, $file_url, $request_timeout, $
 	}
 
 	$tmp_file = tempnam($tmp_dir, 'url');
-	function unlink_tmp_file($file) {
-		@unlink($file);
-		fatal_error_handler();
+	if (!function_exists('unlink_tmp_file')) {
+		function unlink_tmp_file($file) {
+			@unlink($file);
+			fatal_error_handler();
+		}
 	}
 	register_shutdown_function('unlink_tmp_file', $tmp_file);
 
@@ -139,11 +158,11 @@ function ocr_image(array $config, string $img_path): string {
 		 . ' | tesseract stdin stdout 2>/dev/null'
 		 . $config['tesseract_params']
 	);
-	if ($ret === false) {
+	if ($ret !== false && !is_string($ret)) {
 		throw new RuntimeException('Unable to run tesseract');
 	}
 
-	return trim($ret);
+	return trim((string)$ret);
 }
 
 
@@ -156,7 +175,7 @@ function ocr_image(array $config, string $img_path): string {
  */
 function strip_image_metadata(string $img_path): int {
 	$err = shell_exec_error('exiftool -overwrite_original -ignoreMinorErrors -q -q -all= -Orientation ' . escapeshellarg($img_path));
-	if ($err === false) {
+	if ($err !== false) {
 		throw new RuntimeException('Could not strip EXIF metadata!');
 	}
 	clearstatcache(true, $img_path);
@@ -598,7 +617,8 @@ if (isset($_POST['delete'])) {
 	if (!isset($_POST['body'], $_POST['board']) && !$dropped_post)
 		error($config['error']['bot']);
 
-	$post = array('board' => $_POST['board'], 'files' => array());
+	$board_uri = $dropped_post ? $dropped_post['board'] : (isset($_POST['board']) ? $_POST['board'] : false);
+	$post = array('board' => $board_uri, 'files' => array());
 
 	// Check if board exists
 	if (!openBoard($post['board']))
@@ -783,7 +803,7 @@ if (isset($_POST['delete'])) {
 
 		// Add allowed extensions for OP, if enabled.
 		if ($post['op'] && $config['allowed_ext_op']) {
-			array_merge($allowed_extensions, $config['allowed_ext_op']);
+			$allowed_extensions = array_merge($allowed_extensions, $config['allowed_ext_op']);
 		}
 
 		try {
@@ -1066,11 +1086,11 @@ if (isset($_POST['delete'])) {
 		$allhashes = '';
 
 		foreach ($post['files'] as $key => &$file) {
+			$allowed = array_merge($config['allowed_ext'], $config['allowed_ext_files']);
 			if ($post['op'] && $config['allowed_ext_op']) {
-				if (!in_array($file['extension'], $config['allowed_ext_op']))
-					error($config['error']['unknownext']);
+				$allowed = array_merge($allowed, $config['allowed_ext_op']);
 			}
-			elseif (!in_array($file['extension'], $config['allowed_ext']) && !in_array($file['extension'], $config['allowed_ext_files']))
+			if (!in_array($file['extension'], $allowed))
 				error($config['error']['unknownext']);
 
 			$file['is_an_image'] = !in_array($file['extension'], $config['allowed_ext_files']);
@@ -1108,7 +1128,7 @@ if (isset($_POST['delete'])) {
 		if ($file['is_an_image']) {
 			if ($config['ie_mime_type_detection'] !== false) {
 				// Check IE MIME type detection XSS exploit
-				$buffer = file_get_contents($upload, false, null, 0, 255);
+				$buffer = file_get_contents($file['tmp_name'], false, null, 0, 255);
 				if (preg_match($config['ie_mime_type_detection'], $buffer)) {
 					undoImage($post);
 					error($config['error']['mime_exploit']);
@@ -1129,6 +1149,7 @@ if (isset($_POST['delete'])) {
 			}
 
 			$file['exif_stripped'] = false;
+			$file_image_has_operable_metadata = in_array($file['extension'], ['jpg', 'jpeg', 'webp', 'png']);
 
 			if ($file_image_has_operable_metadata && $config['convert_auto_orient']) {
 				// The following code corrects the image orientation.
@@ -1139,7 +1160,7 @@ if (isset($_POST['delete'])) {
 						$gm = in_array($config['thumb_method'], array('gm', 'gm+gifsicle'));
 						if (isset($exif['Orientation']) && $exif['Orientation'] != 1) {
 							$error = shell_exec_error(($gm ? 'gm ' : '') . 'convert ' .
-									escapeshellarg($file['tmp_name']) . ' -auto-orient ' . escapeshellarg($upload));
+									escapeshellarg($file['tmp_name']) . ' -auto-orient ' . escapeshellarg($file['tmp_name']));
 
 							if ($error)
 								error(_('Could not auto-orient image!'), null, $error);

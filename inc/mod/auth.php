@@ -230,7 +230,7 @@ function create_pm_header() {
 
 function make_secure_link_token(string $uri): string {
 	global $mod, $config;
-	return substr(sha1($config['cookies']['salt'] . '-' . $uri . '-' . $mod['id']), 0, 8);
+	return substr(sha1($config['cookies']['salt'] . '-' . $uri . '-' . $mod['id']), 0, 32);
 }
 
 function check_login(Context $ctx, bool $prompt = false): void {

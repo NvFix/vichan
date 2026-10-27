@@ -599,36 +599,23 @@ function file_write($path, $data, $simple = false, $skip_purge = false) {
 		@unlink($path);
 	}
 
-	if (!$fp = @fopen($path, $simple ? 'w' : 'c')) {
+	$temp = $path . '.' . bin2hex(random_bytes(4)) . '.tmp';
+	if (@file_put_contents($temp, $data, LOCK_EX) === false) {
 		@unlink($path);
-		$fp = @fopen($path, $simple ? 'w' : 'c');
+		if (@file_put_contents($temp, $data, LOCK_EX) === false) {
+			error('Unable to open file for writing: ' . $path);
+		}
 	}
 
-	if (!$fp)
-		error('Unable to open file for writing: ' . $path);
-
-	// File locking
-	if (!$simple && !flock($fp, LOCK_EX)) {
-		error('Unable to lock file: ' . $path);
+	@chmod($temp, 0666);
+	if (!@rename($temp, $path)) {
+		@unlink($path);
+		if (!@rename($temp, $path)) {
+			@unlink($temp);
+			error('Unable to replace file: ' . $path);
+		}
 	}
-
-	// Truncate file
-	if (!$simple && !ftruncate($fp, 0))
-		error('Unable to truncate file: ' . $path);
-
-	// Write data
-	if (($bytes = fwrite($fp, $data)) === false)
-		error('Unable to write to file: ' . $path);
-
-	// Unlock
-	if (!$simple)
-		flock($fp, LOCK_UN);
-
-	// Close
-	if (!fclose($fp))
-		error('Unable to close file: ' . $path);
-
-	@chmod($path, 0666);
+	$bytes = strlen($data);
 
 	/**
 	 * Create gzipped file.
@@ -1111,7 +1098,7 @@ function deleteFile($id, $remove_entirely_if_already=true, $file=null) {
 }
 
 // rebuild post (markup)
-function rebuildPost($id) {
+function rebuildPost($id, $rebuild_thread = true) {
 	global $board, $mod;
 
 	$query = prepare(sprintf("SELECT * FROM ``posts_%s`` WHERE `id` = :id", $board['uri']));
@@ -1131,9 +1118,12 @@ function rebuildPost($id) {
 	$query->bindValue(':id', $id, PDO::PARAM_INT);
 	$query->execute() or error(db_error($query));
 
-	buildThread($post['thread'] ? $post['thread'] : $id);
+	$target_thread = $post['thread'] ? (int)$post['thread'] : (int)$id;
+	if ($rebuild_thread) {
+		buildThread($target_thread);
+	}
 
-	return true;
+	return $target_thread;
 }
 
 // Delete a post (reply or thread)
@@ -1193,13 +1183,26 @@ function deletePost($id, $error_if_doesnt_exist=true, $rebuild_after=true) {
 	$query = prepare("SELECT `board`, `post` FROM ``cites`` WHERE `target_board` = :board AND (`target` = " . implode(' OR `target` = ', $ids) . ") ORDER BY `board`");
 	$query->bindValue(':board', $board['uri']);
 	$query->execute() or error(db_error($query));
+	$threads_to_rebuild = [];
 	while ($cite = $query->fetch(PDO::FETCH_ASSOC)) {
 		if ($board['uri'] != $cite['board']) {
 			if (!isset($tmp_board))
 				$tmp_board = $board['uri'];
 			openBoard($cite['board']);
 		}
-		rebuildPost($cite['post']);
+		$target_thread = rebuildPost($cite['post'], false);
+		if ($target_thread) {
+			$threads_to_rebuild[$board['uri']][$target_thread] = true;
+		}
+	}
+
+	foreach ($threads_to_rebuild as $b_uri => $t_ids) {
+		if ($board['uri'] != $b_uri) {
+			openBoard($b_uri);
+		}
+		foreach (array_keys($t_ids) as $t_id) {
+			buildThread($t_id);
+		}
 	}
 
 	if (isset($tmp_board))
@@ -2666,9 +2669,11 @@ function shell_exec_error($command, $suppress_stdout = false) {
 	if ($config['debug'])
 		$start = microtime(true);
 
-	$return = trim(shell_exec('PATH="' . escapeshellcmd($config['shell_path']) . ':$PATH";' .
+	$raw = trim((string)shell_exec('PATH="' . escapeshellcmd($config['shell_path']) . ':$PATH";' .
 		$command . ' 2>&1 ' . ($suppress_stdout ? '> /dev/null ' : '') . '&& echo "TB_SUCCESS"'));
-	$return = preg_replace('/TB_SUCCESS$/', '', $return);
+
+	$success = substr($raw, -10) === 'TB_SUCCESS';
+	$return = trim((string)preg_replace('/TB_SUCCESS$/', '', $raw));
 
 	if ($config['debug']) {
 		$time = microtime(true) - $start;
@@ -2680,7 +2685,11 @@ function shell_exec_error($command, $suppress_stdout = false) {
 		$debug['time']['exec'] += $time;
 	}
 
-	return $return === 'TB_SUCCESS' ? false : $return;
+	if ($success) {
+		return ($suppress_stdout || $return === '') ? false : $return;
+	}
+
+	return $return !== '' ? $return : true;
 }
 
 function slugify($post) {
@@ -2918,7 +2927,8 @@ function cloak_ip($ip) {
 	if (strlen($ipbytes) >= 16)
 		$ipbytes = substr($ipbytes, 0, 16);
 
-	$cyphertext = openssl_encrypt($ipbytes, 'aes-256-ctr', $ipcrypt_key, OPENSSL_RAW_DATA);
+	$iv = random_bytes(16);
+	$cyphertext = $iv . openssl_encrypt($ipbytes, 'aes-256-ctr', $ipcrypt_key, OPENSSL_RAW_DATA, $iv);
 
 	$ret = $config['ipcrypt_prefix'].':' . base32_encode($cyphertext);
 	if (isset($tld) && !empty($tld)) {
@@ -2941,15 +2951,20 @@ function uncloak_ip($ip) {
 	}
 
 	if (substr($ip, 0, strlen($config['ipcrypt_prefix']) + 1) === $config['ipcrypt_prefix'].':') {
-		$plaintext = openssl_decrypt(base32_decode($juice), 'aes-256-ctr', $ipcrypt_key, OPENSSL_RAW_DATA);
+		$raw = base32_decode($juice);
+		if (strlen($raw) <= 16) {
+			// Backward compatibility with legacy zero-IV ciphertexts
+			$plaintext = openssl_decrypt($raw, 'aes-256-ctr', $ipcrypt_key, OPENSSL_RAW_DATA);
+		} else {
+			$iv = substr($raw, 0, 16);
+			$ct = substr($raw, 16);
+			$plaintext = openssl_decrypt($ct, 'aes-256-ctr', $ipcrypt_key, OPENSSL_RAW_DATA, $iv);
+		}
 
 		if ($plaintext === false || strlen($plaintext) == 0)
 			return '#ERROR';
 
-		if (strlen($ip) >= 16)
-			return inet_ntop($plaintext);
-		else
-			return long2ip(unpack('N', $plaintext)[1]);
+		return inet_ntop($plaintext);
 	}
 
 	return '#ERROR';

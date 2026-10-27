@@ -61,7 +61,8 @@ $main_js = $config['file_script'];
 
 $boards = listBoards();
 //$boards = array(array('uri'=>'test'), array('uri'=>'tester'), array('uri'=>'testing'));
-$boards_m = array_chunk($boards, floor(sizeof($boards)/$options['processes']));
+$chunk_size = max(1, (int)ceil(count($boards) / max(1, (int)$options['processes'])));
+$boards_m = array_chunk($boards, $chunk_size);
 
 function doboard($board) {
 	global $global_locale, $config, $main_js, $options;

@@ -51,6 +51,8 @@ favicon.ico
 
 /vendor/
 /agents.md
+.agents
+skills-lock.json
 compose.override.yml
 docker-compose.override.yml
 docker/nginx/custom.conf

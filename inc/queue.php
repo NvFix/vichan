@@ -45,6 +45,7 @@ class Queues {
 						$n--;
 					}
 				}
+				closedir($dir);
 
 				$out = array();
 				foreach ($paths as $v) {

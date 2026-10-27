@@ -1,8 +1,11 @@
 <?php
 
-$files = scandir('static/banners/', SCANDIR_SORT_NONE);
+$files = @scandir('static/banners/', SCANDIR_SORT_NONE);
+if (!is_array($files)) {
+	$files = [];
+}
 $files = array_values(array_filter($files, function($file) {
-	return !str_starts_with($file, '.') && is_file('static/banners/' . $file);
+	return isset($file[0]) && $file[0] !== '.' && is_file('static/banners/' . $file);
 }));
 
 // Exclude default placeholder banner if custom banners exist

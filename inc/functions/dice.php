@@ -47,6 +47,10 @@ function email_dice_roll($post) {
 		$diceY = intval($diceY);
 		$diceZ = intval($diceZ);
 
+		// Clamp roll count to avoid exhaustion
+		$max_rolls = isset($config['max_roll_count']) ? (int)$config['max_roll_count'] : 100;
+		$diceX = min(max($diceX, 1), $max_rolls);
+
 		// Continue only if we have valid values
 		if($diceX > 0 && $diceY > 0) {
 			$dicerolls = array();

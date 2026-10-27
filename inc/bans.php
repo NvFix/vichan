@@ -23,7 +23,7 @@ class Bans {
 				$query .= ":id{$i},";
 			}
 			// Substitute the last comma with a parenthesis.
-			substr_replace($query, ')', strlen($query) - 1);
+			$query = substr_replace($query, ')', strlen($query) - 1);
 
 			// Bind the params
 			$query = prepare($query);
@@ -379,6 +379,7 @@ class Bans {
 		                error($config['error']['noaccess']);
 
 			$mask = self::range_to_string([$ban['ipstart'], $ban['ipend']]);
+			$cloaked_mask = cloak_mask($mask);
 
 			modLog("Removed ban #{$ban_id} for " .
 				(filter_var($mask, FILTER_VALIDATE_IP) !== false ? "<a href=\"?/IP/$cloaked_mask\">$cloaked_mask</a>" : $cloaked_mask));
