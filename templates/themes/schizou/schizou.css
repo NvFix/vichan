@@ -85,15 +85,25 @@ body.theme-schizou {
 }
 
 .news-table {
+    display: block;
     width: 100%;
+    box-sizing: border-box;
     border-collapse: collapse;
+}
+
+.news-table tbody {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .news-table tr {
     display: flex;
     align-items: center;
+    width: 100%;
+    box-sizing: border-box;
     border-bottom: 1px solid #e5d1ec;
-    padding: 7px 0;
+    padding: 8px 0;
 }
 
 .news-table tr:last-child {
@@ -102,18 +112,21 @@ body.theme-schizou {
 
 .news-table td {
     padding: 0;
+    box-sizing: border-box;
 }
 
 .news-title {
+    display: block;
     flex: 0 1 auto;
     max-width: 35%;
     font-weight: bold;
     font-size: 14.5px;
     font-family: arial, helvetica, sans-serif;
-    padding-right: 12px;
+    padding-right: 14px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    box-sizing: border-box;
 }
 
 .news-title a {
@@ -134,6 +147,7 @@ body.theme-schizou {
 }
 
 .news-snippet {
+    display: block;
     flex: 1 1 auto;
     min-width: 0;
     text-align: center;
@@ -143,7 +157,12 @@ body.theme-schizou {
     font-size: 14px;
     font-family: arial, helvetica, sans-serif;
     color: inherit;
-    padding: 0 12px;
+    padding: 0 14px;
+    box-sizing: border-box;
+}
+
+.news-snippet:empty {
+    display: none;
 }
 
 .news-snippet em {
@@ -152,6 +171,7 @@ body.theme-schizou {
 }
 
 .news-date {
+    display: block;
     flex: 0 0 auto;
     margin-left: auto;
     white-space: nowrap;
@@ -159,7 +179,8 @@ body.theme-schizou {
     font-size: 13px;
     font-family: arial, helvetica, sans-serif;
     color: #281b38;
-    padding-left: 12px;
+    padding-left: 14px;
+    box-sizing: border-box;
 }
 
 .detail-box {
@@ -195,20 +216,29 @@ body.theme-schizou {
         grid-template-columns: 1fr;
     }
 
+    .news-table tr {
+        flex-wrap: nowrap;
+        padding: 7px 0;
+    }
+
     .news-title {
+        flex: 1 1 auto;
+        min-width: 0;
+        max-width: calc(100% - 150px);
         font-size: 13.5px;
-        padding-right: 8px;
-        max-width: 32%;
+        padding-right: 10px;
     }
 
     .news-snippet {
-        font-size: 13px;
-        padding: 0 8px;
+        display: none !important;
     }
 
     .news-date {
+        flex: 0 0 auto;
+        margin-left: auto;
         font-size: 12px;
-        padding-left: 8px;
+        white-space: nowrap;
+        padding-left: 0;
     }
 }
 
