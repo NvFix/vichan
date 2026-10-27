@@ -48,6 +48,7 @@
 	$config['webm']['allow_audio'] = true;
 	$config['webm']['ffmpeg_path'] = 'ffmpeg';
 	$config['webm']['ffprobe_path'] = 'ffprobe';
+	$config['webm']['max_length'] = 300; // 5 minutes
 
 	// Thumbnail icons for non-image file uploads
 	$config['file_icons']['webm'] = 'video.png';
