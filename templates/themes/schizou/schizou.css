@@ -86,12 +86,14 @@ body.theme-schizou {
 
 .news-table {
     width: 100%;
-    table-layout: fixed;
     border-collapse: collapse;
 }
 
 .news-table tr {
+    display: flex;
+    align-items: center;
     border-bottom: 1px solid #e5d1ec;
+    padding: 7px 0;
 }
 
 .news-table tr:last-child {
@@ -99,24 +101,16 @@ body.theme-schizou {
 }
 
 .news-table td {
-    padding: 7px 6px;
-    vertical-align: middle;
-}
-
-.news-table td:first-child {
-    padding-left: 0;
-}
-
-.news-table td:last-child {
-    padding-right: 0;
+    padding: 0;
 }
 
 .news-title {
-    width: 25%;
+    flex: 0 1 auto;
+    max-width: 35%;
     font-weight: bold;
     font-size: 14.5px;
     font-family: arial, helvetica, sans-serif;
-    padding-right: 10px;
+    padding-right: 12px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -140,13 +134,16 @@ body.theme-schizou {
 }
 
 .news-snippet {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 14px;
     font-family: arial, helvetica, sans-serif;
     color: inherit;
-    padding: 0 10px;
+    padding: 0 12px;
 }
 
 .news-snippet em {
@@ -155,12 +152,14 @@ body.theme-schizou {
 }
 
 .news-date {
-    width: 145px;
+    flex: 0 0 auto;
+    margin-left: auto;
     white-space: nowrap;
     text-align: right;
     font-size: 13px;
     font-family: arial, helvetica, sans-serif;
     color: #281b38;
+    padding-left: 12px;
 }
 
 .detail-box {
@@ -198,18 +197,18 @@ body.theme-schizou {
 
     .news-title {
         font-size: 13.5px;
-        padding-right: 6px;
-        width: 28%;
+        padding-right: 8px;
+        max-width: 32%;
     }
 
     .news-snippet {
         font-size: 13px;
-        padding: 0 6px;
+        padding: 0 8px;
     }
 
     .news-date {
         font-size: 12px;
-        width: 135px;
+        padding-left: 8px;
     }
 }
 
