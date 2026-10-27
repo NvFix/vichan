@@ -38,3 +38,17 @@ if ($config['cache']['enabled'] === 'fs') {
 
 $time_tot = number_format((float)$time_tot, 4, '.', '');
 modLog("Deleted $deleted_tot expired entries in {$time_tot}s with maintenance tool");
+
+// Check if homepage needs rebuild for daily stats
+if (!empty($config['dir']['home'])) {
+	$index_file = $config['dir']['home'] . 'index.html';
+	if (file_exists($index_file)) {
+		try {
+			$midnight_iran = (new \DateTime('today midnight', new \DateTimeZone('Asia/Tehran')))->getTimestamp();
+			if (filemtime($index_file) < $midnight_iran) {
+				echo "Rebuilding homepage for daily stats reset...\n";
+				\Vichan\Functions\Theme\rebuild_theme('schizou', 'all');
+			}
+		} catch (\Exception $e) {}
+	}
+}

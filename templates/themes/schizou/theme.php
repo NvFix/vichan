@@ -112,16 +112,9 @@
 				while ($post = $res->fetch(PDO::FETCH_ASSOC)) {
 					openBoard($post['board']);
 					$post['link'] = $config['root'] . $board['dir'] . $config['dir']['res'] . link_for($post) . '#' . $post['id'];
-					$body_spaced = preg_replace('/<br\s*\/?>/i', ' ', $post['body']);
-					$body_spaced = preg_replace('/<\/?(?:p|div|li|blockquote|h[1-6])[^>]*>/i', ' ', $body_spaced);
-					$clean_body = trim(preg_replace('/\s+/u', ' ', strip_tags($body_spaced)));
-					if ($clean_body !== '') {
-						$post['snippet'] = pm_snippet($clean_body, 60);
-						$post['snippet_full'] = htmlspecialchars($clean_body, ENT_QUOTES, 'UTF-8');
-					} else {
-						$post['snippet'] = '<em>' . _('(no comment)') . '</em>';
-						$post['snippet_full'] = '(no comment)';
-					}
+					$formatted = $this->format_snippet($post['body'], '', 60);
+					$post['snippet'] = $formatted['snippet'];
+					$post['snippet_full'] = $formatted['full'];
 					$post['date_formatted'] = date('d/m/Y, g:i:s a', $post['time']);
 					$recent_posts[] = $post;
 				}
@@ -140,26 +133,9 @@
 				while ($thread = $res->fetch(PDO::FETCH_ASSOC)) {
 					openBoard($thread['board']);
 					$thread['link'] = $config['root'] . $board['dir'] . $config['dir']['res'] . link_for($thread);
-					$body_spaced = preg_replace('/<br\s*\/?>/i', ' ', $thread['body']);
-					$body_spaced = preg_replace('/<\/?(?:p|div|li|blockquote|h[1-6])[^>]*>/i', ' ', $body_spaced);
-					$clean_body = trim(preg_replace('/\s+/u', ' ', strip_tags($body_spaced)));
-					$subject_spaced = !empty($thread['subject']) ? preg_replace('/<br\s*\/?>/i', ' ', $thread['subject']) : '';
-					$clean_subject = !empty($subject_spaced) ? trim(preg_replace('/\s+/u', ' ', strip_tags($subject_spaced))) : '';
-
-					if ($clean_subject !== '' && $clean_body !== '') {
-						$combined = $clean_subject . ' - ' . $clean_body;
-						$thread['title'] = pm_snippet($combined, 70);
-						$thread['title_full'] = htmlspecialchars($combined, ENT_QUOTES, 'UTF-8');
-					} elseif ($clean_subject !== '') {
-						$thread['title'] = pm_snippet($clean_subject, 70);
-						$thread['title_full'] = htmlspecialchars($clean_subject, ENT_QUOTES, 'UTF-8');
-					} elseif ($clean_body !== '') {
-						$thread['title'] = pm_snippet($clean_body, 70);
-						$thread['title_full'] = htmlspecialchars($clean_body, ENT_QUOTES, 'UTF-8');
-					} else {
-						$thread['title'] = 'Thread #' . $thread['id'];
-						$thread['title_full'] = 'Thread #' . $thread['id'];
-					}
+					$formatted = $this->format_snippet($thread['body'], $thread['subject'] ?? '', 70);
+					$thread['title'] = $formatted['snippet'];
+					$thread['title_full'] = $formatted['full'];
 					$thread['date_formatted'] = date('d/m/Y, g:i:s a', $thread['time']);
 					$hot_threads[] = $thread;
 				}
@@ -301,5 +277,70 @@
 				'recent_images' => $recent_images,
 				'stats' => $stats
 			]);
+		}
+
+		private function format_snippet(string $body, string $subject = '', int $limit = 60): array {
+			$prefix = '';
+			if ($subject !== '') {
+				$clean_sub = trim(preg_replace('/\s+/u', ' ', strip_tags($subject)));
+				if ($clean_sub !== '') {
+					$prefix = $clean_sub . ' - ';
+				}
+			}
+
+			// Convert line breaks and blocks to spaces
+			$text = preg_replace('/<br\s*\/?>/i', ' ', $body);
+			$text = preg_replace('/<\/?(?:p|div|li|blockquote|h[1-6])[^>]*>/i', ' ', $text);
+
+			// Protect kaomoji spans from strip_tags
+			$kaos = [];
+			$text = preg_replace_callback('/<span class="kao[^"]*">(.*?)<\/span>/is', function($m) use (&$kaos) {
+				$id = '___KAO_' . count($kaos) . '___';
+				$kaos[$id] = '<span class="kao font-family-aa-2ch">' . $m[1] . '</span>';
+				return $id;
+			}, $text);
+
+			// Also support raw [kao]...[/kao] or [ascii]...[/ascii]
+			$text = preg_replace_callback('/\[(?:kao|ascii)\](.*?)\[\/(?:kao|ascii)\]/is', function($m) use (&$kaos) {
+				$id = '___KAO_' . count($kaos) . '___';
+				$kaos[$id] = '<span class="kao font-family-aa-2ch">' . htmlspecialchars($m[1], ENT_QUOTES, 'UTF-8') . '</span>';
+				return $id;
+			}, $text);
+
+			// Strip all other HTML tags
+			$clean = trim(preg_replace('/\s+/u', ' ', strip_tags($text)));
+			if ($prefix === '' && $clean === '') {
+				return [
+					'snippet' => '<em>' . _('(no comment)') . '</em>',
+					'full' => '(no comment)'
+				];
+			}
+
+			$combined = $prefix . $clean;
+
+			// Plain text for title attribute
+			$full_plain = $combined;
+			foreach ($kaos as $id => $html) {
+				$full_plain = str_replace($id, strip_tags($html), $full_plain);
+			}
+
+			// Truncate based on character count
+			$len = mb_strlen($combined);
+			if ($len > $limit) {
+				$snippet = mb_substr($combined, 0, $limit) . '&hellip;';
+			} else {
+				$snippet = $combined;
+			}
+
+			// Restore kaomoji spans
+			foreach ($kaos as $id => $html) {
+				$snippet = str_replace($id, $html, $snippet);
+			}
+			$snippet = preg_replace('/___KAO_\d*___?/i', '', $snippet);
+
+			return [
+				'snippet' => '<em>' . $snippet . '</em>',
+				'full' => htmlspecialchars($full_plain, ENT_QUOTES, 'UTF-8')
+			];
 		}
 	}

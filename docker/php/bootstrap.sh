@@ -90,5 +90,36 @@ ln -nfs /code/vendor /var/www/
 # Ensure cache directories are owned by www-data
 chown -R www-data:www-data /var/cache/template-cache /var/tmp/vichan /var/cache/gen-cache 2>/dev/null || true
 
+# Background scheduler to automatically rebuild homepage when 'posts today' resets at midnight (Asia/Tehran)
+(
+    sleep 3
+    php -r "
+        require '/code/inc/bootstrap.php';
+        \$tz = new DateTimeZone('Asia/Tehran');
+        \$midnight = (new DateTime('today midnight', \$tz))->getTimestamp();
+        \$file = \$config['dir']['home'] . 'index.html';
+        if (!file_exists(\$file) || filemtime(\$file) < \$midnight) {
+            \Vichan\Functions\Theme\rebuild_theme('schizou', 'all');
+        }
+    " 2>/dev/null || true
+
+    while true; do
+        SLEEP_SEC=$(php -r "
+            \$tz = new DateTimeZone('Asia/Tehran');
+            \$next = new DateTime('tomorrow midnight', \$tz);
+            echo max(1, \$next->getTimestamp() - time());
+        " 2>/dev/null || echo 3600)
+
+        sleep "$SLEEP_SEC"
+
+        php -r "
+            require '/code/inc/bootstrap.php';
+            \Vichan\Functions\Theme\rebuild_theme('schizou', 'all');
+        " 2>/dev/null || true
+
+        sleep 5
+    done
+) &
+
 # Start the php-fpm server.
 exec php-fpm

@@ -872,6 +872,19 @@ function checkBan($board = false) {
 			// Purge every time.
 			Bans::purge($config['require_ban_view'], $config['purge_bans']);
 		}
+
+		// Rebuild homepage if past midnight Iran time and index.html was generated before midnight
+		if (!empty($config['dir']['home'])) {
+			$index_file = $config['dir']['home'] . 'index.html';
+			if (file_exists($index_file)) {
+				try {
+					$midnight_iran = (new \DateTime('today midnight', new \DateTimeZone('Asia/Tehran')))->getTimestamp();
+					if (filemtime($index_file) < $midnight_iran) {
+						\Vichan\Functions\Theme\rebuild_theme('schizou', 'all');
+					}
+				} catch (\Exception $e) {}
+			}
+		}
 	}
 }
 

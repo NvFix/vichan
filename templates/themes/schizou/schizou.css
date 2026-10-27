@@ -114,7 +114,7 @@ body.theme-schizou {
 .news-title {
     font-weight: bold;
     font-size: 14.5px;
-    font-family: "MS PGothic", "Mona", "Monapo", "IPAMonaPGothic", "IPAPGothic", "submona", sans-serif;
+    font-family: arial, helvetica, sans-serif;
     padding-right: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -131,6 +131,7 @@ body.theme-schizou {
     color: #6841a8;
     text-decoration: underline;
     transition: color 0.15s ease;
+    font-family: arial, helvetica, sans-serif;
 }
 
 .news-title a:hover {
@@ -142,7 +143,7 @@ body.theme-schizou {
     white-space: nowrap;
     text-align: right;
     font-size: 13px;
-    font-family: "MS PGothic", "Mona", "Monapo", "IPAMonaPGothic", "IPAPGothic", "submona", sans-serif;
+    font-family: arial, helvetica, sans-serif;
     color: #281b38;
 }
 
@@ -204,7 +205,7 @@ body.theme-schizou {
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
-    font-family: "MS PGothic", "Mona", "Monapo", "IPAMonaPGothic", "IPAPGothic", "saitamaar_light", "submona", sans-serif;
+    font-family: arial, helvetica, sans-serif;
 }
 
 .item-table tr {
@@ -233,7 +234,7 @@ body.theme-schizou {
     width: 44px;
     font-weight: bold;
     font-size: 14px;
-    font-family: "MS PGothic", "Mona", "Monapo", "IPAMonaPGothic", "IPAPGothic", "saitamaar_light", "submona", sans-serif;
+    font-family: arial, helvetica, sans-serif;
 }
 
 .item-badge a {
@@ -253,7 +254,7 @@ body.theme-schizou {
     font-weight: bold;
     color: #54338c;
     font-size: 14px;
-    font-family: "MS PGothic", "Mona", "Monapo", "IPAMonaPGothic", "IPAPGothic", "saitamaar_light", "submona", sans-serif;
+    font-family: arial, helvetica, sans-serif;
 }
 
 .star-icon {
@@ -267,7 +268,7 @@ body.theme-schizou {
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 14.5px;
-    font-family: "MS PGothic", "Mona", "Monapo", "IPAMonaPGothic", "IPAPGothic", "saitamaar_light", "submona", sans-serif;
+    font-family: arial, helvetica, sans-serif;
     letter-spacing: 0;
 }
 
@@ -279,12 +280,21 @@ body.theme-schizou {
     color: #6841a8;
     text-decoration: none;
     transition: color 0.15s ease;
-    font-family: inherit;
+    font-family: arial, helvetica, sans-serif;
 }
 
 .item-text em {
     font-style: normal;
     font-family: inherit;
+}
+
+.item-text .kao,
+.item-text span.kao,
+.item-text .font-family-aa-2ch,
+.news-title .kao,
+.news-title span.kao,
+.news-title .font-family-aa-2ch {
+    font-family: "MS PGothic", "Mona", "Monapo", "IPAMonaPGothic", "IPAPGothic", "saitamaar_light", "submona", sans-serif !important;
 }
 
 .item-text a:hover {
