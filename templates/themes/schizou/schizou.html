@@ -37,11 +37,9 @@
                                     <td class="news-title">
                                         <a href="{{ config.root }}news.html#{{ entry.id }}" title="{{ entry.subject|e }}">{% if entry.subject %}{{ entry.subject }}{% else %}<em>Untitled</em>{% endif %}</a>
                                     </td>
-                                    <td class="news-snippet">
+                                    <td class="news-snippet" title="{{ entry.snippet_full }}">
                                         {% if entry.snippet %}
-                                            <a href="{{ config.root }}news.html#{{ entry.id }}" title="{{ entry.snippet_full }}">
-                                                {{ entry.snippet|raw }}
-                                            </a>
+                                            {{ entry.snippet|raw }}
                                         {% endif %}
                                     </td>
                                     <td class="news-date"><time datetime="{{ entry.time|date('c') }}" data-time="{{ entry.time }}">{{ entry.date_formatted }}</time></td>

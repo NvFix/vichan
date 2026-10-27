@@ -145,24 +145,8 @@ body.theme-schizou {
     white-space: nowrap;
     font-size: 14px;
     font-family: arial, helvetica, sans-serif;
-    color: #281b38;
+    color: inherit;
     padding: 0 10px;
-}
-
-.news-snippet a {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    color: #281b38;
-    text-decoration: none;
-    transition: color 0.15s ease;
-    font-family: arial, helvetica, sans-serif;
-}
-
-.news-snippet a:hover {
-    color: #6841a8;
-    text-decoration: underline;
 }
 
 .news-snippet em {
@@ -550,15 +534,6 @@ body.theme-schizou[data-theme="Deluded Nightly"] {
     color: #9766c8;
 }
 
-[data-theme="Deluded Nightly"] .news-snippet,
-[data-theme="Deluded Nightly"] .news-snippet a {
-    color: #989bbc;
-}
-
-[data-theme="Deluded Nightly"] .news-snippet a:hover {
-    color: #b585ea;
-}
-
 [data-theme="Deluded Nightly"] .images-grid .image-link {
     border-color: #3a166b;
     background: #160b29;
@@ -646,15 +621,6 @@ body.theme-schizou[data-theme="Yotsuba"] {
 
 [data-theme="Yotsuba"] .item-badge a {
     color: #800000;
-}
-
-[data-theme="Yotsuba"] .news-snippet,
-[data-theme="Yotsuba"] .news-snippet a {
-    color: #800000;
-}
-
-[data-theme="Yotsuba"] .news-snippet a:hover {
-    color: #d00000;
 }
 
 [data-theme="Yotsuba"] .images-grid .image-link {
