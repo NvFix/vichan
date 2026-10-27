@@ -49,7 +49,7 @@
         <section class="box detail-box">
             <div class="box-header">{{ settings.detail_title }}</div>
             <div class="box-content detail-content">
-                {{ settings.detail_body|nl2br }}
+                {{ settings.detail_body|raw|nl2br }}
             </div>
         </section>
 
