@@ -2000,11 +2000,12 @@ span.kao,
 
 span.kao,
 .kao {
-  display: inline;
+  display: inline-block;
+  vertical-align: baseline;
   font-size: 12pt;
-  line-height: 1;
-  white-space: wrap;
-  word-break: break-word;
+  line-height: inherit;
+  white-space: nowrap;
+  max-width: 100%;
   letter-spacing: 0;
 }
 
