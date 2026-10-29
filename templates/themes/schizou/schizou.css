@@ -348,7 +348,7 @@ body.theme-schizou {
 .news-snippet .kao,
 .news-snippet span.kao,
 .news-snippet .font-family-aa-2ch {
-    font-family: "MS PGothic", "Mona", "Monapo", "IPAMonaPGothic", "IPAPGothic", "saitamaar_light", "submona", sans-serif !important;
+    font-family: "saitamaar_light", "MS PGothic", "Mona", "Monapo", "IPAMonaPGothic", "IPAPGothic", "submona", sans-serif !important;
 }
 
 .item-text a:hover {
