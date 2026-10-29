@@ -162,7 +162,9 @@ form[name="post"] input[type="submit"],
 .post-form-modal input[type="submit"],
 #delete-fields input[type="submit"],
 #report-fields input[type="submit"],
-#quick-reply input[type="submit"] {
+#quick-reply input[type="submit"],
+div.pages input[type="submit"],
+.pages input[type="submit"] {
 	background: linear-gradient(180deg, #4d238c 0%, #341561 100%);
 	color: #ffffff;
 	border: 1px solid #5a2ea3;
@@ -180,7 +182,9 @@ form[name="post"] input[type="submit"]:hover,
 .post-form-modal input[type="submit"]:hover,
 #delete-fields input[type="submit"]:hover,
 #report-fields input[type="submit"]:hover,
-#quick-reply input[type="submit"]:hover {
+#quick-reply input[type="submit"]:hover,
+div.pages input[type="submit"]:hover,
+.pages input[type="submit"]:hover {
 	background: linear-gradient(180deg, #5e2ca8 0%, #441c7c 100%);
 	border-color: #733dc9;
 	color: #ffffff;
@@ -189,7 +193,9 @@ form[name="post"] input[type="submit"]:active,
 .post-form-modal input[type="submit"]:active,
 #delete-fields input[type="submit"]:active,
 #report-fields input[type="submit"]:active,
-#quick-reply input[type="submit"]:active {
+#quick-reply input[type="submit"]:active,
+div.pages input[type="submit"]:active,
+.pages input[type="submit"]:active {
 	background: linear-gradient(180deg, #2b114f 0%, #1c0a34 100%);
 }
 

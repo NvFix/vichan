@@ -149,7 +149,9 @@ table.modlog tr th {
 form[name="post"] input[type="submit"],
 .post-form-modal input[type="submit"],
 #delete-fields input[type="submit"],
-#report-fields input[type="submit"] {
+#report-fields input[type="submit"],
+div.pages input[type="submit"],
+.pages input[type="submit"] {
 	background: #ea8;
 	color: #800;
 	border: 1px solid #800;
@@ -165,7 +167,9 @@ form[name="post"] input[type="submit"],
 form[name="post"] input[type="submit"]:hover,
 .post-form-modal input[type="submit"]:hover,
 #delete-fields input[type="submit"]:hover,
-#report-fields input[type="submit"]:hover {
+#report-fields input[type="submit"]:hover,
+div.pages input[type="submit"]:hover,
+.pages input[type="submit"]:hover {
 	background: #fca;
 	border-color: #600;
 }

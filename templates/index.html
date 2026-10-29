@@ -106,6 +106,7 @@
 	<input type="hidden" name="board" value="{{ board.uri }}" />
 	{% if mod %}<input type="hidden" name="mod" value="1" />{% endif %}
 	{{ body }}
+	</form>
 	<div id="board-interactions">
 		<div class="pages">
 			{{ btn.prev }} {% for page in pages %}
@@ -117,7 +118,6 @@
 		</div>
 		{% include 'report_delete.html' %}
 	</div>
-	</form>
 
 	{{ config.ad.bottom }}
 
