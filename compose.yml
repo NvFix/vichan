@@ -39,8 +39,14 @@ services:
       - ./stylesheets:/code/stylesheets
       - ./js:/code/js
       - ./post.php:/code/post.php
+      - ./mod.php:/code/mod.php
       - ./player.php:/code/player.php
       - ./b.php:/code/b.php
+      - ./search.php:/code/search.php
+      - ./report.php:/code/report.php
+      - ./log.php:/code/log.php
+      - ./banned.php:/code/banned.php
+      - ./smart_build.php:/code/smart_build.php
       - ./docker/php/bootstrap.sh:/usr/local/bin/bootstrap.sh
       - ./docker/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
       - ./docker/php/jit.ini:/usr/local/etc/php/conf.d/jit.ini
