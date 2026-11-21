@@ -1,4 +1,4 @@
-FROM nginx:1.27.5-alpine-slim
+FROM nginx:1.31.9-alpine-slim
 
 COPY . /code
 RUN adduser --system www-data \
